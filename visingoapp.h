@@ -129,6 +129,8 @@ private:
 
     int m_saved_argc;
     char **m_saved_argv;
+
+    //friend class BrowserMainWindow;
 };
 
 #endif // VISINGO_VISINGOAPP_H

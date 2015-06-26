@@ -140,6 +140,12 @@ VisingoApp::VisingoApp(int &argc, char **argv)
         return;
     }
 
+#if defined(Q_OS_OSX)
+    QApplication::setQuitOnLastWindowClosed(false);
+#else
+    QApplication::setQuitOnLastWindowClosed(true);
+#endif
+
     // IPC, start server
     m_localServer = new QLocalServer(this);
     connect(m_localServer, SIGNAL(newConnection()),
@@ -158,7 +164,7 @@ VisingoApp::VisingoApp(int &argc, char **argv)
     m_saved_argv = argv;
 
 
-/*
+
 // TODO: remove if unnecessary
 #ifndef QT_NO_OPENSSL
     if (!QSslSocket::supportsSsl()) {
@@ -166,7 +172,7 @@ VisingoApp::VisingoApp(int &argc, char **argv)
                  "This system does not support OpenSSL. SSL websites will not be available.");
     }
 #endif
-*/
+
 
     QDesktopServices::setUrlHandler(QLatin1String("http"), this, "openUrl");
     QString localSysName = QLocale::system().name();
@@ -177,12 +183,6 @@ VisingoApp::VisingoApp(int &argc, char **argv)
     settings.beginGroup(QLatin1String("sessions"));
     m_lastSession = settings.value(QLatin1String("lastSession")).toByteArray();
     settings.endGroup();
-
-#if defined(Q_OS_OSX)
-    QApplication::setQuitOnLastWindowClosed(false);
-#else
-    QApplication::setQuitOnLastWindowClosed(true);
-#endif
 
 #if defined(Q_OS_OSX)
     connect(this, SIGNAL(lastWindowClosed()),
@@ -207,7 +207,7 @@ VisingoApp::~VisingoApp()
 void VisingoApp::lastWindowClosed()
 {
     clean();
-    BrowserMainWindow *mw = new BrowserMainWindow;
+    BrowserMainWindow *mw = new BrowserMainWindow(m_saved_argc, m_saved_argv); // TODO: remove when argc argv passing fixed
     mw->slotHome();
     m_mainWindows.prepend(mw);
 }
