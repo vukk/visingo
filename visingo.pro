@@ -135,10 +135,35 @@ unix: PRE_TARGETDEPS += $$PWD/clingo/build/release/libprogram_opts.a
 unix: LIBS += -L$$PWD/clingo/build/release/ -lshared -lgringo -lclasp -lprogram_opts
 
 
+# TODO: make clingo library and require only that header, not the turtles all the way down
+
 # MODIFY HERE: clingo requirements
-INCLUDEPATH += /usr/include/python2.7 /usr/include/lua5.1
-INCLUDEPATH += /home/kuuranne/opt/tbb43_20150424oss/include
-unix: LIBS += -L/home/kuuranne/opt/tbb43_20150424oss/lib/intel64/gcc4.4
-unix: LIBS += -lpython2.7 -llua5.1 -ltbb
+win32 {
+   # TODO
+}
+
+macx {
+    # The following should be correct for homebrew installed
+    # tbb, lua 5.2 and python 2.7
+
+    # TBB
+    LIBS += /usr/local/lib/libtbb.dylib
+    INCLUDEPATH += /usr/local/Cellar/tbb/4.3-20150611/include
+    DEPENDPATH += /usr/local/Cellar/tbb/4.3-20150611/include
+    # Lua
+    LIBS += /usr/local/lib/liblua.5.2.dylib
+    INCLUDEPATH += /usr/local/include/lua5.2
+    DEPENDPATH += /usr/local/include/lua5.2
+    # Python
+    INCLUDEPATH += /usr/include/python2.7
+    LIBS += -lpython2.7
+}
+
+unix:!macx: {
+    INCLUDEPATH += /usr/include/python2.7 /usr/include/lua5.1
+    INCLUDEPATH += /path/to/tbb/include
+    LIBS += -L/path/to/tbb/lib
+    LIBS += -lpython2.7 -llua5.1 -ltbb
+}
 
 # EOF
