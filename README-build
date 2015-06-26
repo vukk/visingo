@@ -1,0 +1,7 @@
+
+TODO: better instructions, exact commands
+
+- copy clingo source to directory named "clingo"
+- build clingo (follow instructions in clingo/INSTALL)
+- make sure Qt is installed (with webengine)
+- build visingo with qmake
