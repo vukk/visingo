@@ -161,8 +161,8 @@ macx {
 
 unix:!macx: {
     INCLUDEPATH += /usr/include/python2.7 /usr/include/lua5.1
-    INCLUDEPATH += /path/to/tbb/include
-    LIBS += -L/path/to/tbb/lib
+    INCLUDEPATH += /home/kuuranne/opt/tbb43_20150424oss/include
+    LIBS += -L/home/kuuranne/opt/tbb43_20150424oss/lib/intel64/gcc4.4
     LIBS += -lpython2.7 -llua5.1 -ltbb
 }
 
