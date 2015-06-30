@@ -50,6 +50,10 @@ int main(int argc, char **argv)
     if (!app.isTheOnlyBrowser())
         return 0;
 
+
+    // TODO Ignore SSL errors only on release version (Debian issue)
+    qputenv("QT_LOGGING_RULES", "qt.network.ssl.warning=false");
+
     app.newMainWindow();
     return app.exec();
 }
