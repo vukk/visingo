@@ -1,11 +1,41 @@
-<link rel="import" href="../../bower_components/more-routing/more-routing.html">
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
 
-<more-routing-config driver="hash"></more-routing-config>
+<script src="../../bower_components/page/page.js"></script>
+<script>
+  window.addEventListener('WebComponentsReady', function() {
 
-<more-route name="home" path="/"></more-route>
+    // We use Page.js for routing. This is a Micro
+    // client-side router inspired by the Express router
+    // More info: https://visionmedia.github.io/page.js/
+    page('/', function () {
+      app.route = 'home';
+    });
 
-<more-route name="users" path="/users">
-  <more-route name="user-info" path="/:name"></more-route>
-</more-route>
+    page('/users', function () {
+      app.route = 'users';
+    });
 
-<more-route name="contact" path="/contact"></more-route>
+    page('/users/:name', function (data) {
+      app.route = 'user-info';
+      app.params = data.params;
+    });
+
+    page('/contact', function () {
+      app.route = 'contact';
+    });
+
+    // add #! before urls
+    page({
+      hashbang: true
+    });
+
+  });
+</script>
