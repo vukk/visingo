@@ -8,6 +8,10 @@ else: DEFINES += QT_NO_UITOOLS
 macx: CONFIG -= app_bundle
 
 
+# include qt pods (eg. webserver)
+include(../pods.pri)
+
+
 FORMS += \
     addbookmarkdialog.ui \
     bookmarks.ui \

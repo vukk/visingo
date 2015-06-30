@@ -95,7 +95,7 @@ InvokeWrapper<Arg, R, C> invoke(R *receiver, void (C::*memberFun)(Arg))
     return wrapper;
 }
 
-const char *BrowserMainWindow::defaultHome = "file://../ui-assets/index.html";
+const char *BrowserMainWindow::defaultHome = "file://TODO-REMOVE";
 
 BrowserMainWindow::BrowserMainWindow(int argc, char **argv, QWidget *parent, Qt::WindowFlags flags)
     : QMainWindow(parent, flags)
@@ -957,12 +957,12 @@ void BrowserMainWindow::slotViewPageSource()
 void BrowserMainWindow::slotHome()
 {
     // TODO make less fragile if needed, applicationDirPath should be read once at startup
-    QString home = QString("%1/%2").arg(VisingoApp::instance()->applicationDirPath(), "../ui-assets/index.html");
+    //QString home = QString("%1/%2").arg(VisingoApp::instance()->applicationDirPath(), "../ui-assets/index.html");
     // TODO rem, also defaultHome near top of file
     //QSettings settings;
     //settings.beginGroup(QLatin1String("MainWindow"));
     //QString home = settings.value(QLatin1String("home"), QLatin1String(defaultHome)).toString();
-    loadPage(home);
+    loadPage(VisingoApp::instance()->home());
 }
 
 void BrowserMainWindow::slotWebSearch()

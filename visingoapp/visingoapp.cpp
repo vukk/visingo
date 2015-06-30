@@ -113,11 +113,12 @@ static void setUserStyleSheet(QWebEngineProfile *profile, const QString &styleSh
         QMetaObject::invokeMethod(mainWindow, "runScriptOnOpenViews", Qt::QueuedConnection, Q_ARG(QString, source));
 }
 
-VisingoApp::VisingoApp(int &argc, char **argv)
+VisingoApp::VisingoApp(int &argc, char **argv, QString home)
     : QApplication(argc, argv)
     , m_localServer(0)
     , m_privateProfile(0)
     , m_privateBrowsing(false)
+    , m_home(home)
 {
     QCoreApplication::setOrganizationName(QLatin1String("Aalto University Department of Computer Science, Computational Logic Group"));
     QCoreApplication::setApplicationName(QLatin1String("visingo"));

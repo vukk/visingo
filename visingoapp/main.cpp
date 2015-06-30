@@ -40,20 +40,142 @@
 
 #include "visingoapp.h"
 
+// qtwebserver
+#include "tcp/tcpmultithreadedserver.h"
+#include "http/httpwebengine.h"
+#include "http/httpiodeviceresource.h"
+
 #include <qtwebenginewidgetsglobal.h>
+
+#include <QLoggingCategory>
+
+
+// webserver resource, TODO MOVE TO SEPARATE FILE
+#include <QFile>
+#include <QDir>
+#include <QMimeDatabase>
+
+using namespace QtWebServer;
+
+
+// TODO: move to separate file
+class DirResource : public Http::Resource {
+public:
+    DirResource(QDir *webRootDir) : Http::Resource("/"), _webRootDir(webRootDir) {
+        qDebug() << "webRoot: " << _webRootDir->path();
+    } // root "/" is dummy, we catch all
+
+    ~DirResource() { }
+
+    void deliver(const Http::Request& request, Http::Response& response) {
+        //response.setStatusCode(Http::Ok);
+        //response.setHeader(Http::ContentType, "text/html");
+
+        QString uri = request.uniqueResourceIdentifier();
+        if (uri.isEmpty() || uri == "/") {
+            uri = QString("index.html");
+        }
+        if (uri.startsWith('/')) {
+            uri = uri.mid(1);
+        }
+
+        qDebug() << "req uri: " << uri;
+        //qDebug() << "filePath: " << _webRootDir->filePath(uri);
+
+        if(QFile::exists(_webRootDir->filePath(uri))) {
+            if(request.method() == "get") {
+                //response.setHeader(Http::ContentType, contentType());
+
+                // TODO CRITICAL: check that file is somewhere inside webRoot
+                QFile file(_webRootDir->filePath(uri));
+
+                file.open(QIODevice::ReadOnly);
+                if(file.isOpen()) {
+                    QFileInfo fileInfo(file);
+                    response.setHeader(Http::ContentType, _mimeDatabase.mimeTypeForFile(fileInfo).name());
+                    response.setBody(file.readAll());
+                    response.setStatusCode(Http::Ok);
+                    file.close();
+                } else {
+                    response.setHeader(Http::ContentType, "text/html");
+                    response.setBody(QString(
+                        "<h1>Visingo: Forbidden (could not read resource)</h1> <p>Path was: %1</p>").arg(
+                            _webRootDir->absoluteFilePath(uri)).toUtf8());
+                    response.setStatusCode(Http::Forbidden);
+                }
+            }
+        }
+        else {
+            response.setHeader(Http::ContentType, "text/html");
+            response.setBody(QString(
+                "<h1>Visingo: Resource not found.</h1> <p>Path was: %1</p>").arg(
+                    _webRootDir->absoluteFilePath(uri)).toUtf8());
+            response.setStatusCode(Http::NotFound);
+        }
+    }
+
+    // TODO: should make a directory serving resource class for QtWebServer
+    bool match(QString uniqueIdentifier) {
+        // catch all
+        Q_UNUSED( uniqueIdentifier )
+        return true;
+    }
+private:
+    QMimeDatabase _mimeDatabase;
+    QDir *_webRootDir;
+};
+
+// TODO CRITICAL: MAKE SURE WE DONT SERVE OUTSIDE OF WEBROOT DIR!
 
 int main(int argc, char **argv)
 {
+    int port = 7358;
     //Q_INIT_RESOURCE(data);
-    VisingoApp app(argc, argv);
+    VisingoApp visingoapp(argc, argv, QString("http://localhost:%1").arg(port));
     // TODO Remove check below, maybe. Check first if something breaks.
-    if (!app.isTheOnlyBrowser())
+    if (!visingoapp.isTheOnlyBrowser())
         return 0;
 
-
     // TODO Ignore SSL errors only on release version (Debian issue)
-    qputenv("QT_LOGGING_RULES", "qt.network.ssl.warning=false");
+    //qputenv("QT_LOGGING_RULES", "qt.network.ssl.warning=false");
+    QLoggingCategory::setFilterRules("qt.network.ssl.warning=false");
 
-    app.newMainWindow();
-    return app.exec();
+    // add webserver
+    //QCoreApplication a(argc, argv);
+
+    QtWebServer::Tcp::MultithreadedServer tcpServer;
+    QtWebServer::Http::WebEngine webHandler;
+
+    /*
+    Http::IODeviceResource *rsc = new Http::IODeviceResource(
+                "/",
+                new QFile(QString("%1/%2").arg(visingoapp.applicationDirPath(), "../ui-assets/index.html")));
+
+    rsc->setContentType("text/html");
+    webHandler.addResource(rsc);
+    */
+
+    webHandler.addResource(
+        new DirResource(new QDir(
+            QString("%1/%2").arg(visingoapp.applicationDirPath(), "../ui-assets"))));
+
+    /*
+    w.addResource(new QtWebServer::Http::IODeviceResource(
+                  "/",
+                  new QFile(QString("%1/%2").arg(visingoapp.applicationDirPath(), "../ui-assets/index.html"))));
+    */
+
+    tcpServer.setResponder(&webHandler);
+    tcpServer.listen(QHostAddress::LocalHost, port);
+
+
+    // TODO output error if not
+    if(!tcpServer.isListening()) {
+        qDebug() << "Webserver not listening, exiting...";
+        return 1;
+    }
+
+    // visingoapp
+    visingoapp.newMainWindow();
+    return visingoapp.exec();
 }

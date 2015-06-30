@@ -65,7 +65,7 @@ class VisingoApp : public QApplication
     Q_OBJECT
 
 public:
-    VisingoApp(int &argc, char **argv);
+    VisingoApp(int &argc, char **argv, QString home);
     ~VisingoApp();
     static VisingoApp *instance();
     void loadSettings();
@@ -89,6 +89,7 @@ public:
     // TODO: change, use settings dialog maybe
     int argc() const { return m_saved_argc; }
     char **argv() const { return m_saved_argv; }
+    QString home() { return m_home; }
 
 #if defined(Q_OS_OSX)
     bool event(QEvent *event);
@@ -129,6 +130,7 @@ private:
 
     int m_saved_argc;
     char **m_saved_argv;
+    QString m_home;
 
     //friend class BrowserMainWindow;
 };
