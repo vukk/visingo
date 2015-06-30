@@ -23,6 +23,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   // have resolved and content has been stamped to the page
   app.addEventListener('dom-change', function() {
     console.log('Our app is ready to rock!');
+    if (typeof qt.webChannelTransport !== 'undefined') { // jshint ignore:line
+      alert('qt.webChannelTransport found!'); // jshint ignore:line
+      document.getElementById('qtWebChannelNote').innerHTML = 'qt.webChannelTransport DEFINED!!!';
+    }
   });
 
   // See https://github.com/Polymer/polymer/issues/1381
