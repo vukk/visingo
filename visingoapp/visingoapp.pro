@@ -43,7 +43,8 @@ HEADERS += \
     urllineedit.h \
     visingoapp.h \
     webview.h \
-    xbel.h
+    xbel.h \
+    jsvisingocontrol.h
 
 SOURCES += \
     autosaver.cpp \
@@ -65,7 +66,8 @@ SOURCES += \
     visingoapp.cpp \
     webview.cpp \
     xbel.cpp \
-    main.cpp
+    main.cpp \
+    jsvisingocontrol.cpp
 
 RESOURCES += data/data.qrc htmls/htmls.qrc
 RESOURCES += jquery.qrc

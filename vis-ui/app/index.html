@@ -1,15 +1,5 @@
-<!--
-@license
-Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
-This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
-The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
-The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
-Code distributed by Google as part of the polymer project is also
-subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
--->
-
 <!doctype html>
-<html lang="">
+<html lang="en">
 
 <head>
   <meta charset="utf-8">
@@ -17,19 +7,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="generator" content="Visingo dev test" />
   <title>Visingo dev test</title>
-  <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
-
-  <!-- Chrome for Android theme color -->
-  <meta name="theme-color" content="#303F9F">
-
-  <!-- Web Application Manifest -->
-  <link rel="manifest" href="manifest.json">
-
-  <!-- Tile color for Win8 -->
-  <meta name="msapplication-TileColor" content="#3372DF">
-
-  <!-- Tile icon for Win8 (144x144) -->
-  <meta name="msapplication-TileImage" content="images/touch/ms-touch-icon-144x144-precomposed.png">
 
   <!-- build:css styles/main.css -->
   <link rel="stylesheet" href="styles/main.css">
@@ -39,120 +16,115 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <script src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
   <!-- endbuild -->
 
+  <!-- qt webchannel -->
+  <script src="qrc:///qtwebchannel/qwebchannel.js"></script>
+  <!-- firebug lite -->
+  <script type="text/javascript" src="https://getfirebug.com/releases/lite/1.2/firebug-lite.js"></script>
+
   <!-- will be replaced with elements/elements.vulcanized.html -->
   <link rel="import" href="elements/elements.html">
   <!-- endreplace-->
+
+  <style is="custom-style">
+    paper-button {
+      background: var(--accent-color);
+      color: #000;
+    }
+    paper-button::shadow #ripple {
+      color: blue;
+    }
+    /*paper-button[disabled] {
+      border: 5px dotted rgba(100, 100, 100, 0.2);
+    }*/
+  </style>
 </head>
 
 <body unresolved class="fullbleed layout vertical">
-  <span id="browser-sync-binding"></span>
-  <template is="dom-bind" id="app">
+<span id="browser-sync-binding"></span>
+<template is="dom-bind" id="app">
 
-    <paper-drawer-panel id="paperDrawerPanel">
-      <div drawer>
+<paper-header-panel main>
 
-        <!-- Drawer Toolbar -->
-        <paper-toolbar id="drawerToolbar">
-          <span class="paper-font-title">Menu</span>
-        </paper-toolbar>
+<!-- Main Toolbar -->
+<paper-toolbar id="mainToolbar">
 
-        <!-- Drawer Content -->
-          <paper-menu class="list" attr-for-selected="data-route" selected="{{route}}" on-iron-select="onMenuSelect">
-              <a data-route="home" href="/">
-                <iron-icon icon="home"></iron-icon>
-                <span>Home</span>
-              </a>
+<!-- Toolbar actions -->
+<paper-icon-button icon="refresh"></paper-icon-button>
+<!-- Toolbar menu -->
+<iron-selector attr-for-selected="data-route" selected="{{route}}">
+  <paper-icon-button data-route="new" icon="av:queue"></paper-icon-button>
+  <paper-icon-button data-route="help" icon="help"></paper-icon-button>
+</iron-selector>
 
-              <a data-route="users" href="/users">
-                <iron-icon icon="info"></iron-icon>
-                <span>Users</span>
-              </a>
+<span class="flex"></span>
 
-              <a data-route="contact" href="/contact">
-                <iron-icon icon="mail"></iron-icon>
-                <span>Contact</span>
-              </a>
-          </paper-menu>
-      </div>
-      <paper-header-panel main mode="waterfall-tall">
+<!-- Application name -->
+<div class="paper-font-display2 app-name">Visingo</div>
 
-        <!-- Main Toolbar -->
-        <paper-toolbar id="mainToolbar">
-          <paper-icon-button id="paperToggle" icon="menu" paper-drawer-toggle></paper-icon-button>
-          <span class="flex"></span>
+</paper-toolbar>
 
-          <!-- Toolbar icons -->
-          <paper-icon-button icon="refresh"></paper-icon-button>
-          <paper-icon-button icon="search"></paper-icon-button>
+<!-- Main Content -->
+<div class="content">
+  <iron-pages attr-for-selected="data-route" selected="{{route}}">
 
-          <!-- Application name -->
-          <div class="middle paper-font-display2 app-name">Polymer Starter Kit</div>
+  <section data-route="new">
+    <paper-material elevation="1">
+      <h2 class="paper-font-display2">Choose visualiser</h2>
+      <form is="iron-form" id="form-vis" action="">
+        
+        <paper-input-container always-float-label attr-for-value="visualiser">
+          <label>Visualiser: (should be a dropdown..?)</label>
+          <input is="iron-input" id="chosen-visualiser" name="visualiser" label="visualiser" value="test-vis-graph" />
+        </paper-input-container>
+        
+        <paper-button raised onClick="app.initMapping(document.querySelector('#chosen-visualiser').value);">Next</paper-button>
+      </form>
+    </paper-material>
 
-          <!-- Application sub title -->
-          <div class="bottom title"></div>
+    <paper-material elevation="1">
+    <p id="qtWebChannelNote" class="paper-font-body2">Qt WebChannel not defined :-(</p>
+    </paper-material>
 
-        </paper-toolbar>
 
-        <!-- Main Content -->
-        <div class="content">
-          <iron-pages attr-for-selected="data-route" selected="{{route}}">
+    <paper-material elevation="1">
+      <visualizer-predicates id="vis-predicates"></visualizer-predicates>
+    </paper-material>
+  </section>
 
-            <section data-route="home">
-              <paper-material elevation="1">
-                <my-greeting></my-greeting>
+  <section data-route="users">
+    <paper-material elevation="1">
+    <h2 class="paper-font-display2">Users</h2>
+    <p>This is the users section</p>
+    <a href="/users/Rob">Rob</a>
+    </paper-material>
+  </section>
 
-                <p id="qtWebChannelNote">Qt WebChannel not defined :-(</p>
+  <section data-route="user-info">
+    <paper-material elevation="1">
+    <h2 class="paper-font-display2">
+      User:<span>{{params.name}}</span>
+    </h2>
+    <div>This is <span>{{params.name}}</span>'s section</div>
+    </paper-material>
+  </section>
 
-                <p class="paper-font-subhead">You now have:</p>
-                <my-list></my-list>
+  <section data-route="help">
+    <paper-material elevation="1">
+    <h2 class="paper-font-display2">Help</h2>
+    <p>This is the help section</p>
+    </paper-material>
+  </section>
 
-                <p class="paper-font-body2">Looking for more Web App layouts? Check out our <a href="https://github.com/PolymerElements/app-layout-templates">layouts</a> collection. You can also <a href="http://polymerelements.github.io/app-layout-templates/">preview</a> them live.</p>
-              </paper-material>
-              <paper-material elevation="1">
-                <p class="paper-font-body2">This is another card.</p>
-              </paper-material>
+  </iron-pages>
+</div>
+</paper-header-panel>
+</paper-drawer-panel>
 
-            </section>
+</template> <!-- end template dom-bind -->
 
-            <section data-route="users">
-              <paper-material elevation="1">
-                <h2 class="paper-font-display2">Users</h2>
-                <p>This is the users section</p>
-                <a href="/users/Rob">Rob</a>
-              </paper-material>
-            </section>
-
-            <section data-route="user-info">
-              <paper-material elevation="1">
-                <h2 class="paper-font-display2">
-                User:<span>{{params.name}}</span>
-                </h2>
-                <div>This is <span>{{params.name}}</span>'s section</div>
-              </paper-material>
-            </section>
-
-            <section data-route="contact">
-              <paper-material elevation="1">
-                <h2 class="paper-font-display2">Contact</h2>
-                <p>This is the contact section</p>
-              </paper-material>
-            </section>
-
-          </iron-pages>
-        </div>
-      </paper-header-panel>
-    </paper-drawer-panel>
-
-    <paper-toast id="caching-complete"
-                 duration="6000"
-                 text="Caching complete! This app will work offline.">
-    </paper-toast>
-
-  </template>
-
-  <!-- build:js scripts/app.js -->
-  <script src="scripts/app.js"></script>
-  <!-- endbuild-->
+<!-- build:js scripts/app.js -->
+<script src="scripts/app.js"></script>
+<!-- endbuild-->
 </body>
 
 </html>

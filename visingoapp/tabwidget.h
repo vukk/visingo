@@ -127,6 +127,9 @@ private:
 
 #include <QtCore/QUrl>
 #include <QtWidgets/QTabWidget>
+
+#include <QtWebChannel/QtWebChannel>
+
 QT_BEGIN_NAMESPACE
 class QCompleter;
 class QLineEdit;
@@ -163,7 +166,7 @@ signals:
 #endif
 
 public:
-    TabWidget(QWidget *parent = 0);
+    TabWidget(QWebChannel *webChannel, QWidget *parent = 0);
     void clear();
     void addWebAction(QAction *action, QWebEnginePage::WebAction webAction);
 
@@ -215,6 +218,8 @@ private slots:
     void moveTab(int fromIndex, int toIndex);
 
 private:
+    QWebChannel *m_webChannel;
+
     QAction *m_recentlyClosedTabsAction;
     QAction *m_newTabAction;
     QAction *m_closeTabAction;

@@ -206,8 +206,9 @@ void TabBar::reloadTab()
     }
 }
 
-TabWidget::TabWidget(QWidget *parent)
+TabWidget::TabWidget(QWebChannel *webChannel, QWidget *parent)
     : QTabWidget(parent)
+    , m_webChannel(webChannel)
     , m_recentlyClosedTabsAction(0)
     , m_newTabAction(0)
     , m_closeTabAction(0)
@@ -500,6 +501,10 @@ WebView *TabWidget::newTab(bool makeCurrent)
     if (count() == 1)
         currentChanged(currentIndex());
     emit tabsChanged();
+
+    // pass webchannel
+    webView->page()->setWebChannel(m_webChannel);
+
     return webView;
 }
 

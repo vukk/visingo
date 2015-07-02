@@ -1,0 +1,32 @@
+
+<dom-module id="visualizer-predicates">
+  <style>
+    :host {
+      display: block;
+    }
+  </style>
+  <template>
+    <ul>
+      <template is="dom-repeat" items="{{predicates}}">
+        <li>Map <input type="text" name="{{item.name}}" value="[[item.display]]"> to <span class="paper-font-body1">{{item.display}}</span></li>
+      </template>
+    </ul>
+  </template>
+</dom-module>
+<script>
+  (function () {
+    Polymer({
+      is: 'visualizer-predicates',
+      properties: {
+        predicates: {
+          type: Array,
+          notify: true,
+        }
+      },
+      ready: function() {
+        this.predicates = [];
+      }
+    });
+  })();
+</script>
+

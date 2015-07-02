@@ -53,6 +53,11 @@
 #include "ui_passworddialog.h"
 #include "webview.h"
 
+
+// TODO cleanup includes
+#include "jsvisingocontrol.h"
+
+
 #include <QtCore/QSettings>
 
 #include <QtWidgets/QDesktopWidget>
@@ -79,6 +84,8 @@
 using namespace std;
 // end clingo
 
+
+
 template<typename Arg, typename R, typename C>
 struct InvokeWrapper {
     R *receiver;
@@ -95,11 +102,11 @@ InvokeWrapper<Arg, R, C> invoke(R *receiver, void (C::*memberFun)(Arg))
     return wrapper;
 }
 
-const char *BrowserMainWindow::defaultHome = "file://TODO-REMOVE";
+const char *BrowserMainWindow::defaultHome = "file://TODO-REMOVE"; // TODO: remove
 
 BrowserMainWindow::BrowserMainWindow(int argc, char **argv, QWidget *parent, Qt::WindowFlags flags)
     : QMainWindow(parent, flags)
-    , m_tabWidget(new TabWidget(this))
+    //, m_tabWidget(new TabWidget(this)) // TODO: remove
     , m_autoSaver(new AutoSaver(this))
     , m_historyBack(0)
     , m_historyForward(0)
@@ -108,6 +115,13 @@ BrowserMainWindow::BrowserMainWindow(int argc, char **argv, QWidget *parent, Qt:
 {
     m_saved_argc = argc;
     m_saved_argv = argv;
+
+    // webchannel
+    QWebChannel *m_webChannel = new QWebChannel(); // TODO test, does it need qwebengineview or something in? see QQmlWebChannel
+    //view->page()->setWebChannel(chan);
+    QDir *visualizerDir {new QDir(QString("%1/%2").arg(VisingoApp::instance()->applicationDirPath(), "../visualizers"))};
+    m_webChannel->registerObject("visingocontrol", new JSVisingoControl(this, visualizerDir));
+    m_tabWidget = new TabWidget(m_webChannel, this);
 
     setToolButtonStyle(Qt::ToolButtonFollowStyle);
     setAttribute(Qt::WA_DeleteOnClose, true);
@@ -177,7 +191,6 @@ BrowserMainWindow::BrowserMainWindow(int argc, char **argv, QWidget *parent, Qt:
 
     int size = m_tabWidget->lineEditStack()->sizeHint().height();
     m_navigationBar->setIconSize(QSize(size, size));
-
 }
 
 BrowserMainWindow::~BrowserMainWindow()

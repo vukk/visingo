@@ -46,6 +46,8 @@
 #include <QtGui/QIcon>
 #include <QtCore/QUrl>
 
+#include <QtWebChannel/QtWebChannel>
+
 QT_BEGIN_NAMESPACE
 class QWebEngineFrame;
 QT_END_NAMESPACE
@@ -154,6 +156,8 @@ private:
     ChaseWidget *m_chaseWidget;
     TabWidget *m_tabWidget;
     AutoSaver *m_autoSaver;
+
+    QWebChannel *m_webChannel;
 
     int m_saved_argc;
     char **m_saved_argv;

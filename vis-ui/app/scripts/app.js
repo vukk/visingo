@@ -1,45 +1,121 @@
-/*
-Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
-This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
-The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
-The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
-Code distributed by Google as part of the polymer project is also
-subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
-*/
 
 (function(document) {
-  'use strict';
+    'use strict';
 
-  // Grab a reference to our auto-binding template
-  // and give it some initial binding values
-  // Learn more about auto-binding templates at http://goo.gl/Dx1u2g
-  var app = document.querySelector('#app');
+    // Grab a reference to our auto-binding template
+    // and give it some initial binding values
+    // Learn more about auto-binding templates at http://goo.gl/Dx1u2g
+    var app = document.querySelector('#app');
 
-  app.displayInstalledToast = function() {
-    document.querySelector('#caching-complete').show();
-  };
+    app.displayInstalledToast = function() {
+        document.querySelector('#caching-complete').show();
+    };
 
-  // Listen for template bound event to know when bindings
-  // have resolved and content has been stamped to the page
-  app.addEventListener('dom-change', function() {
-    console.log('Our app is ready to rock!');
-    if (typeof qt.webChannelTransport !== 'undefined') { // jshint ignore:line
-      alert('qt.webChannelTransport found!'); // jshint ignore:line
-      document.getElementById('qtWebChannelNote').innerHTML = 'qt.webChannelTransport DEFINED!!!';
-    }
-  });
+    // Listen for template bound event to know when bindings
+    // have resolved and content has been stamped to the page
+    app.addEventListener('dom-change', function() {
+        console.log('Our app is ready to rock!');
 
-  // See https://github.com/Polymer/polymer/issues/1381
-  window.addEventListener('WebComponentsReady', function() {
-    // imports are loaded and elements have been registered
-  });
+        /* jshint ignore:start */
+        // TODO: this may not be the correct place to put our once-app-is-ready stuff
+        if (typeof qt.webChannelTransport !== 'undefined') { // jshint ignore:line
+            alert('qt.webChannelTransport found!'); // jshint ignore:line
+            document.getElementById('qtWebChannelNote').innerHTML = 'qt.webChannelTransport DEFINED!!!';
+        }
 
-  // Close drawer after menu item is selected if drawerPanel is narrow
-  app.onMenuSelect = function() {
-    var drawerPanel = document.querySelector('#paperDrawerPanel');
-    if (drawerPanel.narrow) {
-      drawerPanel.closeDrawer();
-    }
-  };
+        // TODO: check that qt.webChannelTransport exists
+
+        new QWebChannel(qt.webChannelTransport, function(channel) { // jshint ignore:line
+
+            app.webchannel = channel;
+            app.visingocontrol = channel.objects.visingocontrol;
+
+            console.log('creating qwebchannel object');
+            console.log(channel);
+
+            app.visingocontrol.visualizerLoaded.connect(function(visName) {
+                console.log('signal: loaded visualizer ' + visName);
+                console.log(app.visingocontrol.loadedVisualizers);
+                console.log(JSON.parse(app.visingocontrol.loadedVisualizers));
+            });
+
+            app.visingocontrol.sendTestJson.connect(function(blob) {
+                console.log('signal: sendTestJson');
+                console.log(blob);
+            });
+
+            app.visingocontrol.sendTestJsonStr.connect(function(blob) {
+                console.log('signal: sendTestJsonStr');
+                console.log(blob);
+                console.log(JSON.parse(blob));
+            });
+
+
+
+
+            /*
+            // Connect to a signal:
+            channel.objects.foo.mySignal.connect(function() {
+                // This callback will be invoked whenever the signal is emitted on the C++/QML side.
+                console.log(arguments);
+            });
+
+            // To make the object known globally, assign it to the window object, i.e.:
+            window.foo = channel.objects.foo;
+
+            // Invoke a method:
+            foo.myMethod(arg1, arg2, function(returnValue) {
+                // This callback will be invoked when myMethod has a return value. Keep in mind that
+                // the communication is asynchronous, hence the need for this callback.
+                console.log(returnValue);
+            });
+
+            // Read a property value, which is cached on the client side:
+            console.log(foo.myProperty);
+
+            // Writing a property will instantly update the client side cache.
+            // The remote end will be notified about the change asynchronously
+            foo.myProperty = "Hello World!";
+
+            // To get notified about remote property changes,
+            // simply connect to the corresponding notify signal:
+            foo.onMyPropertyChanged.connect(function(newValue) {
+                console.log(newValue);
+            });
+
+            // One can also access enums that are marked with Q_ENUM:
+            console.log(foo.MyEnum.MyEnumerator);
+            */
+        });
+
+        /* jshint ignore:end */
+    });
+
+    // See https://github.com/Polymer/polymer/issues/1381
+    window.addEventListener('WebComponentsReady', function() {
+        // imports are loaded and elements have been registered
+
+    });
+
+    /* jshint ignore:start */
+    app.initMapping = function(visualizer) {
+        var visPredicates = document.querySelector('#vis-predicates');
+        console.log(visualizer);
+        app.visingocontrol.loadVisualizer(visualizer, function(ret) {
+            console.log('loadVisualizer return val: ' + ret);
+            if(ret === true) {
+                console.log('loaded visualizers: ');
+                console.log(app.visingocontrol.loadedVisualizers);
+                console.log(JSON.parse(app.visingocontrol.loadedVisualizers));
+            }
+        });
+        // try to find if visualizer exists
+        // load its define.json
+        //    2 above by same command on webchannel, returns define.json or false
+        // put define.json obj somewhere for now
+        // populate visPredicates
+    };
+    /* jshint ignore:end */
 
 })(document);
+
