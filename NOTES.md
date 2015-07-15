@@ -23,3 +23,10 @@ see https://bugreports.qt.io/browse/QTBUG-43454
 adding js developer tools?
 https://qt.gitorious.org/qt/qtwebengine/source/2282c6605bc554ca610239f3dbc4d6d067c25763:tests/auto/widgets/qwebengineinspector/tst_qwebengineinspector.cpp#L47
 https://getfirebug.com/firebuglite
+
+
+- MAC OS X
+change qmake config at $QTDIR/5.x/clang_64/mkspecs/macx-clang/qmake.conf
+to have
+QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.9
+instead of 10.7
