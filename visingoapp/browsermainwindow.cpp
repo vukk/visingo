@@ -136,7 +136,6 @@ BrowserMainWindow::BrowserMainWindow(int argc, char **argv, QWidget *parent, Qt:
             m_tabWidget, SLOT(loadUrlInCurrentTab(QUrl)));
     connect(m_bookmarksToolbar->toggleViewAction(), SIGNAL(toggled(bool)),
             this, SLOT(updateBookmarksToolbarActionText(bool)));
-
     QVBoxLayout *layout = new QVBoxLayout;
     layout->setSpacing(0);
     layout->setMargin(0);
@@ -191,6 +190,9 @@ BrowserMainWindow::BrowserMainWindow(int argc, char **argv, QWidget *parent, Qt:
 
     int size = m_tabWidget->lineEditStack()->sizeHint().height();
     m_navigationBar->setIconSize(QSize(size, size));
+
+    m_bookmarksToolbar->setVisible(false);
+    m_navigationBar->setVisible(false);
 }
 
 BrowserMainWindow::~BrowserMainWindow()
