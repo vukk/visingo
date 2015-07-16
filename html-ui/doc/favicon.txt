@@ -1,0 +1,5 @@
+faviconist.com
+vg
+philosopher, bold
+radial gradient, 7986CB C5E1A5, bottom-left
+solid black

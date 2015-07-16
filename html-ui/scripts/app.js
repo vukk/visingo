@@ -2,24 +2,15 @@
 (function(document) {
     'use strict';
 
-    // Grab a reference to our auto-binding template
-    // and give it some initial binding values
-    // Learn more about auto-binding templates at http://goo.gl/Dx1u2g
     var app = document.querySelector('#app');
-
-    app.displayInstalledToast = function() {
-        document.querySelector('#caching-complete').show();
-    };
 
     // Listen for template bound event to know when bindings
     // have resolved and content has been stamped to the page
     app.addEventListener('dom-change', function() {
-        console.log('Our app is ready to rock!');
-
         /* jshint ignore:start */
         // TODO: this may not be the correct place to put our once-app-is-ready stuff
-        if (typeof qt.webChannelTransport !== 'undefined') { // jshint ignore:line
-            alert('qt.webChannelTransport found!'); // jshint ignore:line
+        if (typeof qt.webChannelTransport !== 'undefined') {
+            alert('qt.webChannelTransport found!');
             document.getElementById('qtWebChannelNote').innerHTML = 'qt.webChannelTransport DEFINED!!!';
         }
 
@@ -94,7 +85,6 @@
     // See https://github.com/Polymer/polymer/issues/1381
     window.addEventListener('WebComponentsReady', function() {
         // imports are loaded and elements have been registered
-
     });
 
     /* jshint ignore:start */

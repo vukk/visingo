@@ -1,0 +1,37 @@
+
+<dom-module id="visingo-toolbar">
+  <template>
+    <!-- Main Toolbar -->
+    <paper-toolbar id="visingoToolbar">
+
+    <!-- Toolbar actions -->
+    <paper-icon-button icon="refresh"></paper-icon-button>
+    <!-- Toolbar menu -->
+    <iron-selector attr-for-selected="data-route" selected="{{route}}">
+      <paper-icon-button data-route="new" icon="av:queue"></paper-icon-button>
+      <paper-icon-button data-route="help" icon="help"></paper-icon-button>
+    </iron-selector>
+
+    <span class="flex"></span>
+
+    <!-- Application name -->
+    <div class="paper-font-display2 app-name">Visingo</div>
+
+    </paper-toolbar>
+  </template>
+</dom-module>
+<script>
+  (function() {
+    Polymer({
+      is: 'visingo-toolbar',
+
+      properties: {
+        route: {
+          type: String,
+          notify: true
+        }
+      }
+    });
+  })();
+</script>
+

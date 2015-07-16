@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Visualize - Visingo</title>
+
+  <!-- webcomponents -->
+  <script src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+  <!-- Qt javascript channel etc. -->
+  <link rel="import" href="elements/visingo-js.html">
+  <!-- Polymer elements, own elements, routing -->
+  <link rel="import" href="elements/elements.html">
+</head>
+
+<body unresolved class="fullbleed layout vertical">
+<template is="dom-bind" id="app">
+
+<paper-header-panel main>
+
+<!-- toolbar, two way bind route since menu is in toolbar -->
+<visingo-toolbar route={{route}}></visingo-toolbar>
+
+<!-- Main Content -->
+<div class="content">
+</div>
+ 
+</paper-header-panel>
+</paper-drawer-panel>
+
+</template> <!-- end template dom-bind -->
+
+<script src="scripts/app.js"></script>
+</body>
+
+</html>

@@ -1,5 +1,5 @@
 {
-  "name": "vis-ui",
+  "name": "html-ui",
   "private": true,
   "dependencies": {
     "iron-elements": "PolymerElements/iron-elements#1.0.0",
