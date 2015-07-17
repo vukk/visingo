@@ -1,0 +1,57 @@
+
+<!--
+TODO: make this into an element visingo-visualizer-content-visjs that can
+be extended by the visualizer package (often empty extension, but less repeated code?)
+-->
+
+<!-- import vis.js (global vis)-->
+<link rel="import" href="../../elements/vis-import.html">
+
+<script>
+  System.import('./visualizer').then(function(m) {
+    
+  });
+</script>
+
+<dom-module id="visualizer-test-vis-graph">
+  <template>
+
+    <style type="text/css">
+      :host {
+        display: block;
+        position: relative;
+        width: 100%;
+        height: 100%;
+      }
+      #visjs-canvas-div {
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+
+    <!-- vis.js canvas div -->
+    <div id="visjsCanvasDiv"></div>
+
+  </template>
+</dom-module>
+<script>
+  (function() {
+    Polymer({
+      is: 'visualizer-test-vis-graph',
+
+      properties: {
+        resizing: {
+          type: Boolean,
+          value: false,
+          notify: true
+        }
+      },
+
+      attached: function() {
+        this.$.visjsCanvasDiv
+      }
+
+    });
+  })();
+</script>
+

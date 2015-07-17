@@ -37,3 +37,4 @@ instead of 10.7
   - webcola (cola.js)
   - two.js
 
+- moment.js for formatting time
