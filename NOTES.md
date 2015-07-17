@@ -30,3 +30,10 @@ change qmake config at $QTDIR/5.x/clang_64/mkspecs/macx-clang/qmake.conf
 to have
 QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.9
 instead of 10.7
+
+
+- js libs:
+  - vis.js
+  - webcola (cola.js)
+  - two.js
+
