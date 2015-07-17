@@ -8,14 +8,13 @@
   <!-- webcomponents -->
   <script src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
   <!-- Qt javascript channel etc. -->
-  <link rel="import" href="elements/visingo-js.html">
+  <link rel="import" href="elements/visingo-js-import.html">
   <!-- Polymer elements, own elements, routing -->
   <link rel="import" href="elements/elements.html">
 </head>
 
 <body unresolved class="fullbleed layout vertical">
 <template is="dom-bind" id="app">
-
 <paper-header-panel main>
 
 <!-- toolbar, two way bind route since menu is in toolbar -->
@@ -23,11 +22,12 @@
 
 <!-- Main Content -->
 <div class="content">
+
+  <!-- Visualizer specific content should be loaded to here -->
+
 </div>
  
 </paper-header-panel>
-</paper-drawer-panel>
-
 </template> <!-- end template dom-bind -->
 
 <script src="scripts/app.js"></script>
