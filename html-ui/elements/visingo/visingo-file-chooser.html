@@ -1,0 +1,205 @@
+
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-progress/paper-progress.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+
+<dom-module id="visingo-file-chooser">
+
+  <style type="text/css">
+    .enabled {
+      border: 1px dashed #555;
+    }
+    
+    .hover {
+      opacity: .7;
+      border: 1px dashed #111;
+      background-color: #89C35C; /* broken light green */
+    }
+
+    fieldset {   
+      -moz-border-radius:10px;  
+      border-radius: 10px;  
+      -webkit-border-radius: 10px;
+      border: 2px dotted #89C35C;
+    }
+    
+    #UploadBorder{
+      vertical-align: middle;
+      color: #555;
+      padding: 20px;
+      max-height: 300px;
+      overflow-y: auto;
+      display: inline-block;
+    }
+    
+    paper-button {
+      margin-bottom: 20px;
+    }
+    
+    .file {
+      padding: 10px 0px;
+    }
+    
+    .commands {
+      float: right;
+    }
+    
+    .commands iron-icon:not([icon="check-circle"]) {
+      cursor: pointer;
+      opacity: .9;
+    }
+    
+    .commands iron-icon:hover {
+      opacity: 1;
+    }
+    
+    [hidden] {
+      display: none;
+    }
+    
+    .error {
+      color: #f40303;
+      font-size: 11px;
+      margin: 2px 0px -3px;
+    }
+    
+    paper-progress {
+      --paper-progress-active-color: lightgreen;
+    }
+    
+    paper-progress[error] {
+      --paper-progress-active-color: indianred;
+    }
+
+    fieldset {      display: block;     margin-left: 2px;     margin-right: 2px;     padding-top: 0.35em;     padding-bottom: 0.625em;     padding-left: 0.75em;     padding-right: 0.75em;     border: 2px groove (internal value); }
+
+    #fsDropZone {
+      text-align: center;
+      vertical-align: middle;
+    }
+  </style>
+  
+  <template>
+    <fieldset id="fsDropZone">
+      <legend>
+        <content></content>
+      </legend>
+
+      Drop files here or <label for="inputHiddenFiles"><paper-button id="btnSelectFiles" raised><iron-icon icon="file-upload"></iron-icon> Select files</paper-icon-button></label>
+      
+      <input hidden type="file" id="inputHiddenFiles" on-change="handleFiles" multiple$="{{multiple}}">
+    </fieldset>
+
+    <div>
+      Files:
+      <ul>
+      <template is="dom-repeat" items="{{files}}">
+        <li>Name: <span>{{item.name}}</span></li>
+      </template>
+      </ul>
+    </div>
+
+<!--
+    <div>
+      <paper-button id="button" icon="file-upload" class="blue" on-click="_fileClick">
+        <content></content>
+      </paper-button>
+
+      <div id='UploadBorder'>
+        <div id="dropArea" hidden$="{{_hiddenDropText}}">{{dropText}}</div>
+        <template is="dom-repeat" items="{{files}}">
+          <div class="file">
+            <div class="name">
+              <span>{{item.name}}</span>
+              <div class="commands">
+                <iron-icon icon="autorenew" title="Retry Upload" on-click="_retryUpload" hidden$="{{!item.error}}"></iron-icon>
+                <iron-icon icon="cancel" title="Remove" on-click="_cancelUpload" hidden$="{{item.complete}}"></iron-icon>
+                <iron-icon icon="check-circle" title="Success" hidden$="{{!item.complete}}"></iron-icon>
+              </div>
+            </div>
+            <div class="error" hidden$="{{!item.error}}">Error uploading file...</div>
+            <div hidden$={{progressHidden}}>
+              <paper-progress value$="{{item.progress}}" error$="{{item.error}}"></paper-progress>
+            </div>
+          </div>
+        </template>
+      </div>
+    </div>
+    <input type="file" id="fileInput" on-change="_fileChange" hidden multiple="{{multi}}">
+    <<paper-toast id="toastSuccess" text="File uploaded successfully!"></paper-toast>
+    <paper-toast id="toastFail" text="Error uploading file!"></paper-toast>-->
+  </template>
+
+</dom-module>
+
+<!-- Drop files here or btn[Select files] -->
+
+<script>
+  (function() {
+    Polymer({
+      is: 'visingo-file-chooser',
+      
+      properties: {      
+        multiple: {
+          type: Boolean,
+          value: true
+        },
+
+        files: {
+          type: Array,
+          value: []
+        }
+      },
+          
+      remove: function(file) {
+        if(file)
+          this.splice("files", this.files.indexOf(file), 1);
+      },
+
+      removeAll: function() {
+        this.set("files", []);
+      },
+
+      handleFiles: function(evt) {
+        // evt.target.files when using dialog, evt.dataTransfer.files when drag'n'drop
+        var files = evt.target.files || evt.dataTransfer.files;
+        this.pushFiles(files);
+      },
+
+      pushFiles: function(files) {
+        // Loop through the FileList 'files', add to current files
+        // (why the looping construct works? see http://stackoverflow.com/questions/5313575/html5-filelist-and-jquerys-each#comment31961145_5313722)
+        for (var i = 0, f; f = files[i]; i++) {
+          this.push('files', f);
+        }
+      },
+
+      // called by Polymer when the element has been stamped to page
+      ready: function() {
+        var dz = this.$.fsDropZone;
+
+        this.ondragover = function(evt) {
+          evt.stopPropagation();
+          evt.preventDefault();
+          evt.dataTransfer.dropEffect = 'copy';
+          this.toggleClass('hover', true, dz);
+          return false;
+        }
+        
+        this.ondragleave = function(evt) {
+          this.toggleClass('hover', false, dz);
+          return false;
+        }
+        
+        this.ondrop = function(evt) {
+          evt.stopPropagation();
+          evt.preventDefault();
+          this.toggleClass('hover', false, dz);
+          this.handleFiles(evt);
+        }
+      }
+    });
+  })();
+
+</script>
+

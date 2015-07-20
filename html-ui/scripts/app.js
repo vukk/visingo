@@ -9,75 +9,73 @@
     app.addEventListener('dom-change', function() {
         /* jshint ignore:start */
         // TODO: this may not be the correct place to put our once-app-is-ready stuff
-        if (typeof qt.webChannelTransport !== 'undefined') {
-            alert('qt.webChannelTransport found!');
-            document.getElementById('qtWebChannelNote').innerHTML = 'qt.webChannelTransport DEFINED!!!';
-        }
+        if (typeof qt !== 'undefined' && typeof qt.webChannelTransport !== 'undefined') {
+             document.getElementById('visingoMainToolbar').qtConnected = true;
+       
+            new QWebChannel(qt.webChannelTransport, function(channel) { // jshint ignore:line
 
-        // TODO: check that qt.webChannelTransport exists
+                app.webchannel = channel;
+                app.visingocontrol = channel.objects.visingocontrol;
 
-        new QWebChannel(qt.webChannelTransport, function(channel) { // jshint ignore:line
+                console.log('creating qwebchannel object');
+                console.log(channel);
 
-            app.webchannel = channel;
-            app.visingocontrol = channel.objects.visingocontrol;
+                app.visingocontrol.visualizerLoaded.connect(function(visName) {
+                    console.log('signal: loaded visualizer ' + visName);
+                    console.log(app.visingocontrol.loadedVisualizers);
+                    console.log(JSON.parse(app.visingocontrol.loadedVisualizers));
+                });
 
-            console.log('creating qwebchannel object');
-            console.log(channel);
+                app.visingocontrol.sendTestJson.connect(function(blob) {
+                    console.log('signal: sendTestJson');
+                    console.log(blob);
+                });
 
-            app.visingocontrol.visualizerLoaded.connect(function(visName) {
-                console.log('signal: loaded visualizer ' + visName);
-                console.log(app.visingocontrol.loadedVisualizers);
-                console.log(JSON.parse(app.visingocontrol.loadedVisualizers));
+                app.visingocontrol.sendTestJsonStr.connect(function(blob) {
+                    console.log('signal: sendTestJsonStr');
+                    console.log(blob);
+                    console.log(JSON.parse(blob));
+                });
+
+
+
+
+                /*
+                // Connect to a signal:
+                channel.objects.foo.mySignal.connect(function() {
+                    // This callback will be invoked whenever the signal is emitted on the C++/QML side.
+                    console.log(arguments);
+                });
+
+                // To make the object known globally, assign it to the window object, i.e.:
+                window.foo = channel.objects.foo;
+
+                // Invoke a method:
+                foo.myMethod(arg1, arg2, function(returnValue) {
+                    // This callback will be invoked when myMethod has a return value. Keep in mind that
+                    // the communication is asynchronous, hence the need for this callback.
+                    console.log(returnValue);
+                });
+
+                // Read a property value, which is cached on the client side:
+                console.log(foo.myProperty);
+
+                // Writing a property will instantly update the client side cache.
+                // The remote end will be notified about the change asynchronously
+                foo.myProperty = "Hello World!";
+
+                // To get notified about remote property changes,
+                // simply connect to the corresponding notify signal:
+                foo.onMyPropertyChanged.connect(function(newValue) {
+                    console.log(newValue);
+                });
+
+                // One can also access enums that are marked with Q_ENUM:
+                console.log(foo.MyEnum.MyEnumerator);
+                */
             });
 
-            app.visingocontrol.sendTestJson.connect(function(blob) {
-                console.log('signal: sendTestJson');
-                console.log(blob);
-            });
-
-            app.visingocontrol.sendTestJsonStr.connect(function(blob) {
-                console.log('signal: sendTestJsonStr');
-                console.log(blob);
-                console.log(JSON.parse(blob));
-            });
-
-
-
-
-            /*
-            // Connect to a signal:
-            channel.objects.foo.mySignal.connect(function() {
-                // This callback will be invoked whenever the signal is emitted on the C++/QML side.
-                console.log(arguments);
-            });
-
-            // To make the object known globally, assign it to the window object, i.e.:
-            window.foo = channel.objects.foo;
-
-            // Invoke a method:
-            foo.myMethod(arg1, arg2, function(returnValue) {
-                // This callback will be invoked when myMethod has a return value. Keep in mind that
-                // the communication is asynchronous, hence the need for this callback.
-                console.log(returnValue);
-            });
-
-            // Read a property value, which is cached on the client side:
-            console.log(foo.myProperty);
-
-            // Writing a property will instantly update the client side cache.
-            // The remote end will be notified about the change asynchronously
-            foo.myProperty = "Hello World!";
-
-            // To get notified about remote property changes,
-            // simply connect to the corresponding notify signal:
-            foo.onMyPropertyChanged.connect(function(newValue) {
-                console.log(newValue);
-            });
-
-            // One can also access enums that are marked with Q_ENUM:
-            console.log(foo.MyEnum.MyEnumerator);
-            */
-        });
+        } // end if qt defined
 
         /* jshint ignore:end */
     });
@@ -86,25 +84,6 @@
     window.addEventListener('WebComponentsReady', function() {
         // imports are loaded and elements have been registered
     });
-
-    /* jshint ignore:start */
-    app.initMapping = function(visualizer) {
-        var visPredicates = document.querySelector('#vis-predicates');
-        console.log(visualizer);
-        app.visingocontrol.loadVisualizer(visualizer, function(ret) {
-            console.log('loadVisualizer return val: ' + ret);
-            if(ret === true) {
-                console.log('loaded visualizers: ');
-                console.log(app.visingocontrol.loadedVisualizers);
-                console.log(JSON.parse(app.visingocontrol.loadedVisualizers));
-            }
-        });
-        // try to find if visualizer exists
-        // load its define.json
-        //    2 above by same command on webchannel, returns define.json or false
-        // put define.json obj somewhere for now
-        // populate visPredicates
-    };
     /* jshint ignore:end */
 
 })(document);

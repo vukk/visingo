@@ -1,6 +1,24 @@
+<link rel="import" href="../../bower_components/iron-selector/iron-selector.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/iron-icons/av-icons.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/paper-toolbar/paper-toolbar.html">
 
 <dom-module id="visingo-toolbar">
+  <!-- https://www.polymer-project.org/1.0/docs/devguide/styling.html#external-stylesheets -->
+  <link rel="import" type="css" href="./visingo-tooltip.css">
+
+  <style>
+    iron-icon.green {
+      color: lightgreen;
+    }
+    iron-icon.red {
+      color: indianred;
+    }
+  </style>
+
   <template>
+    
     <!-- Main Toolbar -->
     <paper-toolbar id="visingoToolbar">
 
@@ -11,6 +29,9 @@
       <paper-icon-button data-route="new" icon="av:queue"></paper-icon-button>
       <paper-icon-button data-route="help" icon="help"></paper-icon-button>
     </iron-selector>
+
+    <!-- Indicate availability of Qt -->
+    <iron-icon id="qtAvailabilityIcon" icon="settings-input-antenna" tip="Qt Availability" class="red tooltip"></iron-icon>
 
     <span class="flex"></span>
 
@@ -29,7 +50,18 @@
         route: {
           type: String,
           notify: true
+        },
+        qtConnected: {
+          type: Boolean,
+          value: false,
+          observer: '_qtConnectedChanged'
         }
+      },
+
+      _qtConnectedChanged: function(newValue, oldValue) {
+        var qtA = this.$.qtAvailabilityIcon;
+        qtA.toggleClass('green', newValue);
+        qtA.toggleClass('red',  !newValue);
       }
     });
   })();

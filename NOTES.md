@@ -38,3 +38,10 @@ instead of 10.7
   - two.js
 
 - moment.js for formatting time
+
+
+Checks:
+browser compatability and warning messages
+- file API http://www.html5rocks.com/en/tutorials/file/dndfiles/
+- webcomponents OK
+

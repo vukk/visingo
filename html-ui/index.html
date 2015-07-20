@@ -31,32 +31,86 @@
 <paper-header-panel main>
 
 <!-- toolbar, two way bind route since menu is in toolbar -->
-<visingo-toolbar route={{route}}></visingo-toolbar>
+<visingo-toolbar id="visingoMainToolbar" route={{route}}></visingo-toolbar>
 
 <!-- Main Content -->
 <div class="content">
-  <iron-pages attr-for-selected="data-route" selected="{{route}}">
+  <iron-pages attr-for-selected="data-route" selected="{{route}}" class="padded">
 
   <section data-route="new">
     <paper-material elevation="1">
-      <h2 class="paper-font-display2">Choose visualiser</h2>
-      <form is="iron-form" id="form-vis" action="">
-        
-        <paper-input-container always-float-label attr-for-value="visualiser">
-          <label>Visualiser: (should be a dropdown..?)</label>
-          <input is="iron-input" id="chosen-visualiser" name="visualiser" label="visualiser" value="test-vis-graph" />
+      <h2 class="paper-font-display2">New visualization</h2>
+      <form is="iron-form" id="formNewVis" method="post" action="/">
+
+        <div>
+          <h4>Visualization type</h4>
+          <paper-radio-group name="visType" selected="{{visType}}">
+            <paper-radio-button name="playback">Playback</paper-radio-button>
+            <paper-radio-button name="interactive">Interactive</paper-radio-button>
+          </paper-radio-group>
+        </div>
+        <div>
+          <h4>Visualization module</h4>
+          <select name="visModule">
+            <option value="test-vis-graph">test-vis-graph</option>
+            <option value="tes-vis-graph2">test-vis-graph2</option>
+          </select>
+        </div>
+
+        <!--
+
+        <paper-input-container always-float-label attr-for-value="visualizer">
+          <label for="textInput">text input</label>
+          <input is="iron-input" class="floating-label" id="textInput" name="textInput" />
         </paper-input-container>
-        
-        <paper-button raised onClick="app.initMapping(document.querySelector('#chosen-visualiser').value);">Next</paper-button>
+
+        -->
+
+
+        <!--<paper-button raised onClick="app.initMapping(document.querySelector('#chosen-visualizer').value);">Next</paper-button>-->
       </form>
     </paper-material>
 
+
+    <iron-pages attr-for-selected="visualization-type" selected="{{visType}}" onload="this.visType = 'playback'">
+
+      <section visualization-type="playback">
+        <paper-material elevation="1">
+          <div>
+            <h4>Playback log file type</h4>
+            <paper-radio-group name="playbackInputType" selected="claspLog">
+              <paper-radio-button name="claspLog">Output log</paper-radio-button>
+              <paper-radio-button name="claspJSON">JSON</paper-radio-button>
+            </paper-radio-group>
+          </div>
+          <div>
+            <!-- upload files form -->
+          </div>
+          <div>
+            <paper-button raised>Check validity</paper-button>
+          </div>
+
+          <visingo-file-chooser>Choose log file</visingo-file-chooser>
+        </paper-material>
+      </section>
+      
+      <section visualization-type="interactive">
+        <paper-material elevation="1">
+          <h4>Interactivity specific settings</h4>
+          <div>Not yet implemented.</div>
+        </paper-material>
+      </section>
+
+    </iron-pages>
+
+    <!-- Load mapping and settings from visualization module -->
+
     <paper-material elevation="1">
-      <p id="qtWebChannelNote" class="paper-font-body2">Qt WebChannel not defined :-(</p>
+      <div id="output">None</div>
     </paper-material>
 
     <paper-material elevation="1">
-    <p>Route is: <input id="tmpshowroute" value="{{route}}"></p>
+    <p>route is: <input id="tmpshowroute" value="{{route}}"></p>
     </paper-material>
 
     <paper-material elevation="1">
@@ -95,6 +149,8 @@
 </template> <!-- end template dom-bind -->
 
 <script src="scripts/app.js"></script>
-</body>
+<script src="scripts/index.js"></script>
 
+</body>
 </html>
+
