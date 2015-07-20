@@ -94,7 +94,7 @@
       Files:
       <ul>
       <template is="dom-repeat" items="{{files}}">
-        <li>Name: <span>{{item.name}}</span></li>
+      <li>Name: <span>{{item.name}}</span> <iron-icon icon="cancel" title="Remove" on-click="remove" itemname="{{item.name}}"></iron-icon></li>
       </template>
       </ul>
     </div>
@@ -150,14 +150,18 @@
           value: []
         }
       },
+
+      _remove: function(evt) {
+        this.remove(e.model.__data__.item);
+      },
           
       remove: function(file) {
         if(file)
-          this.splice("files", this.files.indexOf(file), 1);
+          this.splice('files', this.files.indexOf(file), 1);
       },
 
       removeAll: function() {
-        this.set("files", []);
+        this.set('files', []);
       },
 
       handleFiles: function(evt) {
