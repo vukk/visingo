@@ -84,11 +84,11 @@
             </paper-radio-group>
           </div>
           <div style="max-width:400px;">
-            <!-- upload files form -->
-            <visingo-file-chooser >Choose log file</visingo-file-chooser>
+            <h4>Choose log file</h4>
+            <visingo-file-chooser id="playbackFile"></visingo-file-chooser>
           </div>
           <div>
-            <paper-button raised>Check validity</paper-button>
+            <paper-button on-tap="parsePlaybackFile()" raised>Check validity</paper-button>
           </div>
 
           
@@ -115,7 +115,7 @@
     </paper-material>
 
     <paper-material elevation="1">
-      <visualizer-predicates id="vis-predicates"></visualizer-predicates>
+      <visualizer-predicates id="visPredicates"></visualizer-predicates>
     </paper-material>
   </section>
 

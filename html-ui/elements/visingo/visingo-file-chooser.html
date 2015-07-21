@@ -1,81 +1,39 @@
 
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
-<link rel="import" href="../../bower_components/paper-progress/paper-progress.html">
 <link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+
+<!-- TODO: remove/add legend tag based on if content is set or not to avoid border issues -->
 
 <dom-module id="visingo-file-chooser">
 
   <style type="text/css">
-    .enabled {
-      border: 1px dashed #555;
-    }
-    
+    /* TODO: allow styling from outside easily via providing --fc-error-color etc */
     .hover {
       opacity: .7;
-      border: 1px dashed #111;
+      border: 2px dotted black;
       background-color: #89C35C; /* broken light green */
     }
 
-    fieldset {   
+    .hidden {
+      display: none;
+    }
+
+    #fsDropZone {   
       -moz-border-radius:10px;  
       border-radius: 10px;  
       -webkit-border-radius: 10px;
       border: 2px dotted #89C35C;
-    }
-    
-    #UploadBorder{
-      vertical-align: middle;
-      color: #555;
-      padding: 20px;
-      max-height: 300px;
-      overflow-y: auto;
-      display: inline-block;
-    }
-    
-    paper-button {
-      margin-bottom: 20px;
-    }
-    
-    .file {
-      padding: 10px 0px;
-    }
-    
-    .commands {
-      float: right;
-    }
-    
-    .commands iron-icon:not([icon="check-circle"]) {
-      cursor: pointer;
-      opacity: .9;
-    }
-    
-    .commands iron-icon:hover {
-      opacity: 1;
-    }
-    
-    [hidden] {
-      display: none;
-    }
-    
-    .error {
-      color: #f40303;
-      font-size: 11px;
-      margin: 2px 0px -3px;
-    }
-    
-    paper-progress {
-      --paper-progress-active-color: lightgreen;
-    }
-    
-    paper-progress[error] {
-      --paper-progress-active-color: indianred;
-    }
-
-    fieldset {      display: block;     margin-left: 2px;     margin-right: 2px;     padding-top: 0.35em;     padding-bottom: 0.625em;     padding-left: 0.75em;     padding-right: 0.75em;     border: 2px groove (internal value); }
-
-    #fsDropZone {
       text-align: center;
-      vertical-align: middle;
+    }
+
+    #wrap {
+      margin-top: 8px;
+      margin-bottom: 8px;
+    }
+
+    #errorMultiple {
+      color: indianred;
+      margin-bottom: 8px;
     }
   </style>
   
@@ -84,9 +42,10 @@
       <legend>
         <content></content>
       </legend>
-
-      Drop files here or <label for="inputHiddenFiles"><paper-button id="btnSelectFiles" raised><iron-icon icon="file-upload"></iron-icon> Select files</paper-icon-button></label>
-      
+      <div id="wrap">
+        Drop file<span>{{multiplesPlural}}</span> here or <label for="inputHiddenFiles"><paper-button id="btnSelectFiles" raised><iron-icon icon="file-upload"></iron-icon> Select file<span>{{multiplesPlural}}</span></paper-icon-button></label>
+      </div>
+      <div id="errorMultiple" class="hidden">Multiple files not allowed.</div>
       <input hidden type="file" id="inputHiddenFiles" on-change="handleFiles" multiple$="{{multiple}}">
     </fieldset>
 
@@ -94,40 +53,10 @@
       Files:
       <ul>
       <template is="dom-repeat" items="{{files}}">
-      <li>Name: <span>{{item.name}}</span> <iron-icon icon="cancel" title="Remove" on-click="remove" itemname="{{item.name}}"></iron-icon></li>
+        <li>Name: <span>{{item.name}}</span> <iron-icon icon="cancel" title="Remove" on-click="_remove" itemname="{{item.name}}"></iron-icon></li>
       </template>
       </ul>
     </div>
-
-<!--
-    <div>
-      <paper-button id="button" icon="file-upload" class="blue" on-click="_fileClick">
-        <content></content>
-      </paper-button>
-
-      <div id='UploadBorder'>
-        <div id="dropArea" hidden$="{{_hiddenDropText}}">{{dropText}}</div>
-        <template is="dom-repeat" items="{{files}}">
-          <div class="file">
-            <div class="name">
-              <span>{{item.name}}</span>
-              <div class="commands">
-                <iron-icon icon="autorenew" title="Retry Upload" on-click="_retryUpload" hidden$="{{!item.error}}"></iron-icon>
-                <iron-icon icon="cancel" title="Remove" on-click="_cancelUpload" hidden$="{{item.complete}}"></iron-icon>
-                <iron-icon icon="check-circle" title="Success" hidden$="{{!item.complete}}"></iron-icon>
-              </div>
-            </div>
-            <div class="error" hidden$="{{!item.error}}">Error uploading file...</div>
-            <div hidden$={{progressHidden}}>
-              <paper-progress value$="{{item.progress}}" error$="{{item.error}}"></paper-progress>
-            </div>
-          </div>
-        </template>
-      </div>
-    </div>
-    <input type="file" id="fileInput" on-change="_fileChange" hidden multiple="{{multi}}">
-    <<paper-toast id="toastSuccess" text="File uploaded successfully!"></paper-toast>
-    <paper-toast id="toastFail" text="Error uploading file!"></paper-toast>-->
   </template>
 
 </dom-module>
@@ -142,7 +71,13 @@
       properties: {      
         multiple: {
           type: Boolean,
-          value: true
+          value: false
+        },
+
+        multiplesPlural: {
+          type: String,
+          value: '',
+          computed: '_computeMultiplesPlural(multiple)'
         },
 
         files: {
@@ -151,17 +86,25 @@
         }
       },
 
+      _computeMultiplesPlural: function(multiple) {
+        return multiple ? 's' : '';
+      },
+
       _remove: function(evt) {
-        this.remove(e.model.__data__.item);
+        this.remove(evt.model.__data__.item);
       },
           
       remove: function(file) {
-        if(file)
+        if(file) {
           this.splice('files', this.files.indexOf(file), 1);
+          
+          if(this.files.length < 1)
+            this.toggleClass('hidden', true, this.$.errorMultiple);
+        }
       },
 
       removeAll: function() {
-        this.set('files', []);
+        this.set('files', []); // TODO: or this.splice? does this give us correct events
       },
 
       handleFiles: function(evt) {
@@ -174,11 +117,16 @@
         // Loop through the FileList 'files', add to current files
         // (why the looping construct works? see http://stackoverflow.com/questions/5313575/html5-filelist-and-jquerys-each#comment31961145_5313722)
         for (var i = 0, f; f = files[i]; i++) {
-          this.push('files', f);
+          if(this.multiple || this.files.length < 1) {
+            this.push('files', f);
+          }
+          else {
+            this.toggleClass('hidden', false, this.$.errorMultiple);
+          }
         }
       },
 
-      // called by Polymer when the element has been stamped to page
+      // called by Polymer
       ready: function() {
         var dz = this.$.fsDropZone;
 
