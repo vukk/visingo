@@ -3,10 +3,13 @@
 <link rel="import" href="../../bower_components/iron-icons/av-icons.html">
 <link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../bower_components/paper-toolbar/paper-toolbar.html">
+<!-- TODO: remove once polymer has the tooltip component again
+-->
+<link rel="import" href="../mdl-import.html">
 
 <dom-module id="visingo-toolbar">
-  <!-- https://www.polymer-project.org/1.0/docs/devguide/styling.html#external-stylesheets -->
-  <link rel="import" type="css" href="./visingo-tooltip.css">
+  <!-- https://www.polymer-project.org/1.0/docs/devguide/styling.html#external-stylesheet 
+  <link rel="import" type="css" href="./visingo-tooltip.css"-->
 
   <style>
     iron-icon.green {
@@ -31,7 +34,11 @@
     </iron-selector>
 
     <!-- Indicate availability of Qt -->
-    <iron-icon id="qtAvailabilityIcon" icon="settings-input-antenna" tip="Qt Availability" class="red tooltip"></iron-icon>
+    <iron-icon id="qtAvailabilityIcon" icon="settings-input-antenna" class="red"></iron-icon>
+    <div class="mdl-tooltip mdl-tooltip--large" for="qtAvailabilityIcon">
+      Qt availability:<br>
+      <span>{{qtConnectedText}}</span>
+    </div>
 
     <span class="flex"></span>
 
@@ -55,6 +62,10 @@
           type: Boolean,
           value: false,
           observer: '_qtConnectedChanged'
+        },
+        qtConnectedText: {
+          type: String,
+          value: 'not connected'
         }
       },
 
@@ -62,6 +73,7 @@
         var qtA = this.$.qtAvailabilityIcon;
         qtA.toggleClass('green', newValue);
         qtA.toggleClass('red',  !newValue);
+        this.qtConnectedText = newValue ? 'connected' : 'not connected';
       }
     });
   })();
