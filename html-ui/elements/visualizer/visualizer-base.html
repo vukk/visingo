@@ -1,7 +1,7 @@
 <script>
   // loads visualizer-helper-scripts.js form current directory
-  System.import('./visualizer-helper-scripts').then(function(m) {
-    visualizer = visualizer || {};
+  System.import('elements/visualizer/visualizer-helper-scripts').then(function(m) {
+    visualizer = window.visualizer || {};
     visualizer.helpers = m;
   });
 </script>

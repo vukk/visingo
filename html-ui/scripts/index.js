@@ -7,8 +7,10 @@
     // Listen for template bound event to know when bindings
     // have resolved and content has been stamped to the page
     app.addEventListener('dom-change', function() {
+        // TODO: Surely there is a better way...
         // Defaults for two-way binded elements
         app.visType = 'playback';
+        app.playbackFile = [];
 
         document.getElementById('formNewVis').addEventListener('iron-form-submit', display);
 

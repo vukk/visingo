@@ -1,0 +1,8 @@
+<script>
+  // loads parser
+  System.import('elements/visingo-parsers/solver-txt-to-json.js').then(function(m) {
+    visingo = window.visingo || {};
+    visingo.parsers = visingo.parsers || {};
+    visingo.parsers.solverTxtToJSON = m;
+  });
+</script>

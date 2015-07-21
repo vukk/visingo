@@ -1,0 +1,8 @@
+<script>
+  // loads parser
+  System.import('elements/visingo-parsers/multiple-term.js').then(function(m) {
+    visingo = window.visingo || {};
+    visingo.parsers = visingo.parsers || {};
+    visingo.parsers.multipleTerm = m;
+  });
+</script>

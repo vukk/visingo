@@ -85,10 +85,11 @@
           </div>
           <div style="max-width:400px;">
             <h4>Choose log file</h4>
-            <visingo-file-chooser id="playbackFile"></visingo-file-chooser>
+            <visingo-file-chooser files="{{playbackFile}}"></visingo-file-chooser>
           </div>
           <div>
-            <paper-button on-tap="parsePlaybackFile()" raised>Check validity</paper-button>
+            <visingo-parse-button files="[[playbackFile]]"></visingo-parse-button>
+            <!--<paper-button on-tap="parsePlaybackFile()" raised>Check validity</paper-button>-->
           </div>
 
           

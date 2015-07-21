@@ -1,0 +1,87 @@
+
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+
+<link rel="import" href="../visingo-parsers/solver-txt-to-json.html">
+
+<!--
+TODO: make a general "do" button, four colors: outdated, done, error, warning
+      then extend that.
+      - Outdated: 'files' updated since last execution
+      - Done: executed successfully on current 'files'
+      - Error: error in parsing
+      - Warning: probably not used
+     idea is to: bind to "value" (here files), button runs "execute" (here parse)... maybe
+-->
+
+<dom-module id="visingo-parse-button">
+  <template>
+    <paper-button on-tap="parse" raised>
+      <iron-icon icon="autorenew"></iron-icon>
+      Parse
+    </paper-button>
+    <div>
+      Parsed:
+      <ul>
+      <template is="dom-repeat" items="{{parsed}}">
+        <li><span>{{item.file.name}}</span></li>
+      </template>
+      </ul>
+    </div>
+  </template>
+
+</dom-module>
+
+<script>
+  (function() {
+    Polymer({
+      is: 'visingo-parse-button',
+      
+      properties: {
+        files: {
+          type: Array,
+          value: []
+        },
+        parsed: {
+          type: Array,
+          value: [],
+          notify: true,
+          readonly: true
+        }
+      },
+
+      parse: function(evt) {
+        //this.files.forEach(this._parseFile);
+        for (var i = 0; i < this.files.length; i++) {
+          this._parseFile(this.files[i], i, this.files);
+        }
+      },
+
+      _parseFile: function(file, idx, arr) {
+        console.log(file, idx, arr, this, this.parsed);
+        reader = new FileReader();
+        reader.onerror = function(evt) {
+          alert('File read error.');
+        };
+        reader.onabort = function(evt) {
+          alert('File read cancelled.');
+        };
+        reader.onloadend = function(evt) {
+          var reader = evt.target;
+          if (reader.readyState === FileReader.DONE) {
+            // js arrays extend automatically, this can be done in parallel
+            this.parsed[idx] = {
+              'file': file,
+              'result': visingo.parsers.solverTxtToJSON.parse(reader.result)
+            };
+          }
+        };
+
+        reader.readAsText(file, 'UTF-8');
+      }
+
+    });
+  })();
+
+</script>
+

@@ -43,7 +43,7 @@
         <content></content>
       </legend>
       <div id="wrap">
-        Drop file<span>{{multiplesPlural}}</span> here or <label for="inputHiddenFiles"><paper-button id="btnSelectFiles" raised><iron-icon icon="file-upload"></iron-icon> Select file<span>{{multiplesPlural}}</span></paper-icon-button></label>
+        Drop file<span>{{multiplesPlural}}</span> here or <label for="inputHiddenFiles"><paper-button id="btnSelectFiles" raised><iron-icon icon="file-upload"></iron-icon> Select file<span>{{multiplesPlural}}</span></paper-button></label>
       </div>
       <div id="errorMultiple" class="hidden">Multiple files not allowed.</div>
       <input hidden type="file" id="inputHiddenFiles" on-change="handleFiles" multiple$="{{multiple}}">
