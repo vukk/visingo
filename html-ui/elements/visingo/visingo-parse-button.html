@@ -40,25 +40,39 @@ TODO: make a general "do" button, four colors: outdated, done, error, warning
       properties: {
         files: {
           type: Array,
-          value: []
+          value: [],
+          observer: '_filesChanged'
         },
         parsed: {
           type: Array,
           value: [],
           notify: true,
           readonly: true
+        },
+        status: {
+          type: String,
+          value: 'outdated',
+          notify: true,
+          readonly: true
         }
+      },
+
+      _filesChanged: function(newVal, oldVal) {
+        //this.splice('parsed', 0, this.parsed.length-1);
+        // TODO remove?
       },
 
       parse: function(evt) {
-        //this.files.forEach(this._parseFile);
-        for (var i = 0; i < this.files.length; i++) {
-          this._parseFile(this.files[i], i, this.files);
-        }
+        this.files.forEach(this._parseFile, this);
       },
 
+      // TODO: need to abort when files changed
+      // TODO: really: keep track of which files are parsed and if new ones are added
+      //       mark those as not parsed. then on button press parse only files that
+      //       have not been parsed yet
+
       _parseFile: function(file, idx, arr) {
-        console.log(file, idx, arr, this, this.parsed);
+        console.log(file, idx, arr, this);
         reader = new FileReader();
         reader.onerror = function(evt) {
           alert('File read error.');
@@ -69,15 +83,38 @@ TODO: make a general "do" button, four colors: outdated, done, error, warning
         reader.onloadend = function(evt) {
           var reader = evt.target;
           if (reader.readyState === FileReader.DONE) {
-            // js arrays extend automatically, this can be done in parallel
-            this.parsed[idx] = {
+            // js arrays extend automatically, this can be done in parallel?
+            this.splice('parsed', idx, 1, {
               'file': file,
               'result': visingo.parsers.solverTxtToJSON.parse(reader.result)
-            };
+            });
+            this._allParsedCheck();
           }
-        };
+        }.bind(this);
 
         reader.readAsText(file, 'UTF-8');
+      },
+
+      // TODO: inefficient, called many times
+      _allParsedCheck: function() {
+        if(this.files.length !== this.parsed.length) {
+          this.set('status', 'outdated');
+          return 'outdated';
+        }
+
+        var ret = 'done';
+        for(var i = 0; i < this.files.length; i++) {
+          if(typeof this.parsed[i] !== 'undefined') {
+            if(this.parsed[i].file.name !== this.files[i].name) {
+              ret = 'outdated';
+              break;
+            }
+          }
+        }
+
+        if(this.status !== ret)
+          this.set('status', ret);
+        return ret;
       }
 
     });
