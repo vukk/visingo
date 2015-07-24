@@ -1,0 +1,108 @@
+
+<dom-module id="visingo-visualizer-settings">
+  <template>
+  <h3>Settings for <span>{{visualizer.name}}</span></h3>
+  <div id="container"></div>
+  </template>
+</dom-module>
+
+<!-- TODO: Make an array of loaded elements, then display when needed.
+           This way we don't import multiple times, and also settings
+           stay the same in-between. -->
+
+<script>
+  (function() {
+    Polymer({
+      is: 'visingo-visualizer-settings',
+      
+      properties: {      
+        visualizer: {
+          type: Object,
+          observer: '_visualizerChange'
+        },
+
+        visualizationType: {
+          type: String,
+          observer: '_onewayBindVisualizationType'
+        },
+
+        parseStatus: {
+          type: String,
+          observer: '_onewayBindParseStatus'
+        },
+
+        parsedFile: {
+          type: Array,
+          observer: '_onewayBindParsedFile'
+        },
+
+        _element: {
+          type: Object
+        }
+      },
+
+      /*
+      observers: [
+        '_onewayBind(visualizationType)',
+        '_onewayBind(parseStatus)',
+        '_onewayBind(parsedFile)'
+      ],*/
+
+      // TODO: check if there is a way to do this as a loop
+      _onewayBindVisualizationType: function(newVal, oldVal) {
+        this._onewayBind('visualizationType');
+      },
+      _onewayBindParseStatus: function(newVal, oldVal) {
+        this._onewayBind('parseStatus');
+      },
+      _onewayBindParsedFile: function(newVal, oldVal) {
+        this._onewayBind('parsedFile');
+      },
+
+      _onewayBind: function(prop) {
+        if(typeof this._element !== 'undefined')
+          this._element.input[prop] = this[prop];
+      },
+
+      _visualizerChange: function(newVal, oldVal) {
+        elem = Polymer.dom(this.$.container).firstChild;
+
+        if(typeof elem !== 'undefined')
+          Polymer.dom(this.$.container).removeChild(elem);
+
+        this._element = undefined;
+
+        this._import(this.visualizer);
+      },
+
+      _import: function(visualizer) {
+        this.importHref(
+          '../../visualizers/' + visualizer.directory + '/settings.html',
+          function(evt) {
+            var elemName = 'visualizer-' + visualizer.name + '-settings';
+            var elem = document.createElement(elemName);
+            elem.id = 'visualizerSettingsElement';
+            elem.input = {};
+
+            // map most properties forward to the element
+            Object.keys(this.properties).forEach(function(item, idx, arr) {
+              // ignore properties starting with underscore, also visualizer
+              if(item[0] !== '_' || item === 'visualizer')
+                elem.input[item] = this[item];
+            }, this);
+
+            Polymer.dom(this.$.container).appendChild(elem);
+            this._element = elem;
+          }.bind(this),
+          function(evt) {
+            // loading error
+            alert('visualizer settings could not be imported!'); // TODO: make it smarter
+          }
+        );
+      },
+    });
+
+  })();
+
+</script>
+

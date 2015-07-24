@@ -4,13 +4,18 @@
 
     var app = document.querySelector('#app');
 
+    /* defaults */
+    app.qtConnected = false;
+
+
     // Listen for template bound event to know when bindings
     // have resolved and content has been stamped to the page
     app.addEventListener('dom-change', function() {
         /* jshint ignore:start */
         // TODO: this may not be the correct place to put our once-app-is-ready stuff
         if (typeof qt !== 'undefined' && typeof qt.webChannelTransport !== 'undefined') {
-             document.getElementById('visingoMainToolbar').qtConnected = true;
+            app.qtConnected = true;
+            document.getElementById('visingoMainToolbar').qtConnected = true;
        
             new QWebChannel(qt.webChannelTransport, function(channel) { // jshint ignore:line
 

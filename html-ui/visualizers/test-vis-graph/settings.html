@@ -1,0 +1,35 @@
+
+<link rel="import" href="settings-options.html">
+<link rel="import" href="settings-mapping.html">
+
+<dom-module id="visualizer-test-vis-graph-settings">
+  <template>
+  <visualizer-test-vis-graph-settings-options input="[[input]]" settings="{{_settings}}">
+  </visualizer-test-vis-graph-settings-options>
+  <visualizer-test-vis-graph-settings-mapping input="[[input]]" settings="[[_settings]]">
+  </visualizer-test-vis-graph-settings-mapping>
+  </template>
+</dom-module>
+
+<script>
+  (function () {
+    Polymer({
+      is: 'visualizer-test-vis-graph-settings',
+      properties: {
+        input: { // has the attributes passed to visingo-visualizer-settings
+          type: Object
+        },
+        _settings: {
+          type: Object,
+          value: {}
+        }
+      },
+
+      created: function() {
+        /* init for binding */
+      }
+
+    });
+  })();
+</script>
+

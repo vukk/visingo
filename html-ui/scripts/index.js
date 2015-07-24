@@ -4,13 +4,22 @@
 
     var app = document.querySelector('#app');
 
+    /* Defaults for bindings */
+    app.visType = 'playback';
+    app.playbackFile = [];
+    app.visualizers = [];
+    app.parsedFiles = [];
+    app.parseStatus = 'outdated';
+    
+
+    app.setDcModeVisualizers = function(evt) {
+        app.visualizers = evt.target.lastResponse.visualizers;
+    };
+
     // Listen for template bound event to know when bindings
     // have resolved and content has been stamped to the page
     app.addEventListener('dom-change', function() {
         // TODO: Surely there is a better way...
-        // Defaults for two-way binded elements
-        app.visType = 'playback';
-        app.playbackFile = [];
 
         document.getElementById('formNewVis').addEventListener('iron-form-submit', display);
 
@@ -21,6 +30,10 @@
 
         function clickHandler(event) {
           Polymer.dom(event).localTarget.parentElement.submit();
+        }
+
+        if(!app.qtConnected) {
+            app.$.ajaxDisconnectedModeEnabledVisualizers.generateRequest();
         }
     });
 

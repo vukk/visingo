@@ -28,6 +28,12 @@
 
 <body unresolved class="fullbleed layout vertical">
 <template is="dom-bind" id="app">
+<iron-ajax id="ajaxDisconnectedModeEnabledVisualizers"
+  url="visualizers/disconnected-mode-enabled.json"
+  handle-as="json"
+  on-response="setDcModeVisualizers"
+  ><!-- TODO: on-error, use on-response handler to set dcMode = dcMode || {}; dcMode.visualizers = ... -->
+</iron-ajax>
 <paper-header-panel main>
 
 <!-- toolbar, two way bind route since menu is in toolbar -->
@@ -44,35 +50,27 @@
 
         <div>
           <h4>Visualization type</h4>
-          <paper-radio-group name="visType" selected="{{visType}}">
+          <paper-radio-group selected="{{visType}}">
             <paper-radio-button name="playback">Playback</paper-radio-button>
+            <template is="dom-if" if="{{qtConnected}}">
+            <!-- TODO: Show message and switch to playback if connection cut.
+                       Also cascade the effect, visualizers should change to disconnected
+                       mode enabled ones only. -->
             <paper-radio-button name="interactive">Interactive</paper-radio-button>
+            </template>
           </paper-radio-group>
         </div>
         <div>
           <h4>Visualization module</h4>
-          <select name="visModule">
-            <option value="test-vis-graph">test-vis-graph</option>
-            <option value="tes-vis-graph2">test-vis-graph2</option>
-          </select>
+          <visingo-visualizer-chooser visualizers="[[visualizers]]" chosen={{chosenVisualizer}}></visingo-visualizer-chooser>
         </div>
-
-        <!--
-
-        <paper-input-container always-float-label attr-for-value="visualizer">
-          <label for="textInput">text input</label>
-          <input is="iron-input" class="floating-label" id="textInput" name="textInput" />
-        </paper-input-container>
-
-        -->
-
 
         <!--<paper-button raised onClick="app.initMapping(document.querySelector('#chosen-visualizer').value);">Next</paper-button>-->
       </form>
     </paper-material>
 
 
-    <iron-pages attr-for-selected="visualization-type" selected="{{visType}}" onload="this.visType = 'playback'">
+    <iron-pages attr-for-selected="visualization-type" selected="{{visType}}">
 
       <section visualization-type="playback">
         <paper-material elevation="1">
@@ -88,8 +86,12 @@
             <visingo-file-chooser files="{{playbackFile}}"></visingo-file-chooser>
           </div>
           <div>
-            <visingo-parse-button files="[[playbackFile]]"></visingo-parse-button>
-            <!--<paper-button on-tap="parsePlaybackFile()" raised>Check validity</paper-button>-->
+            <!-- TODO: parse button only needed when type is log, json type
+                       should be set to app.parsedFiles immediately.
+                       ACTUALLY: just rename playbackFile to something else
+                       and parsedFile to playbackFile! when JSON is on, set
+                       playbackFile directly -->
+            <visingo-parse-button status="{{parseStatus}}" files="[[playbackFile]]" parsed="{{parsedFile}}"></visingo-parse-button>
           </div>
 
           
@@ -105,7 +107,10 @@
 
     </iron-pages>
 
+    <paper-material elevation="1">
     <!-- Load mapping and settings from visualization module -->
+    <visingo-visualizer-settings visualizer="[[chosenVisualizer]]" parse-status="[[parseStatus]]" visualization-type="[[visType]]" parsed-file="[[parsedFile]]"></visingo-visualizer-settings>
+    </paper-material>
 
     <paper-material elevation="1">
       <div id="output">None</div>
