@@ -1,0 +1,148 @@
+
+<!--
+TODO:
+Import parser.
+Strip all predicates from the json file calls. Parse all predicate names. Only accept outermost predicate, not predicates inside predicates?
+Add those to a dropdown, dropdown defaults to -not chosen-.
+Mark which ones are required and which ones are optional.
+If there is a predicate that has a name that matches predicate we need, automatically
+suggest that predicate instead of -not chosen-.
+e.g. *handwave*
+cycle -> args cycle([_,From,To], [_,From,To], [_,From,To]) -> edge(From,To) [dropdown-or-something]
+cycle -> args cycle([_,Cost],[_,Cost],[_,Cost]) -> cost()
+
+
+
+color(edge(N1, N2), yellow)
+color(node(N1), red)
+label(edge(N1, N2), "duh") or label(edge(N1, N2), 2) for costs
+so cost(N1, N2, C) -> label(edge(N1, N2), C) syntax sugar
+
+is name different than label on nodes? probably
+
+colorGrp((N1, N2, N3, N4), yellow) colors all nodes and edges between them
+
+cluster()
+shape() // node shape
+
+color inheritance (map html names to rgb somehow)
+label bg color
+label color
+label size (maybe not allow, or do? affect node size)
+
+node size
+
+layout
+
+
+
+
+NOTE: we can discard anything that is not relevant? - YES
+      for debugging we just show the original unparsed predicates
+      so last rule is "predicate" and we just ignore whatever it gives
+      as long as it parses correctly
+
+
+term
+  = 
+
+
+
+
+// just scratch
+
+in the following create means create if not exists
+whenever you see a node, create that node
+whenever you see an edge, create the nodes involved, then create the edge
+whenever you see a colorEdge, create the nodes involved, then create the edge, then add the color to it
+
+edge: { from:node to:node }
+colorNode: { node:node color:color }
+colorEdge: { }
+
+
+
+//
+DECISIONS:
+- INTERACTIVE MODE ALLOWS NO MAPPING, ASP PROGRAM MUST
+GIVE THE TERMS REQUIRED
+- MAP BOTH IDs AND STRINGS TO JS STRINGS
+
+required form:
+node(N)
+edge(From, To) or edge(Id, From, To)
+  - edges in form edge(From, To) will be given Id = String(From+'%'+To)
+nodeAttr(N, color, Value)
+edgeAttr(From, To, color, Value) or edgeAttr(Id, color, Value)
+
+if Value is a predicate, map it to js Object {} somehow
+if Value is a tuple, map it to js Array []
+
+//
+
+node
+edge
+group
+layout
+
+
+// end scratch
+
+
+// need to get: all nodes that exist ever
+// NO can't be. This would make it impossible to do interactive visualization
+
+user gives:
+node (req: N, can be multiple times): uedge(N, N, _, _)
+
+parse rule
+predicate is uedge - then add arguments[(0, 1)] to nodes
+f1 = 
+preds = {uedge: [f1]}
+checkmatch = "uedge(" getNode "," getNode "," "," ")"
+getNode = bla:(whatever node can be) { if not global.nodes[bla] then global.nodes[bla] = {} }
+
+edge (req: From, To): uedge(From, To, _, _)
+preds = {uedge: [f1, f2]}
+
+coloring nodes (req: Node, Color): ucolor(unode(Node), Color)
+preds = {uedge: ..., ucolor: [f3]}
+checkmatch = "ucolor(unode"
+lets assume ucolor(Color, unode(Node))
+checkmatch = "ucolor(" ", unode(" "))"
+
+coloring edges (req: From, To, Color): uedge(From, To, _, Color)
+f4 = 
+preds = {uedge: [f1,f2,f4]}
+
+
+edge labels (req: From, To, Label): uedge(From, To, Label, _)
+  optional: LabelBackground, LabelColor
+
+-->
+
+<dom-module id="visualizer-test-vis-graph-settings-mapping">
+  <template>
+    <h4>Mapping ASP predicates to visualization</h4>
+    <div>Foobar mapping
+    </div>
+  </template>
+</dom-module>
+
+<script>
+  (function () {
+    Polymer({
+      is: 'visualizer-test-vis-graph-settings-mapping',
+      properties: {
+        input: { // has the attributes passed to visingo-visualizer-settings
+          type: Object
+        },
+        settings: {
+          type: Object
+        }
+      }
+
+    });
+  })();
+</script>
+
