@@ -121,10 +121,120 @@ edge labels (req: From, To, Label): uedge(From, To, Label, _)
 
 -->
 
+<!-- TODO: Replace with polymer element once table is supported -->
+<link rel="import" href="../../elements/mdl-import.html">
+
 <dom-module id="visualizer-test-vis-graph-settings-mapping">
+  <style>
+    td.nn {
+      font-family: "Roboto Mono";
+    }
+    tr td ul {
+      font-size: 12px;
+      line-height: 20px;
+    }
+  </style>
   <template>
     <h4>Mapping ASP predicates to visualization</h4>
-    <div>Foobar mapping
+    <p>
+      The following table presents the predicates supported by the visualization.<br>
+      Options in <i>italics</i> are the default values.<br>
+      An <strong>identifier</strong> has to be either an atom, a string, or an integer.
+    </p>
+    <!--
+    TODO: Make minitab element, split by some character to table, for arguments.
+          Element attributes: r-wrap="&lsquo;" l-wrap="&rsquo;" splitmarker="\\"
+                              styled="false"
+    -->
+    <div>
+      <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+      <thead>
+        <tr>
+          <th class="mdl-data-table__cell--non-numeric">Predicate</th>
+          <th class="mdl-data-table__cell--non-numeric">Arguments</th>
+          <th class="mdl-data-table__cell--non-numeric">Example</th>
+          <th class="mdl-data-table__cell--non-numeric">Alternative</th>
+          <th class="mdl-data-table__cell--non-numeric">Attributes</th>
+        </tr>
+      </thead>
+  <tbody>
+    <tr>
+      <td class="nn mdl-data-table__cell--non-numeric">node(Id)</td>
+      <td class="nn mdl-data-table__cell--non-numeric">&lsquo;Id&rsquo; &ndash; node ID</td>
+      <td class="nn mdl-data-table__cell--non-numeric">node(1).</td>
+      <td class="nn mdl-data-table__cell--non-numeric">&mdash;</td>
+      <td class="nn mdl-data-table__cell--non-numeric">
+        <a href="#nodeAttr">nodeAttr/3</a>
+      </td>
+    </tr>
+    <tr>
+      <td class="nn mdl-data-table__cell--non-numeric">edge(From, To)</td>
+      <td class="nn mdl-data-table__cell--non-numeric">
+        &lsquo;From&lsquo; &ndash; node identifier<br>
+        &lsquo;To&lsquo; &ndash; node identifier<br>
+        The identifier of the edge will be set to<br>
+        <code>Id = string_concat(From, "%", To);</code><br>
+        If the network is undirected,<br>
+        &lsquo;From&rsquo; and &lsquo;To&rsquo;<br>
+        have no special meaning.
+      </td>
+      <td class="nn mdl-data-table__cell--non-numeric">edge(1,2).</td>
+      <td class="nn mdl-data-table__cell--non-numeric">edge/3</td>
+      <td class="nn mdl-data-table__cell--non-numeric">
+        <a href="#edgeAttr">edgeAttr/4</a>
+      </td>
+    </tr>
+    <tr>
+      <td class="nn mdl-data-table__cell--non-numeric">edge(Id, From, To)</td>
+      <td class="nn mdl-data-table__cell--non-numeric">
+        &lsquo;Id&lsquo; &ndash; edge identifier<br>
+        Otherwise like above, in edge/2.
+      </td>
+      <td class="nn mdl-data-table__cell--non-numeric">edge(1,1,2).</td>
+      <td class="nn mdl-data-table__cell--non-numeric">edge/2</td>
+      <td class="nn mdl-data-table__cell--non-numeric">
+        <a href="#edgeAttr">edgeAttr/3</a>
+      </td>
+    </tr>
+
+    <tr>
+      <td class="nn mdl-data-table__cell--non-numeric">group(Id)</td>
+      <td class="nn mdl-data-table__cell--non-numeric">
+        &lsquo;Id&rsquo; &ndash; group identifier
+      </td>
+      <td class="nn mdl-data-table__cell--non-numeric">group(2).</td>
+      <td class="nn mdl-data-table__cell--non-numeric">&mdash;</td>
+      <td class="nn mdl-data-table__cell--non-numeric">
+        Supports all <a href="#nodeAttr">node attributes</a> that<br>
+        make sense for groups,<br>
+        using groupAttr/3.
+      </td>
+    </tr>
+    <tr>
+      <td class="nn mdl-data-table__cell--non-numeric">layout(Style)</td>
+      <td class="nn mdl-data-table__cell--non-numeric">
+        &lsquo;Style&rsquo; is one of the following atoms
+        <ul>
+          <li><i>force</i></li>
+          <li>hierarchical</li>
+        </ul>
+      </td>
+      <td class="nn mdl-data-table__cell--non-numeric">layout(force).</td>
+      <td class="nn mdl-data-table__cell--non-numeric">&mdash;</td>
+      <td class="nn mdl-data-table__cell--non-numeric">
+        <a href="#layoutAttr">layoutAttr/2</a>
+      </td>
+    </tr>
+    <tr>
+      <td class="nn mdl-data-table__cell--non-numeric">cluster</td>
+      <td class="nn mdl-data-table__cell--non-numeric">TODO</td>
+      <td class="nn mdl-data-table__cell--non-numeric">TODO</td>
+      <td class="nn mdl-data-table__cell--non-numeric">&mdash;</td>
+      <td class="nn mdl-data-table__cell--non-numeric">TODO</td>
+    </tr>
+
+  </tbody>
+</table>
     </div>
   </template>
 </dom-module>
