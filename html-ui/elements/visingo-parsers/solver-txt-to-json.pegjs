@@ -30,13 +30,16 @@
 
 // skip until we see line starting with clingo or clasp version
 start
-  = (!(("clasp" / "clingo") " version") anyline)*
+  = (!(("clasp" / "clingo") " version") anylinenl)*
     implemented:implemented
-    anyline*
+    anylinenl* anyline?
   { return implemented; }
 
 anyline
-  = [^\n]* "\n"
+  = [^\n]*
+  
+anylinenl
+  = anyline "\n"
 
 /* start, return json */
 
