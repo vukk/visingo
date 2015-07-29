@@ -8,12 +8,12 @@ be extended by the visualizer package (often empty extension, but less repeated 
 <link rel="import" href="../../elements/vis-import.html">
 
 <script>
-  System.import('./visualizer').then(function(m) {
+  /*System.import('./visualizer').then(function(m) {
     
-  });
+  });*/
 </script>
 
-<dom-module id="visualizer-test-vis-graph">
+<dom-module id="visualizer-test-vis-graph-element">
   <template>
 
     <style type="text/css">
@@ -29,6 +29,8 @@ be extended by the visualizer package (often empty extension, but less repeated 
       }
     </style>
 
+    <p>NOTE: visualizer-test-vis-graph-element stamped to page!</p>
+
     <!-- vis.js canvas div -->
     <div id="visjsCanvasDiv"></div>
 
@@ -37,7 +39,7 @@ be extended by the visualizer package (often empty extension, but less repeated 
 <script>
   (function() {
     Polymer({
-      is: 'visualizer-test-vis-graph',
+      is: 'visualizer-test-vis-graph-element',
 
       properties: {
         resizing: {
@@ -48,7 +50,7 @@ be extended by the visualizer package (often empty extension, but less repeated 
       },
 
       attached: function() {
-        this.$.visjsCanvasDiv
+        //this.$.visjsCanvasDiv
       }
 
     });

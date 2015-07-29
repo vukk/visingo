@@ -9,8 +9,9 @@
   <script src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
   <!-- Qt javascript channel etc. -->
   <link rel="import" href="elements/scripts.html">
-  <!-- Polymer elements, own elements, routing -->
+  <!-- Polymer elements, own elements -->
   <link rel="import" href="elements/elements.html">
+  <link rel="import" href="elements/routing-visualize.html">
 </head>
 
 <body unresolved class="fullbleed layout vertical">
@@ -24,13 +25,22 @@
 <div class="content">
 
   <!-- Visualizer specific content should be loaded to here -->
+  <visingo-visualizer-element visualizer="[[visualizer]]" visualization-type="[[visualizationType]]" input-files="[[inputFiles]]"></visingo-visualizer-element>
 
+  <!--paper-material elevation="1">
+    <p>Route: <input id="tmproute" value="{{route}}"></p>
+    <p>Visualizer: <input id="tmpparams" value="{{params.visualizer}}"></p>
+  </paper-material-->
 </div>
  
 </paper-header-panel>
 </template> <!-- end template dom-bind -->
 
 <script src="scripts/app.js"></script>
+<script src="scripts/visualize.js"></script>
+<script>
+  //console.log(JSON.parse(window.localStorage[app.params.visualizer]));
+</script>
 </body>
 
 </html>

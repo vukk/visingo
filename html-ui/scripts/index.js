@@ -5,15 +5,16 @@
     var app = document.querySelector('#app');
 
     /* Defaults for bindings */
-    app.visType = 'playback';
-    app.playbackFile = [];
+    app.visualizationType = 'playback';
+    app.solverLogFile = [];
     app.visualizers = [];
-    app.parsedFiles = [];
+    app.inputFiles = []; // NOTE: array
     app.parseStatus = 'outdated';
     
 
     app.setDcModeVisualizers = function(evt) {
         app.visualizers = evt.target.lastResponse.visualizers;
+        app.chosenVisualizer = app.visualizers[0];
     };
 
     // Listen for template bound event to know when bindings

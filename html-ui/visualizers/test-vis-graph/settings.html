@@ -1,6 +1,7 @@
 
 <link rel="import" href="settings-options.html">
 <link rel="import" href="settings-mapping.html">
+<link rel="import" href="../../elements/visingo/visingo-launch-button.html">
 
 <dom-module id="visualizer-test-vis-graph-settings">
   <template>
@@ -8,6 +9,7 @@
   </visualizer-test-vis-graph-settings-options>
   <visualizer-test-vis-graph-settings-mapping input="[[input]]" settings="[[_settings]]">
   </visualizer-test-vis-graph-settings-mapping>
+  <visingo-launch-button visualizer="test-vis-graph" settings="[[_settings]]" input="[[input]]"></visingo-launch-button>
   </template>
 </dom-module>
 

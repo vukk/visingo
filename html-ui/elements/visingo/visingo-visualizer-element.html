@@ -1,8 +1,7 @@
 
-<dom-module id="visingo-visualizer-settings">
+<dom-module id="visingo-visualizer-element">
   <template>
-  <h3>Settings for <span>{{visualizer.name}}</span></h3>
-  <div id="container"></div>
+  <div id="visualizerContainer"></div>
   </template>
 </dom-module>
 
@@ -13,11 +12,11 @@
 <script>
   (function() {
     Polymer({
-      is: 'visingo-visualizer-settings',
+      is: 'visingo-visualizer-element',
       
       properties: {      
         visualizer: {
-          type: Object,
+          type: String, // TODO: should be Object, not String
           observer: '_visualizerChange'
         },
 
@@ -26,12 +25,7 @@
           observer: '_onewayBindVisualizationType'
         },
 
-        parseStatus: {
-          type: String,
-          observer: '_onewayBindParseStatus'
-        },
-
-        inputFiles: { // TODO: rename inputFiles
+        inputFiles: {
           type: Array,
           observer: '_onewayBindInputFiles'
         },
@@ -41,20 +35,16 @@
         }
       },
 
-      /*
-      observers: [
-        '_onewayBind(visualizationType)',
-        '_onewayBind(parseStatus)',
-        '_onewayBind(inputFiles)'
-      ],*/
+      // TODO add resizing etc.
+      // TODO: we don't need to bind that much here, just pass arguments once
+      //       except for controls, we should bind controls...
+      //       maybe controls are loaded from a different file, to the toolbar
 
-      // TODO: check if there is a way to do this as a loop
+      
       _onewayBindVisualizationType: function(newVal, oldVal) {
         this._onewayBind('visualizationType');
       },
-      _onewayBindParseStatus: function(newVal, oldVal) {
-        this._onewayBind('parseStatus');
-      },
+
       _onewayBindInputFiles: function(newVal, oldVal) {
         this._onewayBind('inputFiles');
       },
@@ -64,6 +54,8 @@
           this._element.input[prop] = this[prop];
       },
 
+      // TODO visualizer should not change on the fly on this page!
+      //      remove the possibility
       _visualizerChange: function(newVal, oldVal) {
         elem = Polymer.dom(this.$.container).firstChild;
 
@@ -76,27 +68,27 @@
       },
 
       _import: function(visualizer) {
-        this.importHref(
-          '../../visualizers/' + visualizer.directory + '/settings.html',
-          function(evt) {
-            var elemName = 'visualizer-' + visualizer.name + '-settings';
+        this.importHref( // TODO: should be visualizer.directory, not visualizer
+          '../../visualizers/' + visualizer + '/element.html',
+          function(evt) { //            TODO visualizer.name
+            var elemName = 'visualizer-' + visualizer + '-element';
             var elem = document.createElement(elemName);
-            elem.id = 'visualizerSettingsElement';
-            elem.input = {};
+            elem.id = 'visualizerElement';
+            elem.input = {}; //TODO initialize bindings if needed
 
-            // map most properties forward to the element
+            // TODO map properties forward to the element if needed
             Object.keys(this.properties).forEach(function(item, idx, arr) {
               // ignore properties starting with underscore, also visualizer
               if(item[0] !== '_' && item !== 'visualizer')
                 elem.input[item] = this[item];
             }, this);
 
-            Polymer.dom(this.$.container).appendChild(elem);
+            Polymer.dom(this.$.visualizerContainer).appendChild(elem);
             this._element = elem;
           }.bind(this),
           function(evt) {
             // loading error
-            alert('visualizer settings could not be imported!'); // TODO: make it smarter
+            alert('visualizer element could not be imported!'); // TODO: make it smarter
           }
         );
       },

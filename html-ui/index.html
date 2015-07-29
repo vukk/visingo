@@ -9,8 +9,9 @@
   <script src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
   <!-- Qt javascript channel etc. -->
   <link rel="import" href="elements/scripts.html">
-  <!-- Polymer elements, own elements, routing -->
+  <!-- Polymer elements, own elements -->
   <link rel="import" href="elements/elements.html">
+  <link rel="import" href="elements/routing.html">
 
   <style is="custom-style">
     paper-button {
@@ -50,7 +51,7 @@
 
         <div>
           <h4>Visualization type</h4>
-          <paper-radio-group selected="{{visType}}">
+          <paper-radio-group selected="{{visualizationType}}">
             <paper-radio-button name="playback">Playback</paper-radio-button>
             <template is="dom-if" if="{{qtConnected}}">
             <!-- TODO: Show message and switch to playback if connection cut.
@@ -62,7 +63,7 @@
         </div>
         <div>
           <h4>Visualization module</h4>
-          <visingo-visualizer-chooser visualizers="[[visualizers]]" chosen={{chosenVisualizer}}></visingo-visualizer-chooser>
+          <visingo-visualizer-chooser visualizers="[[visualizers]]" chosen="{{chosenVisualizer}}"></visingo-visualizer-chooser>
         </div>
 
         <!--<paper-button raised onClick="app.initMapping(document.querySelector('#chosen-visualizer').value);">Next</paper-button>-->
@@ -70,7 +71,7 @@
     </paper-material>
 
 
-    <iron-pages attr-for-selected="visualization-type" selected="{{visType}}">
+    <iron-pages attr-for-selected="visualization-type" selected="{{visualizationType}}">
 
       <section visualization-type="playback">
         <paper-material elevation="1">
@@ -83,15 +84,12 @@
           </div>
           <div style="max-width:400px;">
             <h4>Choose log file</h4>
-            <visingo-file-chooser files="{{playbackFile}}"></visingo-file-chooser>
+            <visingo-file-chooser files="{{solverLogFile}}"></visingo-file-chooser>
           </div>
           <div>
             <!-- TODO: parse button only needed when type is log, json type
-                       should be set to app.parsedFiles immediately.
-                       ACTUALLY: just rename playbackFile to something else
-                       and parsedFile to playbackFile! when JSON is on, set
-                       playbackFile directly -->
-            <visingo-parse-button status="{{parseStatus}}" files="[[playbackFile]]" parsed="{{parsedFile}}"></visingo-parse-button>
+                       should be set to app.playbackInputFile directly. -->
+            <visingo-parse-button status="{{parseStatus}}" files="[[solverLogFile]]" parsed="{{inputFiles}}"></visingo-parse-button>
           </div>
 
           
@@ -108,8 +106,8 @@
     </iron-pages>
 
     <paper-material elevation="1">
-    <!-- Load mapping and settings from visualization module -->
-    <visingo-visualizer-settings visualizer="[[chosenVisualizer]]" parse-status="[[parseStatus]]" visualization-type="[[visType]]" parsed-file="[[parsedFile]]"></visingo-visualizer-settings>
+      <!-- Load mapping and settings from visualization module -->
+      <visingo-visualizer-settings visualizer="[[chosenVisualizer]]" parse-status="[[parseStatus]]" visualization-type="[[visualizationType]]" input-files="[[inputFiles]]"></visingo-visualizer-settings>
     </paper-material>
 
     <paper-material elevation="1">
@@ -122,23 +120,6 @@
 
     <paper-material elevation="1">
       <visualizer-predicates id="visPredicates"></visualizer-predicates>
-    </paper-material>
-  </section>
-
-  <section data-route="users">
-    <paper-material elevation="1">
-    <h2 class="paper-font-display2">Users</h2>
-    <p>This is the users section</p>
-    <a href="/users/Rob">Rob</a>
-    </paper-material>
-  </section>
-
-  <section data-route="user-info">
-    <paper-material elevation="1">
-    <h2 class="paper-font-display2">
-      User:<span>{{params.name}}</span>
-    </h2>
-    <div>This is <span>{{params.name}}</span>'s section</div>
     </paper-material>
   </section>
 

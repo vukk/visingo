@@ -160,10 +160,199 @@ _ maps to predicate as it was defined before, then just ignored
 
 -->
 
+<!-- TODO: Replace with polymer element once table is supported -->
+<link rel="import" href="../../elements/mdl-import.html">
+
 <dom-module id="visualizer-test-vis-graph-settings-mapping">
+  <style>
+    td.nn {
+      font-family: "Roboto Mono";
+    }
+    tr.sub {
+      /*border-left: 6px solid #909090;*/
+      border-left: 5px solid rgba(0,0,0,.22);
+    }
+    tr td ul {
+      font-size: 12px;
+      line-height: 20px;
+    }
+
+    table, table tr {
+      word-wrap: break-word;
+      max-width: 100%;
+    }
+
+    table td {
+      word-wrap: break-word;
+    }
+  </style>
   <template>
     <h4>Mapping ASP predicates to visualization</h4>
-    <div>Foobar mapping
+    <p>
+      The following two tables present the predicates supported by the visualization.<br>
+      Options in <i>italics</i> are the default values.<br>
+      An <strong>identifier</strong> has to be either an atom, a string, or an integer. The indentifier has to be unique and non-changing (identifier can't change between answer sets).
+    </p>
+    <!--
+    TODO: Make minitab element, split by some character to table, for arguments.
+          Element attributes: r-wrap="&lsquo;" l-wrap="&rsquo;" splitmarker="\\"
+                              styled="false"
+    -->
+
+    <h5>Entities</h5>
+    <div class="tableWrap">
+    <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+      <thead>
+        <tr>
+          <th class="mdl-data-table__cell--non-numeric">Predicate</th>
+          <th class="mdl-data-table__cell--non-numeric">Arguments</th>
+          <th class="mdl-data-table__cell--non-numeric">Example</th>
+          <th class="mdl-data-table__cell--non-numeric">Alternative</th>
+          <th class="mdl-data-table__cell--non-numeric">Attributes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="nn mdl-data-table__cell--non-numeric">node(Id)</td>
+          <td class="nn mdl-data-table__cell--non-numeric">&lsquo;Id&rsquo; &ndash; node ID</td>
+          <td class="nn mdl-data-table__cell--non-numeric">node(1).</td>
+          <td class="nn mdl-data-table__cell--non-numeric">&mdash;</td>
+          <td class="nn mdl-data-table__cell--non-numeric">
+            <a href="#nodeAttr">nodeAttr/3</a>
+          </td>
+        </tr>
+        <tr>
+          <td class="nn mdl-data-table__cell--non-numeric">edge(From, To)</td>
+          <td class="nn mdl-data-table__cell--non-numeric">
+            &lsquo;From&lsquo; &ndash; node identifier<br>
+            &lsquo;To&lsquo; &ndash; node identifier<br>
+            The identifier of the edge will be set to<br>
+            <code>Id = string_concat(From, "%", To);</code><br>
+            If the network is undirected,<br>
+            &lsquo;From&rsquo; and &lsquo;To&rsquo;<br>
+            have no special meaning.
+          </td>
+          <td class="nn mdl-data-table__cell--non-numeric">edge(1,2).</td>
+          <td class="nn mdl-data-table__cell--non-numeric">edge/3</td>
+          <td class="nn mdl-data-table__cell--non-numeric">
+            <a href="#edgeAttr">edgeAttr/4</a>
+          </td>
+        </tr>
+        <tr>
+          <td class="nn mdl-data-table__cell--non-numeric">edge(Id, From, To)</td>
+          <td class="nn mdl-data-table__cell--non-numeric">
+            &lsquo;Id&lsquo; &ndash; edge identifier<br>
+            Otherwise like above, in edge/2.
+          </td>
+          <td class="nn mdl-data-table__cell--non-numeric">edge(1,1,2).</td>
+          <td class="nn mdl-data-table__cell--non-numeric">edge/2</td>
+          <td class="nn mdl-data-table__cell--non-numeric">
+            <a href="#edgeAttr">edgeAttr/3</a>
+          </td>
+        </tr>
+        <tr>
+          <td class="nn mdl-data-table__cell--non-numeric">group(Id)</td>
+          <td class="nn mdl-data-table__cell--non-numeric">
+            &lsquo;Id&rsquo; &ndash; group identifier
+          </td>
+          <td class="nn mdl-data-table__cell--non-numeric">group(2).</td>
+          <td class="nn mdl-data-table__cell--non-numeric">&mdash;</td>
+          <td class="nn mdl-data-table__cell--non-numeric">
+            Supports all <a href="#nodeAttr">node attributes</a> that<br>
+            make sense for groups,<br>
+            using groupAttr/3.
+          </td>
+        </tr>
+        <tr>
+          <td class="nn mdl-data-table__cell--non-numeric">cluster</td>
+          <td class="nn mdl-data-table__cell--non-numeric">TODO</td>
+          <td class="nn mdl-data-table__cell--non-numeric">TODO</td>
+          <td class="nn mdl-data-table__cell--non-numeric">&mdash;</td>
+          <td class="nn mdl-data-table__cell--non-numeric">TODO</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+
+    <h5>Entity attributes</h5>
+    <div class="tableWrap">
+    <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+      <thead>
+        <tr>
+          <th class="mdl-data-table__cell--non-numeric">Predicate</th>
+          <th class="mdl-data-table__cell--non-numeric">Arguments</th>
+          <th class="mdl-data-table__cell--non-numeric">Example</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="nn mdl-data-table__cell--non-numeric">nodeAttr</td>
+          <td class="nn mdl-data-table__cell--non-numeric">
+            TODO
+          </td>
+          <td class="nn mdl-data-table__cell--non-numeric">TODO</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+
+    <h5>Network attributes: Layout &ndash; Control the layout of the network</h5>
+    <p></p>
+    <div class="tableWrap">
+    <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp fullwidth">
+      <thead>
+        <tr>
+          <th class="mdl-data-table__cell--non-numeric">Name</th>
+          <th class="mdl-data-table__cell--non-numeric">Type</th>
+          <th class="mdl-data-table__cell--non-numeric">Default</th>
+          <th class="mdl-data-table__cell--non-numeric">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+         <td class="nn mdl-data-table__cell--non-numeric">layout(randomSeed, Value)</td>
+          <td class="nn mdl-data-table__cell--non-numeric">Number</td>
+          <td class="nn mdl-data-table__cell--non-numeric"><i>random</i></td>
+          <td class="nn mdl-data-table__cell--non-numeric">
+            When using force layout, control the node positioning random seed.
+          </td>
+        </tr>
+        <tr>
+         <td class="nn mdl-data-table__cell--non-numeric">layout(hierarchical, enabled, Value)</td>
+          <td class="nn mdl-data-table__cell--non-numeric">Boolean</td>
+          <td class="nn mdl-data-table__cell--non-numeric">true</td>
+          <td class="nn mdl-data-table__cell--non-numeric">
+            Enable hierarchical (tree) layout.
+          </td>
+        </tr>
+        <tr>
+         <td class="nn mdl-data-table__cell--non-numeric">layout(hierarchical, levelSeparation, Value)</td>
+          <td class="nn mdl-data-table__cell--non-numeric">Number</td>
+          <td class="nn mdl-data-table__cell--non-numeric">150</td>
+          <td class="nn mdl-data-table__cell--non-numeric">
+            The distance between the different levels.
+          </td>
+        </tr>
+        <tr>
+         <td class="nn mdl-data-table__cell--non-numeric">layout(hierarchical, direction, Value)</td>
+          <td class="nn mdl-data-table__cell--non-numeric">String</td>
+          <td class="nn mdl-data-table__cell--non-numeric">"UD"</td>
+          <td class="nn mdl-data-table__cell--non-numeric">
+            The direction of the hierarchical layout. The available options are: UD (up-down), DU (down-up), LR (left-right), RL (right-left).
+          </td>
+        </tr>
+        <tr>
+         <td class="nn mdl-data-table__cell--non-numeric">layout(hierarchical, sortMethod, Value)</td>
+          <td class="nn mdl-data-table__cell--non-numeric">Atom</td>
+          <td class="nn mdl-data-table__cell--non-numeric">hubsize</td>
+          <td class="nn mdl-data-table__cell--non-numeric">
+            The algorithm used to ascertain the levels of the nodes based on the data. The possible options are: hubsize, directed.
+Hubsize takes the nodes with the most edges and puts them at the top. From that the rest of the hierarchy is evaluated.
+Directed adheres to the to and from data of the edges. edge(From,To) so To is a level lower than From.
+          </td>
+        </tr>
+      </tbody>
+    </table>
     </div>
   </template>
 </dom-module>

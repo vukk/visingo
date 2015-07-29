@@ -24,7 +24,7 @@ TODO: make a general "do" button, four colors: outdated, done, error, warning
       Parsed:
       <ul>
       <template is="dom-repeat" items="{{parsed}}">
-        <li><span>{{item.file.name}}</span></li>
+        <li><span>{{item.name}}</span></li>
       </template>
       </ul>
     </div>
@@ -72,7 +72,7 @@ TODO: make a general "do" button, four colors: outdated, done, error, warning
       //       have not been parsed yet
 
       _parseFile: function(file, idx, arr) {
-        console.log(file, idx, arr, this);
+//        console.log(fileArg, idx, arr, this);
         reader = new FileReader();
         reader.onerror = function(evt) {
           alert('File read error.');
@@ -85,8 +85,12 @@ TODO: make a general "do" button, four colors: outdated, done, error, warning
           if (reader.readyState === FileReader.DONE) {
             // js arrays extend automatically, this can be done in parallel?
             this.splice('parsed', idx, 1, {
-              'file': file,
-              'result': visingo.parsers.solverTxtToJSON.parse(reader.result)
+              //file: file, // would be dropped on JSON.stringify
+              name: file.name,
+              size: file.size,
+              type: file.type,
+              lastModified: file.lastModified,
+              data: visingo.parsers.solverTxtToJSON.parse(reader.result)
             });
             this._allParsedCheck();
           }
@@ -105,7 +109,7 @@ TODO: make a general "do" button, four colors: outdated, done, error, warning
         var ret = 'done';
         for(var i = 0; i < this.files.length; i++) {
           if(typeof this.parsed[i] !== 'undefined') {
-            if(this.parsed[i].file.name !== this.files[i].name) {
+            if(this.parsed[i].name !== this.files[i].name) {
               ret = 'outdated';
               break;
             }
