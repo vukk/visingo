@@ -18,7 +18,7 @@
     window.addEventListener('WebComponentsReady', function() {
         // imports are loaded and elements have been registered
 //        console.log('current params:', app.params);
-        var stored = JSON.parse(window.localStorage[app.params.visualizer]));
+        var stored = JSON.parse(window.localStorage[app.params.visualizer]);
         // TODO: just load all to app? by Object.keys(stored) app.key = ...
         app.visualizer = app.params.visualizer;
         app.visualizationType = stored.visualizationType;
