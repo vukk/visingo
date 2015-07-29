@@ -36,7 +36,6 @@ layout
 
 
 
-
 NOTE: we can discard anything that is not relevant? - YES
       for debugging we just show the original unparsed predicates
       so last rule is "predicate" and we just ignore whatever it gives
@@ -44,7 +43,7 @@ NOTE: we can discard anything that is not relevant? - YES
 
 
 term
-  = 
+  =
 
 
 
@@ -75,8 +74,29 @@ edge(From, To) or edge(Id, From, To)
 nodeAttr(N, color, Value)
 edgeAttr(From, To, color, Value) or edgeAttr(Id, color, Value)
 
+aliases?
+- nodeColor/2 edgeColor/2 edgeColor/3
+
 if Value is a predicate, map it to js Object {} somehow
 if Value is a tuple, map it to js Array []
+
+in general also:
+if Value is an atom, set str.isAtom = true
+if Value is a string, set str.isAtom = false
+by patching the string
+
+foo(bar(1, "nah"), (1,yarr(huh(9))))
+
+{ name: "foo",
+  args: [{ name: "bar",
+           args: [1, "nah"] },
+          [1, {name: "yarr",
+               args: {name: "huh",
+                      args: [9]}}]
+        ]
+}
+
+
 
 //
 
@@ -91,13 +111,14 @@ layout
 
 // need to get: all nodes that exist ever
 // NO can't be. This would make it impossible to do interactive visualization
+// We assume (of course) that node IDs are unique during the program
 
 user gives:
 node (req: N, can be multiple times): uedge(N, N, _, _)
 
 parse rule
 predicate is uedge - then add arguments[(0, 1)] to nodes
-f1 = 
+f1 =
 preds = {uedge: [f1]}
 checkmatch = "uedge(" getNode "," getNode "," "," ")"
 getNode = bla:(whatever node can be) { if not global.nodes[bla] then global.nodes[bla] = {} }
@@ -112,12 +133,30 @@ lets assume ucolor(Color, unode(Node))
 checkmatch = "ucolor(" ", unode(" "))"
 
 coloring edges (req: From, To, Color): uedge(From, To, _, Color)
-f4 = 
+f4 =
 preds = {uedge: [f1,f2,f4]}
 
 
 edge labels (req: From, To, Label): uedge(From, To, Label, _)
   optional: LabelBackground, LabelColor
+
+
+edge - uedge
+what could happen...
+edge(From, To) - uedge(To, _, From, _)
+edge(Id, From, To) - uedge(Id, (node(From),node(To)))
+
+node req: Id
+edge req: From, To ; optionally: Id
+edgeAttr given: Attr ; req: Value
+
+add predicate: foo / bar / baz / catchAll
+then after that
+bar = "uedge(" id:id ", (node(" from:id "),node(" to:id ")))"
+{ global.edges.push() }
+
+_ maps to predicate as it was defined before, then just ignored
+
 
 -->
 
@@ -145,4 +184,3 @@ edge labels (req: From, To, Label): uedge(From, To, Label, _)
     });
   })();
 </script>
-
