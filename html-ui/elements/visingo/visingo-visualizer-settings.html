@@ -31,9 +31,9 @@
           observer: '_onewayBindParseStatus'
         },
 
-        parsedFile: {
+        inputFiles: { // TODO: rename inputFiles
           type: Array,
-          observer: '_onewayBindParsedFile'
+          observer: '_onewayBindInputFiles'
         },
 
         _element: {
@@ -45,7 +45,7 @@
       observers: [
         '_onewayBind(visualizationType)',
         '_onewayBind(parseStatus)',
-        '_onewayBind(parsedFile)'
+        '_onewayBind(inputFiles)'
       ],*/
 
       // TODO: check if there is a way to do this as a loop
@@ -55,8 +55,8 @@
       _onewayBindParseStatus: function(newVal, oldVal) {
         this._onewayBind('parseStatus');
       },
-      _onewayBindParsedFile: function(newVal, oldVal) {
-        this._onewayBind('parsedFile');
+      _onewayBindInputFiles: function(newVal, oldVal) {
+        this._onewayBind('inputFiles');
       },
 
       _onewayBind: function(prop) {

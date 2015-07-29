@@ -1,0 +1,31 @@
+<!--
+Loads page.js and defines routes, we use hashbang routing
+page.js: https://visionmedia.github.io/page.js/
+-->
+
+<script src="../bower_components/page/page.js"></script>
+
+<script>
+  window.addEventListener('WebComponentsReady', function() {
+  
+    page.base('/visualize.html');
+
+    page('/', function () {
+      app.route = 'new';
+    });
+
+    page('/visualize/:visualizer', function (data) {
+      app.route = 'visualize';
+      app.params = data.params;
+    });
+
+    page('/help', function () {
+      app.route = 'help';
+    });
+
+    page({
+      hashbang: true
+    });
+
+  });
+</script>
