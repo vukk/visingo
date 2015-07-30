@@ -3,24 +3,32 @@
 <script>
 // From: http://stackoverflow.com/a/25651677/3620923
 // modified a bit
+/* the function */
+
 _.mixin({
     shallowDiff: function(a,b) {
         return _.omit(a, function(v,k) { return b[k] === v; })
     },
-    deepDiff: function(a,b) {
+    deepDiff: function(old, comp) {
         var r = {};
-        _.each(a, function(v,k) {
-            if(b[k] === v) return;
-            if(typeof b[k] === 'undefined') {
-            	r[k] = v;
-            }
-            else {
-	            // but what if it returns an empty object? still attach?
-    	        r[k] = _.isObject(v)
-    	                ? _.deepDiff(v, b[k])
-    	                : v
-    	            ;
-            }});
+        _.each(old, function(value, key) { // value, key
+            if(typeof comp[key] === 'undefined') return; // {foo: 1}, {} -> undefined
+            if(comp[key] === value) return; // {foo: 1}, {foo: 1} -> undefined
+
+            // but what if it returns an empty object? still attach?
+	          r[key] = _.isObject(value)
+	                 ? _.deepDiff(value, comp[key])
+                   : comp[key]
+	          ;
+
+        });
+
+        // copy missing keys over
+        var missing = _.difference(Object.keys(comp), Object.keys(old));
+        _.each(missing, function(compKey) {
+            r[compKey] = comp[compKey];
+        });
+
         return r;
     }
 });
