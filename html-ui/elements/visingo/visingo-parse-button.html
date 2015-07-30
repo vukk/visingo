@@ -36,7 +36,7 @@ TODO: make a general "do" button, four colors: outdated, done, error, warning
   (function() {
     Polymer({
       is: 'visingo-parse-button',
-      
+
       properties: {
         files: {
           type: Array,
@@ -90,7 +90,7 @@ TODO: make a general "do" button, four colors: outdated, done, error, warning
               size: file.size,
               type: file.type,
               lastModified: file.lastModified,
-              data: visingo.parsers.solverTxtToJSON.parse(reader.result)
+              data: visingo.parsers.solverTxtToJson.parse(reader.result)
             });
             this._allParsedCheck();
           }
@@ -125,4 +125,3 @@ TODO: make a general "do" button, four colors: outdated, done, error, warning
   })();
 
 </script>
-
