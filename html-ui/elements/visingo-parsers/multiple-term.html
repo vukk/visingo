@@ -1,8 +1,7 @@
 <script>
-  // loads parser
-  System.import('elements/visingo-parsers/multiple-term.js').then(function(m) {
-    visingo = window.visingo || {};
-    visingo.parsers = visingo.parsers || {};
-    visingo.parsers.multipleTerm = m;
-  });
+// pegjs was run with "pegjs -e visingo.parsers.multipleTerm multiple-term.pegjs"
+// setup
+window.visingo = window.visingo || {};
+window.visingo.parsers = window.visingo.parsers || {};
 </script>
+<script src="multiple-term.js"></script>

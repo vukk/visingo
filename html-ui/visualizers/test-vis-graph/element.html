@@ -6,33 +6,31 @@ be extended by the visualizer package (often empty extension, but less repeated 
 
 <!-- import vis.js (global vis)-->
 <link rel="import" href="../../elements/vis-import.html">
-
-<script>
-  /*System.import('./visualizer').then(function(m) {
-    
-  });*/
-</script>
+<!-- import lodash (global _) -->
+<link rel="import" href="../../elements/lodash-import.html">
+<!-- import parser -->
+<link rel="import" href="../../elements/visingo-parsers/answersetterms-to-visjs.html">
 
 <dom-module id="visualizer-test-vis-graph-element">
   <template>
 
     <style type="text/css">
       :host {
+        /*display: block;
+        position: relative;*/
         display: block;
-        position: relative;
         width: 100%;
         height: 100%;
       }
-      #visjs-canvas-div {
+      #visjsCanvasContainer {
         width: 100%;
         height: 100%;
+        background-color: #fff;
       }
     </style>
 
-    <p>NOTE: visualizer-test-vis-graph-element stamped to page!</p>
-
     <!-- vis.js canvas div -->
-    <div id="visjsCanvasDiv"></div>
+    <div id="visjsCanvasContainer"></div>
 
   </template>
 </dom-module>
@@ -46,11 +44,29 @@ be extended by the visualizer package (often empty extension, but less repeated 
           type: Boolean,
           value: false,
           notify: true
+        },
+        _visScript: {
+          type: Object,
+          readonly: true
         }
       },
 
-      attached: function() {
-        //this.$.visjsCanvasDiv
+      created: function() {
+        //console.log(this.resolveUrl('visualizer.js'));
+        System.import(this.resolveUrl('visualizer.js')).then(function(m) {
+          this._visScript = m;
+          //this.launch();
+        }.bind(this));
+      },
+
+      attached: function () {
+        // foo
+        this.async(function(){
+          this._visScript.initialize(this.$.visjsCanvasContainer);
+          // TODO: remove visS, visC which are here for development convenience
+          window.visS = this._visScript;
+          window.visC = this.$.visjsCanvasContainer;
+        },1);
       }
 
     });

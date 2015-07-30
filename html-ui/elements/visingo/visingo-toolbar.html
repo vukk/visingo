@@ -68,6 +68,11 @@
           value: 'not connected'
         }
       },
+      
+      created: function() {
+        // set visingo-toolbar to have paper-header class
+        this.toggleClass('paper-header', true);
+      },
 
       _qtConnectedChanged: function(newValue, oldValue) {
         var qtA = this.$.qtAvailabilityIcon;
