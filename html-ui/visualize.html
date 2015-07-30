@@ -16,13 +16,13 @@
 
 <body unresolved class="fullbleed layout vertical">
 <template is="dom-bind" id="app">
-<paper-header-panel main>
+<paper-header-panel>
 
 <!-- toolbar, two way bind route since menu is in toolbar -->
 <visingo-toolbar id="visingoMainToolbar" route={{route}}></visingo-toolbar>
 
 <!-- Main Content -->
-<div class="content">
+<div class="fit">
 
   <!-- Visualizer specific content should be loaded to here -->
   <visingo-visualizer-element visualizer="[[visualizer]]" visualization-type="[[visualizationType]]" input-files="[[inputFiles]]"></visingo-visualizer-element>
