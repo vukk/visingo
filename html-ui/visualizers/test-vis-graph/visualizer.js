@@ -58,6 +58,16 @@ var testVisGraphVisualizer = (function (vis, _, parser) {
                 maxVelocity: 15,
                 solver: 'forceAtlas2Based',
                 timestep: 0.25
+            },
+            nodes: {
+                color: {
+                    background: "#DCEDC8",
+                    border: "#7CB342",
+                    highlight: {
+                        background: "#F1F8E9",
+                        border: "#7CB342"
+                    }
+                }
             }
         };
         //attributes = new vis.DataSet({});
