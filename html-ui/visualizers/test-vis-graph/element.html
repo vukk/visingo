@@ -2,12 +2,20 @@
 <!--
 TODO: make this into an element visingo-visualizer-content-visjs that can
 be extended by the visualizer package (often empty extension, but less repeated code?)
+
+TODO: import System.js
+
+TODO: make own bower.json for each visualizer?
+
+TODO: remove visjsConfigurator
 -->
 
 <!-- import vis.js (global vis)-->
 <link rel="import" href="../../elements/vis-import.html">
 <!-- import lodash (global _) -->
 <link rel="import" href="../../elements/lodash-import.html">
+<!-- import tock (global class Tock) -->
+<link rel="import" href="../../elements/tock-import.html">
 <!-- import parser -->
 <link rel="import" href="../../elements/visingo-parsers/answersetterms-to-visjs.html">
 
@@ -27,10 +35,15 @@ be extended by the visualizer package (often empty extension, but less repeated 
         height: 100%;
         background-color: #fff;
       }
+      #visjsConfigurator {
+        display: hidden;
+      }
     </style>
 
     <!-- vis.js canvas div -->
     <div id="visjsCanvasContainer"></div>
+    <div id="visjsConfigurator"></div>
+
 
   </template>
 </dom-module>
@@ -40,33 +53,98 @@ be extended by the visualizer package (often empty extension, but less repeated 
       is: 'visualizer-test-vis-graph-element',
 
       properties: {
-        resizing: {
-          type: Boolean,
-          value: false,
-          notify: true
+        input: {
+          type: Object
         },
         _visScript: {
           type: Object,
           readonly: true
+        },
+        _timer: {
+          type: Object,
+          readonly: true
+        },
+        _timerDefaultInterval: {
+          type: Number,
+          value: 4000 // milliseconds
+        },
+        _playbackState: {
+          type: Object,
+          value: function() { return {}; }
         }
       },
 
       created: function() {
-        //console.log(this.resolveUrl('visualizer.js'));
         System.import(this.resolveUrl('visualizer.js')).then(function(m) {
           this._visScript = m;
-          //this.launch();
         }.bind(this));
       },
 
-      attached: function () {
-        // foo
-        this.async(function(){
-          this._visScript.initialize(this.$.visjsCanvasContainer);
-          // TODO: remove visS, visC which are here for development convenience
-          window.visS = this._visScript;
-          window.visC = this.$.visjsCanvasContainer;
-        },1);
+      attached: function() {
+        this.waitForVisScript();
+      },
+
+      waitForVisScript: function() {
+        this.async(function() {
+          // wait until _visScript is loaded
+          if(typeof this._visScript === 'undefined') {
+            this.waitForVisScript();
+            console.log('Waiting for _visScript...');
+            return;
+          }
+
+          this.launch();
+        }, 100);
+      },
+
+      launch: function() {
+        this._visScript.initialize(this.$.visjsCanvasContainer, this.$.visjsConfigurator);
+        // TODO: remove visS, visC which are here for development convenience
+        window.visS = this._visScript;
+        window.visC = this.$.visjsCanvasContainer;
+
+        if(this.input.visualizationType === 'playback')
+          this.startPlayback();
+      },
+
+      startPlayback: function () {
+        this._timer = new Tock({
+          countdown: true,
+          interval: 16, // 16ms ~ 60fps
+          //callback: someCallbackFunction,
+          complete: this.playbackTick.bind(this)
+        });
+        console.log(this.input);
+        // TODO take into account multiple solve calls
+        this._playbackState.data = this.input.inputFiles[0].data.Call[0].Witnesses;
+        this._playbackState.pointer = 0;
+        console.log(this._playbackState.data);
+
+        // if no anwer sets are present
+        if(typeof this._playbackState.data[this._playbackState.pointer] === 'undefined')
+          return;
+
+        // load first answer set immediately
+        this.playbackTick.bind(this)();
+      },
+
+      playbackTick: function() {
+        // load next answerset
+        console.log('playbackTick', this._playbackState.data[this._playbackState.pointer].Value);
+
+        this._visScript.addAnswerSet(
+            this._playbackState.data[this._playbackState.pointer].Value
+        );
+        this._playbackState.pointer = this._playbackState.pointer + 1;
+
+        //TODO: dev remove
+        //if(this._playbackState.pointer === 2) return;
+        // if in the end
+        if(typeof this._playbackState.data[this._playbackState.pointer] === 'undefined')
+          return;
+
+        this._timer.reset();
+        this._timer.start(this._timerDefaultInterval);
       }
 
     });
