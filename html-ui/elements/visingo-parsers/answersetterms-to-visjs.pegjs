@@ -64,7 +64,7 @@ start
   = terms:terms "\r"? "\n"? { return global; }
 
 terms
-  = E* first:term rest:(E+ term)* E*
+  = E* first:term? rest:(E+ term)* E*
   { return buildList(first, rest, 1); }
 
 term
@@ -75,6 +75,7 @@ term
   / entityEdge3
   / attrEdge3
   / attrLayout
+  / atom:booleanAtom
   / atom:predicateIdent
   / aspstring
   / integer
@@ -147,7 +148,8 @@ pathAndValue
   }
 
 singlePathOrValue
-  = atom:predicateIdent
+  = atom:booleanAtom
+  / atom:predicateIdent
   / string:aspstring
   / num:number
 
@@ -174,6 +176,7 @@ arguments
 
 argument
   = predicate
+  / atom:booleanAtom
   / atom:predicateIdent
   / tuple:anontuple
   / string:aspstring
@@ -187,6 +190,11 @@ anontuple
   {
     return buildList(first, rest, 2);
   }
+
+/* Booleans */
+booleanAtom
+  = "true" { return true; }
+  / "false" { return false; }
 
 /* ASP strings */
 
