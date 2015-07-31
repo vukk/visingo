@@ -92,9 +92,8 @@ attrNode
   = predicateName:"nodeAttr" "(" id:entityIdent "," rest:pathAndValue ")"
   {
     ensureEntity('nodes', id);
-    var lst = buildList(rest);
-    if(lst.length < 2) { return; }
-    setDeep(global.nodes[id], lst.slice(0, -1), lst[lst.length-1]);
+    if(rest.length < 2) { return; }
+    setDeep(global.nodes[id], rest.slice(0, -1), rest[rest.length-1]);
   }
 
 entityEdge2
@@ -104,6 +103,8 @@ entityEdge2
     ensureEntity('nodes', node2);
     var id = String(node1) + '%' + String(node2);
     ensureEntity('edges', id);
+    global.edges[id].from = node1;
+    global.edges[id].to = node2;
   }
 
 entityEdge3
@@ -112,6 +113,8 @@ entityEdge3
     ensureEntity('nodes', node1);
     ensureEntity('nodes', node2);
     ensureEntity('edges', id);
+    global.edges[id].from = node1;
+    global.edges[id].to = node2;
   }
 
 attrEdge2
