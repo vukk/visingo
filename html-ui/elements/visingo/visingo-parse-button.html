@@ -40,12 +40,12 @@ TODO: make a general "do" button, four colors: outdated, done, error, warning
       properties: {
         files: {
           type: Array,
-          value: [],
+          value: function() { return []; },
           observer: '_filesChanged'
         },
         parsed: {
           type: Array,
-          value: [],
+          value: function() { return []; },
           notify: true,
           readonly: true
         },

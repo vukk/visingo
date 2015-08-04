@@ -22,7 +22,7 @@
       properties: {
         visualizers: {
           type: Array,
-          value: []
+          value: function() { return []; }
         },
         chosen: {
           type: Object,
@@ -33,7 +33,6 @@
         chosenIdx: {
           type: String,
           value: "0"
-          //notify: true
         }
       },
 
