@@ -19,6 +19,8 @@ TODO: remove visjsConfigurator
 <!-- import parser -->
 <link rel="import" href="../../elements/visingo-parsers/answersetterms-to-visjs.html">
 
+<link rel="import" href="toolbar-controls.html">
+
 <dom-module id="visualizer-test-vis-graph-element">
   <template>
 
@@ -71,37 +73,127 @@ TODO: remove visjsConfigurator
         _playbackState: {
           type: Object,
           value: function() { return {}; }
+        },
+        _toolbarControlsElement: {
+          type: Object
         }
       },
 
+      _ctlPlay: function() {
+        console.log('controls: play');
+        // if already playing
+        if(this._timer.go) return;
+        // if paused, call pause to resume
+        if(this._timer.pause_time) { return this._timer.pause(); }
+        // otherwise start playing if we are not in the end
+        if(this._playbackState.pointer < this._playbackState.data.length - 1)
+          this.playbackTick();
+      },
+
+      _ctlPause: function() {
+        console.log('controls: pause');
+        this._timer.pause();
+      },
+
+      _ctlNext: function() {
+        console.log('controls: next');
+        if(this._timer.go) { // NOTE: timer shouldn't be on if pointer is at end
+          this._timer.stop();
+          this._timer.reset();
+          this.playbackTick.bind(this)(); // TODO: is bind needed?
+        }
+        else {
+          if(this._playbackState.pointer < this._playbackState.data.length - 1)
+            this.playbackNext();
+        }
+      },
+
+      _ctlPrevious: function() {
+        console.log('controls: previous');
+        // TODO: implement
+        console.log('NOTE: "previous" not implemented');
+      },
+
+      _ctlToStart: function() {
+        console.log('controls: toStart');
+        this._timer.stop();
+        this._timer.reset();
+        // rewind to start (destroy and init), but don't start automatically
+        this._visScript.destroy();
+        this._visScript.initialize(this.$.visjsCanvasContainer, this.input.settings);
+        this._playbackState.pointer = 0;
+      },
+
+      _ctlToEnd: function() {
+        console.log('controls: toEnd');
+        this._timer.stop();
+        this._timer.reset();
+
+        var len = this._playbackState.data.length;
+        var cur = this._playbackState.pointer;
+        // queue the rest of the sets
+        for(var i = cur; i < len-cur; i++) {
+          this._visScript.queueAnswerSet(
+              this._playbackState.data[i].Value
+          );
+        }
+        this._playbackState.pointer = len-1;
+        this._visScript.flushChanges();
+      },
+
       created: function() {
+        // load visualizer script
         System.import(this.resolveUrl('visualizer.js')).then(function(m) {
           this._visScript = m;
         }.bind(this));
       },
 
       attached: function() {
-        this.waitForVisScript();
+        // attach controls to the toolbar
+        this.async(function() {
+          var elem = document.createElement(
+            'visualizer-test-vis-graph-toolbar-controls'
+          );
+
+          elem.controls = {
+            play: function() { return this._ctlPlay(); }.bind(this),
+            pause: function() { return this._ctlPause(); }.bind(this),
+            next: function() { return this._ctlNext(); }.bind(this),
+            previous: function() { return this._ctlPrevious(); }.bind(this),
+            toStart: function() { return this._ctlToStart(); }.bind(this),
+            toEnd: function() { return this._ctlToEnd(); }.bind(this),
+          };
+
+          var tb = document.getElementById('visingoMainToolbar');
+          tb.attachComponent(elem);
+          this._toolbarControlsElement = elem;
+        });
+        this.waitForLoad();
       },
 
-      waitForVisScript: function() {
+      waitForLoad: function() {
         this.async(function() {
           // wait until _visScript is loaded
           if(typeof this._visScript === 'undefined') {
-            this.waitForVisScript();
+            this.waitLoad();
             console.log('Waiting for _visScript...');
             return;
           }
 
           this.launch();
-        }, 100);
+        }, 48); // 48/16 ~ 3 frames
       },
 
       launch: function() {
         this._visScript.initialize(this.$.visjsCanvasContainer, this.input.settings);
-        // TODO: remove visS, visC which are here for development convenience
-        window.visS = this._visScript;
-        window.visC = this.$.visjsCanvasContainer;
+        // TODO: remove window.vs which is here for development convenience
+        window.vs = this._visScript;
+
+        window.visingo = window.visingo || {};
+        window.visingo.debug = window.visingo.debug || {};
+        window.visingo.debug.script = this._visScript;
+        window.visingo.debug.element = this;
+        window.visingo.debug.container = this.$.visjsCanvasContainer;
 
         if(this.input.visualizationType === 'playback')
           this.startPlayback();
@@ -125,26 +217,29 @@ TODO: remove visjsConfigurator
           return;
 
         // load first answer set immediately
-        this.playbackTick.bind(this)();
+        this.playbackTick.bind(this)(); // TODO: is bind needed?
       },
 
       playbackTick: function() {
-        // load next answerset
-        console.log('playbackTick', this._playbackState.data[this._playbackState.pointer].Value);
+        if(this.playbackNext()) {
+          this._timer.reset();
+          this._timer.start(this._timerDefaultInterval);
+        }
+      },
 
+      // returns boolean, whether caller can continue timer or not
+      playbackNext: function() {
         this._visScript.addAnswerSet(
             this._playbackState.data[this._playbackState.pointer].Value
         );
+
+        // if in the end TODO: make based on length?
+        if(typeof this._playbackState.data[this._playbackState.pointer + 1] === 'undefined')
+          return false;
+
         this._playbackState.pointer = this._playbackState.pointer + 1;
 
-        //TODO: dev remove
-        //if(this._playbackState.pointer === 2) return;
-        // if in the end
-        if(typeof this._playbackState.data[this._playbackState.pointer] === 'undefined')
-          return;
-
-        this._timer.reset();
-        this._timer.start(this._timerDefaultInterval);
+        return true;
       }
 
     });

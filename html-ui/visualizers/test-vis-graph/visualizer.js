@@ -10,39 +10,33 @@
  */
 var testVisGraphVisualizer = (function (vis, _, parser) {
 	var my = {},
-		privateVariable = 1,
+        network,
         context,
         container,
         canvas,
         entities,
         currentEntityKeys = {nodes: [], edges: []},
-        attributes,
-        network;
+        attributes;
+
+    my.destroy = function() {
+        if(network instanceof vis.Network) {
+            network.destroy();
+            context = undefined;
+            canvas = undefined;
+            entities = undefined;
+            currentEntityKeys = {nodes: [], edges: []};
+            attributes = undefined;
+        }
+    }
 
     my.initialize = function(visJsContainer, settings) {
+        my.destroy();
         container = visJsContainer;
-
-        /*// TODO: remove development stuff
-        var devNodes = [{id: 1, label: 'Node 1'},
-        {id: 2, label: 'Node 2'},
-        {id: 3, label: 'Node 3'},
-        {id: 4, label: 'Node 4'},
-        {id: 5, label: 'Node 5'}];
-        var devEdges = [
-        {from: 1, to: 3},
-        {from: 1, to: 2},
-        {from: 2, to: 4},
-        {from: 2, to: 5}
-        ];
-        currentEntityKeys.nodes = [1,2,3,4,5];
-        currentEntityKeys.edges = ['1%3', '1%2', '2%4', '2%5']; */
 
         // entities are visjs network "data"
         entities = {
             nodes: new vis.DataSet([], {queue: true}),
-            //nodes: new vis.DataSet(devNodes, {queue: true}),
             edges: new vis.DataSet([], {queue: true})
-            //edges: new vis.DataSet(devEdges, {queue: true})
         };
 
         // attributes are visjs network "options"
@@ -82,7 +76,7 @@ var testVisGraphVisualizer = (function (vis, _, parser) {
         // load initial options
         loadCurrentOptions();
 
-        console.log('attr: ', attributes);
+        console.log('Loaded network with default attributes: ', attributes);
 
         my.network = network; // TODO remove
         my.edges = entities.edges;
@@ -133,8 +127,14 @@ var testVisGraphVisualizer = (function (vis, _, parser) {
     };
 
     // my.queueAnswerSet()
-
+    //
     my.addAnswerSet = function(set) {
+        var ret = my.queueAnswerSet(set);
+        my.flushChanges();
+        return ret;
+    };
+
+    my.queueAnswerSet = function(set) {
         var parsed = doParsing(set);
         //console.log('parsed', parsed);
         if(parsed === false) return false;
@@ -189,13 +189,16 @@ var testVisGraphVisualizer = (function (vis, _, parser) {
 
         //console.log('current: ', attributes);
         console.log('parsed: ', parsed, ' changes: ', attributeChanges);
+        // TODO: queue changes, execute upon my.flushChanges()
         network.setOptions(attributeChanges);
 
+        return true;
+    };
+
+    my.flushChanges = function() {
         // Flush changes to screen
         entities.nodes.flush();
         entities.edges.flush();
-
-        return true;
     };
 
 	return my;

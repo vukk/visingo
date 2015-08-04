@@ -1,0 +1,49 @@
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/iron-icons/av-icons.html">
+<link rel="import" href="../../bower_components/iron-icons/image-icons.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+
+<dom-module id="visualizer-test-vis-graph-toolbar-controls">
+  <style>
+    paper-icon-button.green {
+      color: #8BC34A;
+    }
+    paper-icon-button.yellow {
+      color: #FFEB3B;
+    }
+  </style>
+  <template>
+  <div>
+    <paper-icon-button on-tap="toStart" icon="av:skip-previous"></paper-icon-button>
+    <paper-icon-button on-tap="previous" icon="image:navigate-before" disabled></paper-icon-button>
+    <paper-icon-button on-tap="play" icon="av:play-circle-filled" class="green"></paper-icon-button>
+    <paper-icon-button on-tap="pause" icon="av:pause-circle-filled" class="yellow"></paper-icon-button>
+    <paper-icon-button on-tap="next" icon="image:navigate-next"></paper-icon-button>
+    <paper-icon-button on-tap="toEnd" icon="av:skip-next"></paper-icon-button>
+  </div>
+  </template>
+</dom-module>
+
+<script>
+  (function() {
+    Polymer({
+      is: 'visualizer-test-vis-graph-toolbar-controls',
+      
+      properties: {
+        controls: {
+          type: Object
+        }
+      },
+      
+      toStart: function() { this.controls.toStart(); },
+      previous: function() { this.controls.previous(); },
+      play: function() { this.controls.play(); },
+      pause: function() { this.controls.pause(); },
+      next: function() { this.controls.next(); },
+      toEnd: function() { this.controls.toEnd(); },
+
+    });
+  })();
+
+</script>
+

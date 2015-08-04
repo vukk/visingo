@@ -25,7 +25,7 @@
     Polymer({
       is: 'visingo-visualizer-element',
       
-      properties: {      
+      properties: {
         visualizer: {
           type: String, // TODO: should be Object, not String
           observer: '_visualizerChange'
@@ -48,7 +48,8 @@
 
         _element: {
           type: Object
-        }
+        },
+
       },
 
       // TODO add resizing etc.
@@ -76,16 +77,13 @@
       },
 
       // TODO visualizer should not change on the fly on this page!
-      //      remove the possibility
+      //      remove the possibility, or deal with changing visualizer nicely
       _visualizerChange: function(newVal, oldVal) {
-        elem = Polymer.dom(this.$.container).firstChild;
-
-        if(typeof elem !== 'undefined')
-          Polymer.dom(this.$.container).removeChild(elem);
+        if(typeof this._element !== 'undefined')
+          Polymer.dom(this.$.visualizerContainer).removeChild(this._element);
 
         this._element = undefined;
-
-        this._import(this.visualizer);
+        this._import(newVal);
       },
 
       _import: function(visualizer) {
@@ -113,8 +111,8 @@
           }
         );
       },
-    });
 
+    });
   })();
 
 </script>

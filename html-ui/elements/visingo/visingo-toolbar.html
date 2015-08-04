@@ -21,9 +21,8 @@
   </style>
 
   <template>
-    
     <!-- Main Toolbar -->
-    <paper-toolbar id="visingoToolbar">
+    <paper-toolbar>
 
     <!-- Toolbar actions -->
     <paper-icon-button icon="refresh"></paper-icon-button>
@@ -39,6 +38,12 @@
       Qt availability:<br>
       <span>{{qtConnectedText}}</span>
     </div>
+
+    <span class="flex"></span>
+
+    <!-- Element insertion point -->
+    <div id="container"></div>
+    <!-- End insertion point -->
 
     <span class="flex"></span>
 
@@ -66,6 +71,10 @@
         qtConnectedText: {
           type: String,
           value: 'not connected'
+        },
+        _components: {
+          type: Array,
+          value: function() { return []; }
         }
       },
       
@@ -79,7 +88,20 @@
         qtA.toggleClass('green', newValue);
         qtA.toggleClass('red',  !newValue);
         this.qtConnectedText = newValue ? 'connected' : 'not connected';
-      }
+      },
+
+      attachComponent: function(component) {
+        // instanceof HTMLElement return obj instanceof HTMLElement;
+        if(typeof component === 'undefined' || !(component instanceof HTMLElement)) {
+          return false;
+        }
+
+        this._components.push(component);
+        Polymer.dom(this.$.container).appendChild(component);
+
+        return true;
+      },
+
     });
   })();
 </script>
