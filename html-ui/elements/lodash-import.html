@@ -10,25 +10,39 @@ _.mixin({
         return _.omit(a, function(v,k) { return b[k] === v; })
     },
     deepDiff: function(old, comp) {
-        var r = {};
-        _.each(old, function(value, key) { // value, key
-            if(typeof comp[key] === 'undefined') return; // {foo: 1}, {} -> undefined
-            if(comp[key] === value) return; // {foo: 1}, {foo: 1} -> undefined
+        function internalDeepDiff(old, comp) {
+            var r = {};
+            _.each(old, function(value, key) { // value, key
+                if(typeof comp[key] === 'undefined') return; // {foo: 1}, {} -> undefined
+                if(comp[key] === value) return; // {foo: 1}, {foo: 1} -> undefined
 
-            // but what if it returns an empty object? still attach?
-	          r[key] = _.isObject(value)
-	                 ? _.deepDiff(value, comp[key])
-                   : comp[key]
-	          ;
+                // but what if it returns an empty object? still attach?
+                if((_.isObject(value) && _.isObject(comp[key]))) {
+                    var v = internalDeepDiff(value, comp[key]);
+                    if(typeof v !== 'undefined')
+                        r[key] = v;
+                }
+                else {
+                    r[key] = comp[key];
+                }
 
-        });
-
-        // copy missing keys over
-        var missing = _.difference(Object.keys(comp), Object.keys(old));
-        _.each(missing, function(compKey) {
-            r[compKey] = comp[compKey];
-        });
-
+            });
+        
+            // copy missing keys over
+            var missing = _.difference(Object.keys(comp), Object.keys(old));
+            _.each(missing, function(compKey) {
+                r[compKey] = comp[compKey];
+            });
+        
+            if(_.isEmpty(r)) return;
+            
+            return r;
+        }
+        
+        var r = internalDeepDiff(old, comp);
+        
+        if(typeof r === 'undefined')
+            return {};
         return r;
     }
 });

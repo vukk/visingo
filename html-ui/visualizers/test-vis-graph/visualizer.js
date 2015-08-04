@@ -19,7 +19,7 @@ var testVisGraphVisualizer = (function (vis, _, parser) {
         attributes,
         network;
 
-    my.initialize = function(visJsContainer, visJsConfiguratorElement) {
+    my.initialize = function(visJsContainer, settings) {
         container = visJsContainer;
 
         /*// TODO: remove development stuff
@@ -70,8 +70,13 @@ var testVisGraphVisualizer = (function (vis, _, parser) {
                 }
             }
         };
-        //attributes = new vis.DataSet({});
 
+        // settings
+        if(settings.directed === true)
+            _.set(attributes, 'edges.arrows.to.enabled', true);
+
+
+        // create network
         network = new vis.Network(container, entities, attributes);
 
         // load initial options
@@ -131,6 +136,7 @@ var testVisGraphVisualizer = (function (vis, _, parser) {
 
     my.addAnswerSet = function(set) {
         var parsed = doParsing(set);
+        //console.log('parsed', parsed);
         if(parsed === false) return false;
 
         // entities
@@ -167,11 +173,14 @@ var testVisGraphVisualizer = (function (vis, _, parser) {
         delete parsed.nodes;
         delete parsed.edges;
         // rename entity attributes when needed
-        // global node and edge attributes, nodeOptions -> nodes, edgeOptions -> edges
-        parsed.nodes = parsed.nodeOptions;
-        parsed.edges = parsed.edgeOptions;
-        delete parsed.nodeOptions;
-        delete parsed.edgeOptions;
+        // global node and edge attributes, nodeDefaults -> nodes, edgeDefaults -> edges
+        parsed.nodes = parsed.nodeDefaults;
+        parsed.edges = parsed.edgeDefaults;
+        delete parsed.nodeDefaults;
+        delete parsed.edgeDefaults;
+
+        //console.log('parsed', parsed);
+        //console.log(JSON.stringify(parsed), JSON.stringify(attributes));
 
         // _.deepDiff(current, new) gives only what's different in new compared to current
         // _.deepDiff is defined as a mixin in lodash-import.html

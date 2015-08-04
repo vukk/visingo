@@ -82,4 +82,4 @@ nonascii
   = [\x80-\uFFFF]
 
 S "whitespace"
-  = [ \t\r\n\f]+
+  = [ \t\r\n\f]

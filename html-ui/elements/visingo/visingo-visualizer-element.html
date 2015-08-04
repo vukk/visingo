@@ -41,6 +41,11 @@
           observer: '_onewayBindInputFiles'
         },
 
+        settings: {
+          type: Object,
+          observer: '_onewayBindSettings'
+        },
+
         _element: {
           type: Object
         }
@@ -59,6 +64,11 @@
       _onewayBindInputFiles: function(newVal, oldVal) {
         this._onewayBind('inputFiles');
       },
+
+      _onewayBindSettings: function(newVal, oldVal) {
+        this._onewayBind('settings');
+      },
+
 
       _onewayBind: function(prop) {
         if(typeof this._element !== 'undefined')
@@ -85,7 +95,7 @@
             var elemName = 'visualizer-' + visualizer + '-element';
             var elem = document.createElement(elemName);
             elem.id = 'visualizerElement';
-            elem.input = {}; //TODO initialize bindings if needed
+            elem.input = {}; // TODO initialize bindings if needed
 
             // TODO map properties forward to the element if needed
             Object.keys(this.properties).forEach(function(item, idx, arr) {

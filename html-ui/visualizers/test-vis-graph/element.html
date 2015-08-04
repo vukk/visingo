@@ -98,7 +98,7 @@ TODO: remove visjsConfigurator
       },
 
       launch: function() {
-        this._visScript.initialize(this.$.visjsCanvasContainer, this.$.visjsConfigurator);
+        this._visScript.initialize(this.$.visjsCanvasContainer, this.input.settings);
         // TODO: remove visS, visC which are here for development convenience
         window.visS = this._visScript;
         window.visC = this.$.visjsCanvasContainer;

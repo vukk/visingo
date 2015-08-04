@@ -121,7 +121,7 @@ nonascii
   = [\x80-\uFFFF]
 
 E "tab or space"
-  = [ \t]+
+  = [ \t]
 
 S "whitespace"
-  = [ \t\r\n\f]+
+  = [ \t\r\n\f]

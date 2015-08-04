@@ -5,7 +5,7 @@ some TODO notes:
   - or make newTab command accept a bool whether or not to enable,
     then enable on main and visualization
 
-
+- parsers need to accept single element tuples? (foo,)
 
 
 

@@ -1,5 +1,6 @@
 /*
  * ASP graph visualizer peg.js parser
+ * TODO: don't break on whitespace
  */
 
 /* initializer */
@@ -67,18 +68,27 @@ terms
   = E* first:term? rest:(E+ term)* E*
   { return buildList(first, rest, 1); }
 
-term
+// predicate must be first (here we have specific predicates before...)
+// booleanAtom must be before atom
+// number must be before string (to support floats "1.2")
+term // tuple is not allowed
   = entityNode
   / attrNode
   / entityEdge2
   / attrEdge2
   / entityEdge3
   / attrEdge3
+  / attrGroup
+  / attrNodeDefault
+  / attrEdgeDefault
   / attrLayout
+  / attrPhysics
+  / attrInteraction
+  / predicate
   / atom:booleanAtom
   / atom:predicateIdent
-  / aspstring
-  / integer
+  / num:number
+  / string:aspstring
 
 entityNode
   = predicateName:"node" "(" id:entityIdent ")"
@@ -117,6 +127,14 @@ entityEdge3
     global.edges[id].to = node2;
   }
 
+attrGroup
+  = predicateName:"groupAttr" "(" id:entityIdent "," rest:pathAndValue ")"
+  {
+    ensure('groups');
+    global.groups[id] = global.groups[id] || {};
+    setDeep(global.groups[id], rest.slice(0, -1), rest[rest.length-1]);
+  }
+
 attrEdge2
   = predicateName:"edgeAttr" "((" node1:entityIdent "," node2:entityIdent ")," rest:pathAndValue ")"
   {
@@ -135,6 +153,22 @@ attrEdge3
     setDeep(global.edges[id], rest.slice(0, -1), rest[rest.length-1]);
   }
 
+attrNodeDefault
+  = predicateName:"nodeDefault" "(" rest:pathAndValue ")"
+  {
+    if(rest.length < 2) { return; }
+    ensure('nodeDefaults');
+    setAttr(global.nodeDefaults, rest);
+  }
+
+attrEdgeDefault
+  = predicateName:"edgeDefault" "(" rest:pathAndValue ")"
+  {
+    if(rest.length < 2) { return; }
+    ensure('edgeDefaults');
+    setAttr(global.edgeDefaults, rest);
+  }
+
 attrLayout
   = predicateName:"layout" "(" rest:pathAndValue ")"
   {
@@ -143,6 +177,24 @@ attrLayout
     setAttr(global.layout, rest);
   }
 
+attrPhysics
+  = predicateName:"physics" "(" rest:pathAndValue ")"
+  {
+    if(rest.length < 2) { return; }
+    ensure('physics');
+    setAttr(global.physics, rest);
+  }
+
+attrInteraction
+  = predicateName:"interaction" "(" rest:pathAndValue ")"
+  {
+    if(rest.length < 2) { return; }
+    ensure('interaction');
+    setAttr(global.interaction, rest);
+  }
+
+
+
 /* path and value */
 pathAndValue
   = first:singlePathOrValue rest:("," singlePathOrValue)*
@@ -150,11 +202,14 @@ pathAndValue
     return buildList(first, rest, 1);
   }
 
+// predicate must be first
+// booleanAtom must be before atom
+// number must be before string (to support floats "1.2")
 singlePathOrValue
   = atom:booleanAtom
   / atom:predicateIdent
-  / string:aspstring
   / num:number
+  / string:aspstring
 
 
 
@@ -177,13 +232,16 @@ arguments
     return buildList(first, rest, 2);
   }
 
+// predicate must be first
+// booleanAtom must be before atom
+// number must be before string (to support floats "1.2")
 argument
   = predicate
   / atom:booleanAtom
   / atom:predicateIdent
   / tuple:anontuple
-  / string:aspstring
   / num:number
+  / string:aspstring
 
 
 /* tuples */
@@ -213,10 +271,7 @@ integer "integer"
   = sign:"-"? digits:([0-9]+) { d = makeInteger(digits); return (sign === '-') ? -d : d }
 
 decimal "decimal"
-  = sign:"-"? digits:([0-9]+) "." fraction:([0-9]+) { d = makeFloat(digits); return (sign === '-') ? -d : d }
-
-decimal "decimal"
-  = sign:"-"? float:$(characteristic:[0-9]+ "." decimal:[0-9]+)
+  = "\"" sign:"-"? float:$(characteristic:[0-9]+ "." decimal:[0-9]+) "\""
   {
     var f = parseFloat(float);
     return (sign === '-') ? -f : f;
@@ -257,8 +312,8 @@ nonascii
   = [\x80-\uFFFF]
 
 E "tab or space"
-  = [ \t]+
+  = [ \t]
 
 S "whitespace"
-  = [ \t\r\n\f]+
+  = [ \t\r\n\f]
 

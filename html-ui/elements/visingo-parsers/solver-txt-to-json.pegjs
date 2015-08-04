@@ -148,10 +148,10 @@ solvingtextnl "Solving..."
 /* single model */
 
 model
-  = anl:answernumline "\n" pl:predicateline "\n" ol:optimizationlinenl?
+  = anl:answernumline "\n" al:answersetline "\n" ol:optimizationlinenl?
   {
     var m = {};
-    m['Value'] = pl;
+    m['Value'] = al;
     if(ol !== null) m['Costs'] = ol;
     return m;
   }
@@ -170,34 +170,66 @@ answernumline "answer number line"
   = "Answer: " num:posinteger { return num; }
 /* a line of predicates, separated by spaces */
 
-predicateline
-  = first:predicate rest:(S+ predicate)*
+answersetline
+  = E* first:term? rest:(E+ term)* E*
   { return buildList(first, rest, 1); }
-  / E* { return []; }
 
+term // tuple is not allowed
+  = predicate
+  / atom:booleanAtom
+  / atom:predicateIdent
+  / string:aspstring
+  / num:number
 
 /* a single predicate */
 
 predicate "predicate"
-  = $(ident "(" arguments ")")
+  = $(predicateIdent "(" arguments ")")
 
 // must have at least 1 argument (no empty predicates or tuples)
+//arguments
+//  = first:argument rest:("," S* argument)*
+//    { return buildList(first, rest, 1) }
+    
 arguments
-  = first:argument rest:("," S* argument)*
-    { return buildList(first, rest, 1) }
+  = first:argument rest:("," E* argument)*
+  {
+    return buildList(first, rest, 2);
+  }
+
 
 argument
   = predicate
-  / tag:ident
-  / num:posinteger
+  / atom:booleanAtom
+  / atom:predicateIdent
+  / tuple:anontuple
+  / string:aspstring
+  / num:number
 
+
+/* tuples */
+
+anontuple
+  = "(" E* first:argument rest:("," E* argument)* E* ")"
+  {
+    return buildList(first, rest, 2);
+  }
+
+/* Booleans */
+booleanAtom
+  = "true" { return true; }
+  / "false" { return false; }
+
+/* ASP strings */
+
+aspstring "double quoted string"
+  = "\"" str:string "\"" { return str; }
 
 /* numbers */
 
 posinteger "positive integer"
   = digits:[0-9]+ { return makeInteger(digits); }
 
-// digits:("-"? [0-9]+) doesn't work for some reason, pegjs bug?
 integer "integer"
   = sign:"-"? digits:([0-9]+) { d = makeInteger(digits); return (sign === '-') ? -d : d }
 
@@ -205,27 +237,44 @@ timedecimal "positive decimal number"
   = float:$(characteristic:[0-9]+ "." decimal:[0-9]+)
   { return parseFloat(float); }
 
+decimal "decimal"
+  = sign:"-"? float:$(characteristic:[0-9]+ "." decimal:[0-9]+)
+  {
+    var f = parseFloat(float);
+    return (sign === '-') ? -f : f;
+  }
+
+number "number"
+  = decimal
+  / integer
+
 
 /* characters & strings */
 
+// not " or newline related characters
+string "string"
+  = str:([^\"\r\n\f]+) { return str.join("") }
+
 // prefix allows default negation e.g. '-predicate(X,Y)'
-ident "identifier"
-  = $("-"? identStart identChar*)
+predicateIdent "predicate identifier"
+  = prefix:$"-"? start:predicateIdentStart chars:predicateIdentChar* {
+      return prefix + start + chars.join("");
+    }
 
 // allow "_" on the start of idents, since heuristic predicates might be present in the output
-identStart
+predicateIdentStart
   = [_a-z]i
   / nonascii
 
-identChar
+predicateIdentChar
   = [_a-z0-9-]i
   / nonascii
 
 nonascii
   = [\x80-\uFFFF]
 
-E "space or tab"
-  = [ \t\f]
+E "tab or space"
+  = [ \t]
 
 S "whitespace"
   = [ \t\r\n\f]
@@ -234,3 +283,4 @@ S "whitespace"
 
 filepath "file path"
   = $([A-Za-z0-9\-_\.\\\/]+)
+
