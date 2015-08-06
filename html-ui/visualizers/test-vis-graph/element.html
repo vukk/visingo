@@ -66,7 +66,7 @@ TODO: remove visjsConfigurator
           type: Object,
           readonly: true
         },
-        _timerDefaultInterval: {
+        _timerInterval: {
           type: Number,
           value: 8000 // milliseconds
         },
@@ -150,7 +150,7 @@ TODO: remove visjsConfigurator
 
       attached: function() {
         // attach controls to the toolbar
-        this.async(function() {
+        //this.async(function() {
           var elem = document.createElement(
             'visualizer-test-vis-graph-toolbar-controls'
           );
@@ -164,10 +164,17 @@ TODO: remove visjsConfigurator
             toEnd: function() { return this._ctlToEnd(); }.bind(this),
           };
 
+          // TODO: When imperative javascript two-way binding for Polymer is
+          //       again available (removed in 1.0), change this to a binding.
+          //       Current solution is admittedly an ugly hack.
+          elem.updateInterval = {f: function(value, old) {
+            this._timerInterval = value;
+          }.bind(this)};
+
           var tb = document.getElementById('visingoMainToolbar');
           tb.attachComponent(elem);
           this._toolbarControlsElement = elem;
-        });
+        //});
         this.waitForLoad();
       },
 
@@ -203,7 +210,7 @@ TODO: remove visjsConfigurator
         this._timer = new Tock({
           countdown: true,
           interval: 16, // 16ms ~ 60fps
-          //callback: someCallbackFunction,
+          callback: this.timerTick.bind(this),
           complete: this.playbackTick.bind(this)
         });
         console.log(this.input);
@@ -223,7 +230,7 @@ TODO: remove visjsConfigurator
       playbackTick: function() {
         if(this.playbackNext()) {
           this._timer.reset();
-          this._timer.start(this._timerDefaultInterval);
+          this._timer.start(this._timerInterval);
         }
       },
 
@@ -233,6 +240,12 @@ TODO: remove visjsConfigurator
             this._playbackState.data[this._playbackState.pointer].Value
         );
 
+        // flash time display
+        this._toolbarControlsElement.$.timeToNextInputContainer._setFocused(true);
+        this.async(function() {
+          this._toolbarControlsElement.$.timeToNextInputContainer._setFocused(false);
+        }, 250); // 250ms seems to be enough for the underline to flash fully
+
         // if in the end TODO: make based on length?
         if(typeof this._playbackState.data[this._playbackState.pointer + 1] === 'undefined')
           return false;
@@ -240,9 +253,13 @@ TODO: remove visjsConfigurator
         this._playbackState.pointer = this._playbackState.pointer + 1;
 
         return true;
+      },
+
+      timerTick: function() {
+        // update time display
+        this._toolbarControlsElement.timeToNext = this._timer.msToTime(this._timer.lap());
       }
 
     });
   })();
 </script>
-

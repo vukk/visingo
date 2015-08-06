@@ -2,24 +2,173 @@
 <link rel="import" href="../../bower_components/iron-icons/av-icons.html">
 <link rel="import" href="../../bower_components/iron-icons/image-icons.html">
 <link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
 
 <dom-module id="visualizer-test-vis-graph-toolbar-controls">
+  <link rel="import" type="css" href="white-shadows.css">
   <style>
-    paper-icon-button.green {
-      color: #8BC34A;
+    /* Little white shadows sparkle and glisten... */
+    :host paper-button {
+      --shadow-elevation-2dp: {
+        box-shadow: 0 2px 2px 0 rgba(255, 255, 255, 0.14),
+                    0 1px 5px 0 rgba(255, 255, 255, 0.12),
+                    0 3px 1px -2px rgba(255, 255, 255, 0.2);
+      };
+
+      --shadow-elevation-3dp: {
+        box-shadow: 0 3px 4px 0 rgba(255, 255, 255, 0.14),
+                    0 1px 8px 0 rgba(255, 255, 255, 0.12),
+                    0 3px 3px -2px rgba(255, 255, 255, 0.4);
+      };
+
+      --shadow-elevation-4dp: {
+        box-shadow: 0 4px 5px 0 rgba(255, 255, 255, 0.14),
+                    0 1px 10px 0 rgba(255, 255, 255, 0.12),
+                    0 2px 4px -1px rgba(255, 255, 255, 0.4);
+      };
+
+      --shadow-elevation-6dp: {
+        box-shadow: 0 6px 10px 0 rgba(255, 255, 255, 0.14),
+                    0 1px 18px 0 rgba(255, 255, 255, 0.12),
+                    0 3px 5px -1px rgba(255, 255, 255, 0.4);
+      };
+
+      --shadow-elevation-8dp: {
+        box-shadow: 0 8px 10px 1px rgba(255, 255, 255, 0.14),
+                    0 3px 14px 2px rgba(255, 255, 255, 0.12),
+                    0 5px 5px -3px rgba(255, 255, 255, 0.4);
+      };
+
+      --shadow-elevation-16dp: {
+        box-shadow: 0 16px 24px 2px rgba(255, 255, 255, 0.14),
+                    0  6px 30px 5px rgba(255, 255, 255, 0.12),
+                    0  8px 10px -5px rgba(255, 255, 255, 0.4);
+      };
+
     }
-    paper-icon-button.yellow {
-      color: #FFEB3B;
+    /* part of a system plan. */
+
+
+    paper-input-container {
+      --paper-input-container-input-color: white;
+      --paper-input-container-focus-color: white;
+      --paper-input-container-invalid-color: red;
+      margin-left: 0.5em;
+      margin-right: 0.5em;
     }
+    paper-input-container input {
+      text-align: center;
+    }
+    #intervalInputContainer {
+      width: 3em;
+    }
+    #timeToNextInputContainer {
+      width: 6em;
+    }
+    #timeToNextInput {
+      text-align: center;
+    }
+
+    /*paper-icon-button:hover {
+        background: var(--paper-orange-50);
+        border-radius: 50%;
+      }*/
+
+    /* small buttons around icons */
+    paper-button::shadow paper-material {
+      background-color: var(--paper-light-green-800); /* --paper-light-green-900 */
+    }
+    paper-button::shadow .content {
+      padding: 2px;
+    }
+    paper-button {
+      --paper-button: {
+        min-width: 35px;
+        min-height: auto;
+        height: auto;
+        padding: 3px;
+        margin: 0;
+        color: var(--paper-grey-50);
+      };
+      --paper-button-disabled: {
+        min-width: 35px;
+        min-height: auto;
+        height: auto;
+        padding: 3px;
+        margin: 0;
+        background-color: inherit;
+        color: var(--paper-grey-700);
+      };
+    }
+    paper-button::shadow paper-ripple {
+      /*color: rgba(100, 221, 23, 0.5); /* --paper-light-green-a700 */
+      color: var(--paper-light-green-a400);
+    }
+
+    /* hilight play and pause with color */
+    #playBtn::shadow paper-material {
+      background-color: var(--paper-light-green-600); /* --paper-light-green-900 */
+    }
+    #pauseBtn::shadow paper-material {
+      background-color: var(--paper-yellow-700); /* --paper-light-green-900 */
+    }
+
+    /* margin: 0;
+  padding: 0; */
   </style>
   <template>
-  <div>
-    <paper-icon-button on-tap="toStart" icon="av:skip-previous"></paper-icon-button>
-    <paper-icon-button on-tap="previous" icon="image:navigate-before" disabled></paper-icon-button>
-    <paper-icon-button on-tap="play" icon="av:play-circle-filled" class="green"></paper-icon-button>
-    <paper-icon-button on-tap="pause" icon="av:pause-circle-filled" class="yellow"></paper-icon-button>
-    <paper-icon-button on-tap="next" icon="image:navigate-next"></paper-icon-button>
-    <paper-icon-button on-tap="toEnd" icon="av:skip-next"></paper-icon-button>
+  <div class="layout horizontal">
+    <div class="layout vertical">
+      <div class="flex"></div>
+      <paper-input-container id="intervalInputContainer" auto-validate>
+        <label>Interval</label>
+        <input id="intervalInput" is="iron-input" pattern="\d+(\.\d+)?" bind-value="{{interval::change}}">
+        <paper-input-error>Only numbers are allowed!</paper-input-error>
+      </paper-input-container>
+      <div class="flex"></div>
+    </div>
+    <div class="layout vertical">
+      <div class="flex"></div>
+      <div class="layout horizontal">
+        <paper-button on-tap="toStart" raised>
+          <iron-icon icon="av:skip-previous"></iron-icon>
+        </paper-button>
+        <paper-button on-tap="previous" raised disabled>
+          <iron-icon icon="image:navigate-before"></iron-icon>
+        </paper-button>
+        <paper-button on-tap="play" raised id="playBtn">
+          <iron-icon icon="av:play-circle-filled"></iron-icon>
+        </paper-button>
+        <paper-button on-tap="pause" raised id="pauseBtn">
+          <iron-icon icon="av:pause-circle-filled"></iron-icon>
+        </paper-button>
+        <paper-button on-tap="next" raised>
+          <iron-icon icon="image:navigate-next"></iron-icon>
+        </paper-button>
+        <paper-button on-tap="toEnd" raised>
+          <iron-icon icon="av:skip-next"></iron-icon>
+        </paper-button>
+        <!--paper-icon-button on-tap="toStart" icon="av:skip-previous"></paper-icon-button>
+        <paper-icon-button on-tap="previous" icon="image:navigate-before" disabled></paper-icon-button>
+        <paper-icon-button on-tap="play" icon="av:play-circle-filled" class="green"></paper-icon-button>
+        <paper-icon-button id="pauseBtn" on-tap="pause" icon="av:pause-circle-filled" class="yellow"></paper-icon-button>
+        <paper-icon-button on-tap="next" icon="image:navigate-next"></paper-icon-button>
+        <paper-icon-button on-tap="toEnd" icon="av:skip-next"></paper-icon-button-->
+      </div>
+      <div class="flex"></div>
+    </div>
+    <div class="layout vertical">
+      <div class="flex"></div>
+      <paper-input-container id="timeToNextInputContainer" always-float-label>
+        <label>To next</label>
+        <input id="timeToNextInput" is="iron-input" value="[[timeToNext]]" disabled>
+        <paper-input-error>Lift</paper-input-error>
+      </paper-input-container>
+      <div class="flex"></div>
+    </div>
   </div>
   </template>
 </dom-module>
@@ -28,13 +177,32 @@
   (function() {
     Polymer({
       is: 'visualizer-test-vis-graph-toolbar-controls',
-      
+
       properties: {
         controls: {
           type: Object
+        },
+        interval: {
+          type: Number,
+          value: 8,
+          observer: '_intervalChanged'
+        },
+        timeToNext: {
+          type: String,
+          value: "00:00.000"
+        },
+        updateInterval: { // TODO: remove when two-way bind done in element.html
+          type: Object
         }
       },
-      
+
+      _intervalChanged: function(newVal, oldVal) {
+        if(!this.$.intervalInput.validate()) return;
+        console.log('_intervalChanged', newVal, oldVal);
+        if(typeof this.updateInterval !== 'undefined')
+          this.updateInterval.f(newVal*1000, oldVal*1000);
+      },
+
       toStart: function() { this.controls.toStart(); },
       previous: function() { this.controls.previous(); },
       play: function() { this.controls.play(); },
@@ -46,4 +214,3 @@
   })();
 
 </script>
-
