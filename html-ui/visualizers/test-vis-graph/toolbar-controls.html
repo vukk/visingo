@@ -6,6 +6,7 @@
 
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/paper-styles/color.html">
 
 <dom-module id="visualizer-test-vis-graph-toolbar-controls">
   <link rel="import" type="css" href="white-shadows.css">
@@ -56,14 +57,20 @@
       --paper-input-container-input-color: white;
       --paper-input-container-focus-color: white;
       --paper-input-container-invalid-color: red;
+      --paper-input-container-label: {text-align: center;};
       margin-left: 0.5em;
       margin-right: 0.5em;
     }
     paper-input-container input {
       text-align: center;
     }
+    #answerNumberInputContainer {
+      width: 3em;
+    }
     #intervalInputContainer {
       width: 3em;
+      --paper-input-container-color: var(--paper-light-green-800);
+      --paper-input-container-focus-color: var(--paper-light-green-a200);
     }
     #timeToNextInputContainer {
       width: 6em;
@@ -79,7 +86,7 @@
 
     /* small buttons around icons */
     paper-button::shadow paper-material {
-      background-color: var(--paper-light-green-800); /* --paper-light-green-900 */
+      background-color: var(--paper-light-green-800);
     }
     paper-button::shadow .content {
       padding: 2px;
@@ -104,16 +111,15 @@
       };
     }
     paper-button::shadow paper-ripple {
-      /*color: rgba(100, 221, 23, 0.5); /* --paper-light-green-a700 */
       color: var(--paper-light-green-a400);
     }
 
     /* hilight play and pause with color */
     #playBtn::shadow paper-material {
-      background-color: var(--paper-light-green-600); /* --paper-light-green-900 */
+      background-color: var(--paper-light-green-600);
     }
     #pauseBtn::shadow paper-material {
-      background-color: var(--paper-yellow-700); /* --paper-light-green-900 */
+      background-color: var(--paper-yellow-700);
     }
 
     /* margin: 0;
@@ -121,15 +127,28 @@
   </style>
   <template>
   <div class="layout horizontal">
-    <div class="layout vertical">
-      <div class="flex"></div>
-      <paper-input-container id="intervalInputContainer" auto-validate>
-        <label>Interval</label>
-        <input id="intervalInput" is="iron-input" pattern="\d+(\.\d+)?" bind-value="{{interval::change}}">
-        <paper-input-error>Only numbers are allowed!</paper-input-error>
-      </paper-input-container>
-      <div class="flex"></div>
-    </div>
+    <template is="dom-if" if="{{answerNumber}}">
+      <div class="layout vertical">
+        <div class="flex"></div>
+        <paper-input-container id="answerNumberInputContainer" always-float-label>
+          <label>Model&#35;</label>
+          <input id="answerNumberInput" is="iron-input" value="[[answerNumber]]" disabled>
+          <paper-input-error>TODO remove &amp; fix margin-bottom</paper-input-error>
+        </paper-input-container>
+        <div class="flex"></div>
+      </div>
+    </template>
+    <template is="dom-if" if="[[interval]]">
+      <div class="layout vertical">
+        <div class="flex"></div>
+        <paper-input-container id="intervalInputContainer" auto-validate>
+          <label>Interval</label>
+          <input id="intervalInput" is="iron-input" pattern="\d+(\.\d+)?" bind-value="{{interval::change}}">
+          <paper-input-error>Only numbers are allowed!</paper-input-error>
+        </paper-input-container>
+        <div class="flex"></div>
+      </div>
+    </template>
     <div class="layout vertical">
       <div class="flex"></div>
       <div class="layout horizontal">
@@ -151,21 +170,15 @@
         <paper-button on-tap="toEnd" raised>
           <iron-icon icon="av:skip-next"></iron-icon>
         </paper-button>
-        <!--paper-icon-button on-tap="toStart" icon="av:skip-previous"></paper-icon-button>
-        <paper-icon-button on-tap="previous" icon="image:navigate-before" disabled></paper-icon-button>
-        <paper-icon-button on-tap="play" icon="av:play-circle-filled" class="green"></paper-icon-button>
-        <paper-icon-button id="pauseBtn" on-tap="pause" icon="av:pause-circle-filled" class="yellow"></paper-icon-button>
-        <paper-icon-button on-tap="next" icon="image:navigate-next"></paper-icon-button>
-        <paper-icon-button on-tap="toEnd" icon="av:skip-next"></paper-icon-button-->
       </div>
       <div class="flex"></div>
     </div>
-    <div class="layout vertical">
+    <div class="layout vertical"><!-- TODO: Rename to timeInputContainer and reuse in interactiveMode? Add dom-if. -->
       <div class="flex"></div>
       <paper-input-container id="timeToNextInputContainer" always-float-label>
         <label>To next</label>
         <input id="timeToNextInput" is="iron-input" value="[[timeToNext]]" disabled>
-        <paper-input-error>Lift</paper-input-error>
+        <paper-input-error>TODO remove &amp; fix margin-bottom</paper-input-error>
       </paper-input-container>
       <div class="flex"></div>
     </div>
@@ -184,23 +197,22 @@
         },
         interval: {
           type: Number,
-          value: 8,
           observer: '_intervalChanged'
+        },
+        answerNumber: {
+          type: Number,
+          notify: true
         },
         timeToNext: {
           type: String,
           value: "00:00.000"
-        },
-        updateInterval: { // TODO: remove when two-way bind done in element.html
-          type: Object
         }
       },
 
       _intervalChanged: function(newVal, oldVal) {
-        if(!this.$.intervalInput.validate()) return;
-        console.log('_intervalChanged', newVal, oldVal);
-        if(typeof this.updateInterval !== 'undefined')
-          this.updateInterval.f(newVal*1000, oldVal*1000);
+        var iiElem = this.$$('#intervalInput');
+        if(typeof iiElem === 'undefined' || !iiElem.validate()) return;
+        this.fire('interval-changed', this.interval);
       },
 
       toStart: function() { this.controls.toStart(); },

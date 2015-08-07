@@ -4,10 +4,9 @@ TODO: make this into an element visingo-visualizer-content-visjs that can
 be extended by the visualizer package (often empty extension, but less repeated code?)
 
 TODO: import System.js
-
 TODO: make own bower.json for each visualizer?
 
-TODO: remove visjsConfigurator
+TODO: additional settings dialog, follow node network.focus(NodeID, {scale: 0.5, animation: true, locked: true})
 -->
 
 <!-- import vis.js (global vis)-->
@@ -44,13 +43,13 @@ TODO: remove visjsConfigurator
 
     <!-- vis.js canvas div -->
     <div id="visjsCanvasContainer"></div>
-    <div id="visjsConfigurator"></div>
-
 
   </template>
 </dom-module>
 <script>
   (function() {
+    var MIN_ZOOM_INTERVAL = 2000; // ms
+
     Polymer({
       is: 'visualizer-test-vis-graph-element',
 
@@ -76,7 +75,51 @@ TODO: remove visjsConfigurator
         },
         _toolbarControlsElement: {
           type: Object
+        },
+        _autoZoom: {
+          type: Boolean,
+          value: false,
+          observer: '_autoZoomChanged'
+        },
+      },
+
+      observers: [
+        '_playbackPointerChanged(_playbackState.current)'
+      ],
+
+      _playbackPointerChanged: function(state) {
+        // bind playback pointer to answer number in toolbar
+        if(typeof this._toolbarControlsElement === 'undefined') return;
+        this._toolbarControlsElement.set('answerNumber', state);
+        // auto zoom
+        if(this._autoZoom === true) {
+          this._fitLater();
         }
+      },
+
+      _autoZoomChanged: function(newVal, oldVal) {
+        if(newVal === false) return;
+        // Do fit later:
+        this._fitLater();
+      },
+
+      // NOTE: Try to avoid two network fit animations being in action at the same time.
+      _fitLater: function() {
+        // NOTE: minimum animation time will be 1000ms, if we don't have that
+        // much time, just skip the fit.
+        if(this._timerInterval < MIN_ZOOM_INTERVAL) return;
+
+        var maxTimeForAnimation = this._timerInterval - 1000;
+        // cap at 3000
+        maxTimeForAnimation = (maxTimeForAnimation > 3000) ? 3000 : maxTimeForAnimation;
+
+        this.async(function() {
+          this.fitNetwork(maxTimeForAnimation);
+        }.bind(this), 1000);
+      },
+
+      fitNetwork: function() {
+        this._visScript.fitNetwork();
       },
 
       _ctlPlay: function() {
@@ -86,7 +129,7 @@ TODO: remove visjsConfigurator
         // if paused, call pause to resume
         if(this._timer.pause_time) { return this._timer.pause(); }
         // otherwise start playing if we are not in the end
-        if(this._playbackState.pointer < this._playbackState.data.length - 1)
+        if(this._playbackState.current < this._playbackState.data.length - 1)
           this.playbackTick();
       },
 
@@ -103,7 +146,7 @@ TODO: remove visjsConfigurator
           this.playbackTick.bind(this)(); // TODO: is bind needed?
         }
         else {
-          if(this._playbackState.pointer < this._playbackState.data.length - 1)
+          if(this._playbackState.current < this._playbackState.data.length - 1)
             this.playbackNext();
         }
       },
@@ -121,7 +164,7 @@ TODO: remove visjsConfigurator
         // rewind to start (destroy and init), but don't start automatically
         this._visScript.destroy();
         this._visScript.initialize(this.$.visjsCanvasContainer, this.input.settings);
-        this._playbackState.pointer = 0;
+        this.set('_playbackState.current', 0);
       },
 
       _ctlToEnd: function() {
@@ -130,14 +173,14 @@ TODO: remove visjsConfigurator
         this._timer.reset();
 
         var len = this._playbackState.data.length;
-        var cur = this._playbackState.pointer;
+        var cur = this._playbackState.current;
         // queue the rest of the sets
         for(var i = cur; i < len-cur; i++) {
           this._visScript.queueAnswerSet(
               this._playbackState.data[i].Value
           );
         }
-        this._playbackState.pointer = len-1;
+        this.set('_playbackState.current', len-1);
         this._visScript.flushChanges();
       },
 
@@ -149,32 +192,47 @@ TODO: remove visjsConfigurator
       },
 
       attached: function() {
-        // attach controls to the toolbar
-        //this.async(function() {
-          var elem = document.createElement(
-            'visualizer-test-vis-graph-toolbar-controls'
-          );
+        var elem = document.createElement(
+          'visualizer-test-vis-graph-toolbar-controls'
+        );
 
-          elem.controls = {
-            play: function() { return this._ctlPlay(); }.bind(this),
-            pause: function() { return this._ctlPause(); }.bind(this),
-            next: function() { return this._ctlNext(); }.bind(this),
-            previous: function() { return this._ctlPrevious(); }.bind(this),
-            toStart: function() { return this._ctlToStart(); }.bind(this),
-            toEnd: function() { return this._ctlToEnd(); }.bind(this),
-          };
+        elem.controls = {
+          play: function() { return this._ctlPlay(); }.bind(this),
+          pause: function() { return this._ctlPause(); }.bind(this),
+          next: function() { return this._ctlNext(); }.bind(this),
+          previous: function() { return this._ctlPrevious(); }.bind(this),
+          toStart: function() { return this._ctlToStart(); }.bind(this),
+          toEnd: function() { return this._ctlToEnd(); }.bind(this),
+        };
 
-          // TODO: When imperative javascript two-way binding for Polymer is
-          //       again available (removed in 1.0), change this to a binding.
-          //       Current solution is admittedly an ugly hack.
-          elem.updateInterval = {f: function(value, old) {
-            this._timerInterval = value;
-          }.bind(this)};
+        // get toolbar
+        var tb = document.getElementById('visingoMainToolbar');
 
-          var tb = document.getElementById('visingoMainToolbar');
-          tb.attachComponent(elem);
-          this._toolbarControlsElement = elem;
-        //});
+        // set interval default value
+        elem.interval = this._timerInterval / 1000;
+        // bind to interval
+        elem.addEventListener('interval-changed', function(evt) {
+          this._timerInterval = evt.target.interval*1000;
+          if(this._timerInterval < MIN_ZOOM_INTERVAL) {
+            tb.set('autoZoom', false);
+            tb.set('disableAutoZoom', true);
+            return;
+          }
+          if(tb.disableAutoZoom === true)
+            tb.set('disableAutoZoom', false);
+        }.bind(this));
+
+        // attach controls to toolbar
+        tb.attachComponent(elem);
+        this._toolbarControlsElement = elem;
+        // enable auto-zoom setting in toolbar
+        tb.showAutoZoom = true;
+        // bind to autozoom
+        tb.addEventListener('auto-zoom-changed', function(evt) {
+          this._autoZoom = evt.target.autoZoom;
+        }.bind(this));
+
+        // wait for rest of the stuff to load
         this.waitForLoad();
       },
 
@@ -207,20 +265,21 @@ TODO: remove visjsConfigurator
       },
 
       startPlayback: function () {
-        this._timer = new Tock({
+        this.set('_timer', new Tock({
           countdown: true,
           interval: 16, // 16ms ~ 60fps
           callback: this.timerTick.bind(this),
           complete: this.playbackTick.bind(this)
-        });
-        console.log(this.input);
+          })
+        );
+        //console.log(this.input);
         // TODO take into account multiple solve calls
         this._playbackState.data = this.input.inputFiles[0].data.Call[0].Witnesses;
-        this._playbackState.pointer = 0;
-        console.log(this._playbackState.data);
+        this.set('_playbackState.current', 0);
+        //console.log(this._playbackState.data);
 
         // if no anwer sets are present
-        if(typeof this._playbackState.data[this._playbackState.pointer] === 'undefined')
+        if(typeof this._playbackState.data[this._playbackState.current] === 'undefined')
           return;
 
         // load first answer set immediately
@@ -237,7 +296,7 @@ TODO: remove visjsConfigurator
       // returns boolean, whether caller can continue timer or not
       playbackNext: function() {
         this._visScript.addAnswerSet(
-            this._playbackState.data[this._playbackState.pointer].Value
+            this._playbackState.data[this._playbackState.current].Value
         );
 
         // flash time display
@@ -247,10 +306,10 @@ TODO: remove visjsConfigurator
         }, 250); // 250ms seems to be enough for the underline to flash fully
 
         // if in the end TODO: make based on length?
-        if(typeof this._playbackState.data[this._playbackState.pointer + 1] === 'undefined')
+        if(typeof this._playbackState.data[this._playbackState.current + 1] === 'undefined')
           return false;
 
-        this._playbackState.pointer = this._playbackState.pointer + 1;
+        this.set('_playbackState.current', this._playbackState.current + 1);
 
         return true;
       },

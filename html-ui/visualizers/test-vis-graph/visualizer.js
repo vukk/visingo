@@ -1,8 +1,8 @@
 /*
- * 
+ *
  *
  * TODO: when adding nodes, calculate approximate positions before adding
- *       maybe by: 
+ *       maybe by:
  *       if run for each node: take connected node coords, average, run few iterations
  *       if run for all: fix nodes, straighten edges,
  *                       run physics, capture positions, release, show
@@ -81,7 +81,7 @@ var testVisGraphVisualizer = (function (vis, _, parser) {
         my.network = network; // TODO remove
         my.edges = entities.edges;
         my.nodes = entities.nodes;
-        
+
         canvas    = container.firstChild.firstChild;
         context   = canvas.getContext('2d');
     };
@@ -118,7 +118,7 @@ var testVisGraphVisualizer = (function (vis, _, parser) {
         else if(_.isString(set)) {
             toParse = set;
         }
-        else 
+        else
             return false;
 
         //console.log('parsing', toParse);
@@ -154,16 +154,16 @@ var testVisGraphVisualizer = (function (vis, _, parser) {
             // by default show id as label, but don't override if label set
             if(typeof parsed.nodes[key].label === 'undefined')
                 parsed.nodes[key].label = String(parsed.nodes[key].id);
-            
+
             entities.nodes.add(parsed.nodes[key]);
         });
         _.map(edgesToAdd, function(key) {
             entities.edges.add(parsed.edges[key]);
         });
 
-        currentEntityKeys.nodes = 
+        currentEntityKeys.nodes =
             _.union(nodesToAdd, _.difference(currentEntityKeys.nodes, nodesToRem));
-        currentEntityKeys.edges = 
+        currentEntityKeys.edges =
             _.union(edgesToAdd, _.difference(currentEntityKeys.edges, edgesToRem));
 
         // attributes
@@ -188,7 +188,7 @@ var testVisGraphVisualizer = (function (vis, _, parser) {
 
 
         //console.log('current: ', attributes);
-        console.log('parsed: ', parsed, ' changes: ', attributeChanges);
+        //console.log('parsed: ', parsed, ' changes: ', attributeChanges);
         // TODO: queue changes, execute upon my.flushChanges()
         network.setOptions(attributeChanges);
 
@@ -201,6 +201,16 @@ var testVisGraphVisualizer = (function (vis, _, parser) {
         entities.edges.flush();
     };
 
+		my.fitNetwork = function(duration) {
+			  if(typeof duration === 'undefined')
+						duration = 3000;
+
+				var options = {
+						duration: duration, // ms
+						easingFunction: 'easeInOutCubic'
+				};
+				network.fit({animation:options});
+		};
+
 	return my;
 }(vis, _, visingo.parsers.answersettermsToVisjs));
-
