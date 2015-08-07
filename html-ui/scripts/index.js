@@ -10,8 +10,8 @@
     app.visualizers = [];
     app.inputFiles = []; // NOTE: array
     app.parseStatus = 'outdated';
-    
 
+    // disconnected mode
     app.setDcModeVisualizers = function(evt) {
         app.visualizers = evt.target.lastResponse.visualizers;
         app.chosenVisualizer = app.visualizers[0];
@@ -20,19 +20,7 @@
     // Listen for template bound event to know when bindings
     // have resolved and content has been stamped to the page
     app.addEventListener('dom-change', function() {
-        // TODO: Surely there is a better way...
-
-        document.getElementById('formNewVis').addEventListener('iron-form-submit', display);
-
-        function display(event) {
-          var output = document.getElementById('output');
-          output.innerHTML = JSON.stringify(event.detail);
-        }
-
-        function clickHandler(event) {
-          Polymer.dom(event).localTarget.parentElement.submit();
-        }
-
+        // disconnected mode
         if(!app.qtConnected) {
             app.$.ajaxDisconnectedModeEnabledVisualizers.generateRequest();
         }
@@ -43,6 +31,7 @@
         // imports are loaded and elements have been registered
     });
 
+    // interactive mode
     /* jshint ignore:start */
     app.initMapping = function(visualizer) {
         var visPredicates = document.querySelector('#vis-predicates');
@@ -64,4 +53,3 @@
     /* jshint ignore:end */
 
 })(document);
-

@@ -18,12 +18,9 @@
       background: var(--accent-color);
       color: #000;
     }
-    paper-button::shadow #ripple {
-      color: blue;
+    paper-button::shadow paper-ripple {
+      color: var(--paper-light-green-a400);
     }
-    /*paper-button[disabled] {
-      border: 5px dotted rgba(100, 100, 100, 0.2);
-    }*/
   </style>
 </head>
 
@@ -33,7 +30,7 @@
   url="visualizers/disconnected-mode-enabled.json"
   handle-as="json"
   on-response="setDcModeVisualizers"
-  ><!-- TODO: on-error, use on-response handler to set dcMode = dcMode || {}; dcMode.visualizers = ... -->
+  ><!-- TODO: on-error; also use on-response handler to set dcMode = dcMode || {}; dcMode.visualizers = ... -->
 </iron-ajax>
 <paper-header-panel>
 
@@ -47,7 +44,7 @@
   <section data-route="new">
     <paper-material elevation="1">
       <h2 class="paper-font-display2">New visualization</h2>
-      <form is="iron-form" id="formNewVis" method="post" action="/">
+      <form is="iron-form">
 
         <div>
           <h4>Visualization type</h4>
@@ -92,10 +89,10 @@
             <visingo-parse-button status="{{parseStatus}}" files="[[solverLogFile]]" parsed="{{inputFiles}}"></visingo-parse-button>
           </div>
 
-          
+
         </paper-material>
       </section>
-      
+
       <section visualization-type="interactive">
         <paper-material elevation="1">
           <h4>Interactivity specific settings</h4>
@@ -110,22 +107,12 @@
       <visingo-visualizer-settings visualizer="[[chosenVisualizer]]" parse-status="[[parseStatus]]" visualization-type="[[visualizationType]]" input-files="[[inputFiles]]"></visingo-visualizer-settings>
     </paper-material>
 
-    <paper-material elevation="1">
-      <div id="output">None</div>
-    </paper-material>
-
-    <paper-material elevation="1">
-    <p>route is: <input id="tmpshowroute" value="{{route}}"></p>
-    </paper-material>
-
-    <paper-material elevation="1">
-      <visualizer-predicates id="visPredicates"></visualizer-predicates>
-    </paper-material>
   </section>
 
   <section data-route="help">
     <paper-material elevation="1">
     <h2 class="paper-font-display2">Help</h2>
+    <!-- TODO: make into paper-dialog, modal -->
     <p>This is the help section</p>
     </paper-material>
   </section>
@@ -141,4 +128,3 @@
 
 </body>
 </html>
-
