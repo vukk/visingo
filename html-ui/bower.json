@@ -7,7 +7,7 @@
     "neon-elements": "PolymerElements/neon-elements#1.0.0",
     "page": "visionmedia/page.js#~1.6.3",
     "pegjs": "~0.8.0",
-    "vis": "~4.5.0",
+    "vis": "~4.7.0",
     "system.js": "~0.18.4",
     "traceur": "~0.0.90",
     "tock": "~1.0.8",
