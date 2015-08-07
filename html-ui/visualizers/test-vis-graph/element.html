@@ -3,19 +3,20 @@
 TODO: make this into an element visingo-visualizer-content-visjs that can
 be extended by the visualizer package (often empty extension, but less repeated code?)
 
-TODO: import System.js
 TODO: make own bower.json for each visualizer?
 
 TODO: additional settings dialog, follow node network.focus(NodeID, {scale: 0.5, animation: true, locked: true})
 -->
 
+<!-- import system.js (global System.import()) -->
+<link rel="import" href="../../elements/systemjs-import.html">
 <!-- import vis.js (global vis)-->
 <link rel="import" href="../../elements/vis-import.html">
 <!-- import lodash (global _) -->
 <link rel="import" href="../../elements/lodash-import.html">
 <!-- import tock (global class Tock) -->
 <link rel="import" href="../../elements/tock-import.html">
-<!-- import parser -->
+<!-- import parser, required for visualization.js -->
 <link rel="import" href="../../elements/visingo-parsers/answersetterms-to-visjs.html">
 
 <link rel="import" href="toolbar-controls.html">
