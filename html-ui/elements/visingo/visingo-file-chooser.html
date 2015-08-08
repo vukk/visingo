@@ -18,9 +18,9 @@
       display: none;
     }
 
-    #fsDropZone {   
-      -moz-border-radius:10px;  
-      border-radius: 10px;  
+    #fsDropZone {
+      -moz-border-radius:10px;
+      border-radius: 10px;
       -webkit-border-radius: 10px;
       border: 2px dotted #89C35C;
       text-align: center;
@@ -36,7 +36,7 @@
       margin-bottom: 8px;
     }
   </style>
-  
+
   <template>
     <fieldset id="fsDropZone">
       <legend>
@@ -67,8 +67,8 @@
   (function() {
     Polymer({
       is: 'visingo-file-chooser',
-      
-      properties: {      
+
+      properties: {
         multiple: {
           type: Boolean,
           value: false
@@ -93,11 +93,11 @@
       _remove: function(evt) {
         this.remove(evt.model.__data__.item);
       },
-          
+
       remove: function(file) {
         if(file) {
           this.splice('files', this.files.indexOf(file), 1);
-          
+
           if(this.files.length < 1)
             this.toggleClass('hidden', true, this.$.errorMultiple);
         }
@@ -137,12 +137,12 @@
           this.toggleClass('hover', true, dz);
           return false;
         }
-        
+
         this.ondragleave = function(evt) {
           this.toggleClass('hover', false, dz);
           return false;
         }
-        
+
         this.ondrop = function(evt) {
           evt.stopPropagation();
           evt.preventDefault();
@@ -154,4 +154,3 @@
   })();
 
 </script>
-

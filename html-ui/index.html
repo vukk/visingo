@@ -12,6 +12,7 @@
   <!-- Polymer elements, own elements -->
   <link rel="import" href="elements/elements.html">
   <link rel="import" href="elements/routing.html">
+  <link rel="import" href="elements/ettet/ettet-filedrop.html">
 
   <style is="custom-style">
     paper-button {
@@ -79,14 +80,17 @@
               <paper-radio-button name="claspJSON">JSON</paper-radio-button>
             </paper-radio-group>
           </div>
-          <div style="max-width:400px;">
-            <h4>Choose log file</h4>
-            <visingo-file-chooser files="{{solverLogFile}}"></visingo-file-chooser>
-          </div>
           <div>
-            <!-- TODO: parse button only needed when type is log, json type
-                       should be set to app.playbackInputFile directly. -->
-            <visingo-parse-button status="{{parseStatus}}" files="[[solverLogFile]]" parsed="{{inputFiles}}"></visingo-parse-button>
+            <h4>Choose log file</h4>
+            <div class="layout horizontal">
+              <div style="max-width:400px;min-width:280px;">
+                <!--visingo-file-chooser files="{{solverLogFile}}"></visingo-file-chooser-->
+                <ettet-filedrop files="{{solverLogFile}}" multiple></ettet-filedrop>
+              </div>
+              <!-- TODO: parse button only needed when type is log, json type
+                         should be set to app.playbackInputFile directly. -->
+              <visingo-parse-button status="{{parseStatus}}" files="[[solverLogFile]]" parsed="{{inputFiles}}"></visingo-parse-button>
+            </div>
           </div>
 
 
