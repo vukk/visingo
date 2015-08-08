@@ -36,13 +36,14 @@
     <!-- Main Toolbar -->
     <paper-toolbar>
 
-    <!-- Toolbar actions -->
-    <paper-icon-button icon="refresh"></paper-icon-button>
     <!-- Toolbar menu -->
     <iron-selector attr-for-selected="data-route" selected="{{route}}">
       <paper-icon-button data-route="new" icon="av:queue"></paper-icon-button>
-      <paper-icon-button data-route="help" icon="help"></paper-icon-button>
+      <paper-icon-button id="helpBtn" data-route="help" icon="help"></paper-icon-button>
     </iron-selector>
+    <div class="mdl-tooltip mdl-tooltip--large" for="helpBtn">
+      Show help
+    </div>
 
     <!-- Indicate availability of Qt -->
     <div id="qtAvailability">
