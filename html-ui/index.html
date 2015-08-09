@@ -12,7 +12,6 @@
   <!-- Polymer elements, own elements -->
   <link rel="import" href="elements/elements.html">
   <link rel="import" href="elements/routing.html">
-  <link rel="import" href="elements/ettet/ettet-filedrop.html">
 
   <style is="custom-style">
     paper-button {
@@ -36,7 +35,7 @@
 <paper-header-panel>
 
 <!-- toolbar, two way bind route since menu is in toolbar -->
-<visingo-toolbar id="visingoMainToolbar" route={{route}}></visingo-toolbar>
+<visingo-toolbar id="visingoMainToolbar" route="{{route}}"></visingo-toolbar>
 
 <!-- Main Content -->
 <div class="content">
