@@ -1,0 +1,290 @@
+
+<link rel="import" href="../../bower_components/paper-drawer-panel/paper-drawer-panel.html">
+<link rel="import" href="../../bower_components/paper-scroll-header-panel/paper-scroll-header-panel.html">
+<link rel="import" href="../../bower_components/paper-toolbar/paper-toolbar.html">
+<link rel="import" href="../../bower_components/paper-menu/paper-menu.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/iron-icons/notification-icons.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
+
+<link rel="import" href="../lodash-import.html">
+
+
+<dom-module id="visingo-help">
+  <style>
+  :host {
+    /* Redefine theme internally */
+    --dark-primary-color:       #689F38;
+    --default-primary-color:    #8BC34A;
+    --light-primary-color:      #DCEDC8;
+    --text-primary-color:       #212121;
+    --accent-color:             #607D8B;
+    --primary-background-color: #DCEDC8;
+    --primary-text-color:       #212121;
+    --secondary-text-color:     #727272;
+    --disabled-text-color:      #BDBDBD;
+    --divider-color:            #B6B6B6;
+
+    /* Components */
+
+    /* paper-menu */
+    --menu-link-color: #111111;
+
+    /* paper-input */
+    --paper-input-container-color:       rgba(255, 255, 255, 0.64);
+    --paper-input-container-focus-color: rgba(255, 255, 255, 1);
+    --paper-input-container-input-color: #fff;
+
+    width: 100%;
+    height: 100%;
+  }
+
+  paper-drawer-panel {
+    width: 100%;
+    height: 100%;
+    --paper-drawer-panel-left-drawer-container: {
+      background-color: var(--primary-background-color);
+      /*border-right: 1px solid var(--google-grey-300);*/
+      box-shadow: inset -2px 4px 6px -3px rgba(0, 0, 0, 0.5);
+    };
+    --paper-drawer-panel-main-container: {
+      background-image: url("images/farmer.png");
+      background-size: 349px 349px;
+      font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      color: #333;
+    };
+  }
+  @media only screen and ( -webkit-min-device-pixel-ratio: 1.3 ),
+         only screen and (    min--moz-device-pixel-ratio: 1.3 ),
+         only screen and (      -o-min-device-pixel-ratio: 2.6/2 ),
+         only screen and (         min-device-pixel-ratio: 1.3 ),
+         only screen and ( min-resolution: 124.8dpi ),
+         only screen and ( min-resolution: 1.3dppx ) {
+    paper-drawer-panel {
+      --paper-drawer-panel-main-container: {
+        background: url( 'images/farmer@2x.png' ) top left / 349px 349px;
+        font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        color: #333;
+      };
+    }
+  }
+
+  .content {
+    padding: 0 2em 1em 2em;
+    height: 900px;
+  }
+  #menuToolbar {
+    box-shadow: inset -2px 0px 2px 0px rgba(0, 0, 0, 0.3);
+  }
+  paper-menu {
+    box-shadow: inset -2px 4px 6px -3px rgba(0, 0, 0, 0.5);
+  }
+  paper-menu iron-icon {
+    margin-right: 33px;
+    opacity: 0.54;
+  }
+  paper-menu a {
+    text-decoration: none;
+    color: var(--menu-link-color);
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -ms-flex-direction: row;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+    font-family: 'Roboto', 'Noto', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 24px;
+    min-height: 48px;
+    padding: 0 16px;
+  }
+  .sub {
+    margin-left: 0.5em;
+  }
+  .sub iron-icon {
+    color: var(--paper-blue-500);
+  }
+  .visualizerItemInMenu {
+    line-height: 1em;
+  }
+  .tagname {
+    font-size: 11px;
+    line-height: 1em;
+    color: var(--paper-grey-600);
+  }
+
+
+  </style>
+  <template>
+    <paper-drawer-panel id="layout">
+
+      <!-- Left menu -->
+      <paper-scroll-header-panel drawer fixed>
+        <paper-toolbar id="menuToolbar">
+          <template is="dom-if" if="[[panel]]">
+            <paper-icon-button icon="cancel" dialog-confirm></paper-icon-button>
+          </template>
+          <!-- TODO: center text, move close button to corner -->
+          <span class="paper-font-title" style="margin-left: 1em;">Help</span>
+        </paper-toolbar>
+        <paper-menu class="list" attr-for-selected="data-route" selected="{{helpRoute}}">
+          <a data-route="index" on-tap="tapMenu">
+            <iron-icon icon="home"></iron-icon>
+            <span>Help main page</span>
+          </a>
+
+          <a data-route="visualizers" on-tap="tapMenu">
+            <iron-icon icon="notification:live-tv"></iron-icon>
+            <span>Visualizers</span>
+          </a>
+
+          <template is="dom-repeat" items="[[_visualizersArray]]">
+            <a data-route$="[[_makeVisRoute(item.tag)]]" on-tap="tapMenu" class="sub">
+              <iron-icon icon="gesture"></iron-icon>
+              <div class="visualizerItemInMenu">
+                <span>{{item.name}}</span><br>
+                <span class="tagname">(<em>{{item.tag}}</em>)</span>
+              </div>
+            </a>
+          </template>
+
+          <a data-route="extend" on-tap="tapMenu">
+            <iron-icon icon="code"></iron-icon>
+            <span>Implementing a visualizer</span>
+          </a>
+
+          <a data-route="about" on-tap="tapMenu">
+            <iron-icon icon="info"></iron-icon>
+            <span>About Visingo</span>
+          </a>
+        </paper-menu>
+      </paper-scroll-header-panel>
+
+      <!-- Main content -->
+      <paper-scroll-header-panel main>
+        <div class="content">
+          <div id="title"><h1>Route: <span class="paper-font-title">{{helpRoute}}</span></h1></div>
+          <iron-pages attr-for-selected="data-route" selected="{{helpRoute}}">
+            <section data-route="index">
+              <p>Index content</p>
+            </section>
+            <section data-route="index">
+              <p>Index content</p>
+            </section>
+            <template is="dom-repeat" items="[[_visualizersArray]]">
+              <section data-route$="[[_makeVisRoute(item.tag)]]">
+                <div id$="[[_makeVisRoute(item.tag)]]"></div>
+              </section>
+            </template>
+          </iron-pages>
+        </div>
+      </paper-scroll-header-panel>
+
+    </paper-drawer-panel>
+  </template>
+
+</dom-module>
+
+<script>
+  (function() {
+    Polymer({
+      is: 'visingo-help',
+
+      properties: {
+        panel: {
+          type: Boolean,
+          value: false
+        },
+        visualizers: {
+          type: Object,
+          value: function() { return {}; },
+          observer: '_visualizersChanged'
+        },
+        helpRoute: {
+          type: String,
+          value: 'index',
+          observer: '_helpRouteChanged'
+        },
+        _visualizerHelpElements: {
+          type: Object,
+          value: function() { return {}; }
+        },
+        _visualizersArray: {
+          type: Array,
+          value: function() { return []; }
+        }
+      },
+
+      _visualizersChanged: function(value, old) {
+        var keys = Object.keys(value);
+        for(idx in keys) {
+          // if already loaded, skip
+          if(this._visualizerHelpElements[keys[idx]] !== undefined) continue;
+          this._importHelp(value[keys[idx]]); // load and create help element
+        }
+      },
+
+      _helpRouteChanged: function(value, old) {
+        // Check if wish to display help of specific visualizer
+        var match = /^visualizer-(.+)$/.exec(value);
+        if(match === null) return;
+
+        // Append loaded help element if not already appended.
+        var tag = match[1];
+        var container = this.$$('#'+value); // get by id
+        console.log(container, container.firstChild);
+        if(container.firstChild === null) {
+          container.appendChild(this._visualizerHelpElements[tag]);
+        }
+      },
+
+      _makeVisRoute: function(tag) {
+        console.log('visualizer-' + tag);
+        return 'visualizer-' + tag;
+      },
+
+      // Close drawer on tap, if necessary
+      tapMenu: function(evt) {
+        if (this.$.layout.narrow) {
+          this.$.layout.closeDrawer();
+        }
+        console.log('tapped menu item', evt.target, evt);
+      },
+
+      ready: function() {
+        this.helpRoute = 'index';
+      },
+
+      _importHelp: function(visualizer) {
+        console.log('_importHelp', visualizer);
+        var path = '../../visualizers/' + visualizer.directory + '/help.html';
+        this.importHref(
+          path,
+          function(evt) {
+            var elemName = 'visualizer-' + visualizer.tag + '-help';
+            var elem = document.createElement(elemName);
+            this._visualizerHelpElements[visualizer.tag] = elem;
+            this.push('_visualizersArray', visualizer);
+          }.bind(this),
+          function(evt) {
+            // loading error
+            console.log(
+              'ERROR: Help element for ' + visualizer.name + '(' + visualizer.tag + ')'
+              + ' couldn\'t be loaded from ' + this.resolveUrl(path)
+            );
+          }
+        );
+      }
+
+    });
+  })();
+
+</script>
