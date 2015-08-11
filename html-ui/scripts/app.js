@@ -7,7 +7,6 @@
     /* defaults */
     app.qtConnected = false;
 
-
     // Listen for template bound event to know when bindings
     // have resolved and content has been stamped to the page
     app.addEventListener('dom-change', function() {
@@ -16,7 +15,7 @@
         if (typeof qt !== 'undefined' && typeof qt.webChannelTransport !== 'undefined') {
             app.qtConnected = true;
             document.getElementById('visingoMainToolbar').qtConnected = true;
-       
+
             new QWebChannel(qt.webChannelTransport, function(channel) { // jshint ignore:line
 
                 app.webchannel = channel;
@@ -83,6 +82,15 @@
         } // end if qt defined
 
         /* jshint ignore:end */
+
+        // web-mode
+        if(!app.qtConnected) {
+            app.$.webModeAjax.addEventListener('visualizers-changed', function() {
+                if(!app.qtConnected)
+                  app.visualizers = app.webModeVisualizers;
+            });
+            app.$.webModeAjax.generateRequest();
+        }
     });
 
     // See https://github.com/Polymer/polymer/issues/1381
@@ -92,4 +100,3 @@
     /* jshint ignore:end */
 
 })(document);
-

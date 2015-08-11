@@ -24,10 +24,10 @@
   (function() {
     Polymer({
       is: 'visingo-visualizer-element',
-      
+
       properties: {
         visualizer: {
-          type: String, // TODO: should be Object, not String
+          type: Object,
           observer: '_visualizerChange'
         },
 
@@ -57,7 +57,7 @@
       //       except for controls, we should bind controls...
       //       maybe controls are loaded from a different file, to the toolbar
 
-      
+
       _onewayBindVisualizationType: function(newVal, oldVal) {
         this._onewayBind('visualizationType');
       },
@@ -87,10 +87,10 @@
       },
 
       _import: function(visualizer) {
-        this.importHref( // TODO: should be visualizer.directory, not visualizer
-          '../../visualizers/' + visualizer + '/element.html',
-          function(evt) { //            TODO visualizer.name
-            var elemName = 'visualizer-' + visualizer + '-element';
+        this.importHref(
+          '../../visualizers/' + visualizer.directory + '/element.html',
+          function(evt) {
+            var elemName = 'visualizer-' + visualizer.tag + '-element';
             var elem = document.createElement(elemName);
             elem.id = 'visualizerElement';
             elem.input = {}; // TODO initialize bindings if needed
@@ -116,4 +116,3 @@
   })();
 
 </script>
-

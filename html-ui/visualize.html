@@ -16,10 +16,12 @@
 
 <body unresolved class="fullbleed layout vertical">
 <template is="dom-bind" id="app">
+<visingo-web-mode-ajax id="webModeAjax" visualizers="{{webModeVisualizers}}" chosen-visualizer="{{chosenVisualizer}}">
+</visingo-web-mode-ajax>
 <paper-header-panel>
 
 <!-- toolbar, two way bind route since menu is in toolbar -->
-<visingo-toolbar id="visingoMainToolbar" route={{route}}></visingo-toolbar>
+<visingo-toolbar id="visingoMainToolbar" route="{{route}}" show-help="{{displayHelp}}"></visingo-toolbar>
 
 <!-- Main Content -->
 <div class="fit">
@@ -32,8 +34,19 @@
     <p>Visualizer: <input id="tmpparams" value="{{params.visualizer}}"></p>
   </paper-material-->
 </div>
- 
+
 </paper-header-panel>
+
+</paper-header-panel>
+
+<!-- Currently extending polymer custom elements is not possible, so stamp
+     paper dialog directly to the page.
+     NOTE: It seems that styles need to be applied directly here, and not in
+           app-theme.html. Otherwise the dialog will not display properly. -->
+<paper-dialog id="helpDialog" with-backdrop opened="{{displayHelp}}" style="min-width: 90%; min-height: 90%; border-radius: 5px;">
+    <visingo-help panel visualizers="[[visualizers]]" qt-connected="[[qtConnected]]"></visingo-help>
+</paper-dialog>
+
 </template> <!-- end template dom-bind -->
 
 <script src="scripts/app.js"></script>

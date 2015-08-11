@@ -15,11 +15,8 @@
   (function() {
     Polymer({
       is: 'visingo-launch-button',
-      
+
       properties: {
-        visualizer: {
-          type: String
-        },
         input: {
           type: Object
         },
@@ -29,22 +26,21 @@
       },
 
       _saveData: function() {
-        window.localStorage[this.visualizer] = JSON.stringify({
-          visualizer: this.visualizer,
+        window.localStorage[this.input.visualizer.tag] = JSON.stringify({
+          visualizer: this.input.visualizer,
           visualizationType: this.input.visualizationType,
           inputFiles: this.input.inputFiles,
           settings: this.settings
         });
-        console.log(window.localStorage[this.visualizer]);
+        console.log(window.localStorage[this.input.visualizer.tag]);
       },
 
       launch: function(evt) {
         this._saveData();
-        window.open('visualize.html#!/visualize/' + this.visualizer); // TODO: escape?
+        window.open('visualize.html#!/visualize/' + this.input.visualizer.tag); // TODO: escape?
       }
 
     });
   })();
 
 </script>
-

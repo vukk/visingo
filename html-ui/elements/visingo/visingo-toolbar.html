@@ -6,7 +6,7 @@
 <link rel="import" href="../../bower_components/paper-styles/color.html">
 <link rel="import" href="../../bower_components/paper-checkbox/paper-checkbox.html">
 <!-- TODO: Remove MDL once polymer has the tooltip component again. -->
-<link rel="import" href="../mdl-import.html">
+<!--link rel="import" href="../mdl-import.html"-->
 
 <dom-module id="visingo-toolbar">
   <style>
@@ -30,6 +30,8 @@
       margin-right: 0.5em;
     }
 
+
+
   </style>
 
   <template>
@@ -39,20 +41,23 @@
     <!-- Toolbar menu -->
     <iron-selector attr-for-selected="data-route" selected="{{route}}">
       <paper-icon-button data-route="new" icon="av:queue"></paper-icon-button>
-      <paper-icon-button id="helpBtn" data-route="help" icon="help"></paper-icon-button>
     </iron-selector>
-    <div class="mdl-tooltip mdl-tooltip--large" for="helpBtn">
-      Show help
+
+    <div id="helpButtonDiv" title="Show help">
+      <paper-icon-button icon="help" on-tap="tapHelp"></paper-icon-button>
     </div>
+    <!--div for="helpButtonDiv">
+      Show help
+    </div-->
 
     <!-- Indicate availability of Qt -->
-    <div id="qtAvailability">
+    <div id="qtAvailability" title="Qt availability">
       <paper-icon-button id="qtAvailabilityIcon" icon="settings-input-antenna" class="red" disabled></paper-icon-button>
     </div>
-    <div class="mdl-tooltip mdl-tooltip--large" for="qtAvailability">
+    <!--div class="mdl-tooltip mdl-tooltip--large" for="qtAvailability">
       Qt availability:<br>
       <span>{{qtConnectedText}}</span>
-    </div>
+    </div-->
 
     <span class="flex"></span>
 
@@ -107,6 +112,11 @@
           value: false,
           notify: true
         },
+        showHelp: {
+          type: Boolean,
+          value: false,
+          notify: true
+        },
         _components: {
           type: Array,
           value: function() { return []; }
@@ -114,7 +124,7 @@
       },
 
       created: function() {
-        // set visingo-toolbar to have paper-header class
+        // set visingo-toolbar to have paper-header class, otherwise layout bugs
         this.toggleClass('paper-header', true);
       },
 
@@ -123,6 +133,11 @@
         qtA.toggleClass('green', newValue);
         qtA.toggleClass('red',  !newValue);
         this.qtConnectedText = newValue ? 'connected' : 'not connected';
+      },
+
+      tapHelp: function(evt) {
+        // toggle
+        this.showHelp = !this.showHelp;
       },
 
       attachComponent: function(component) {

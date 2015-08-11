@@ -15,6 +15,7 @@
 <dom-module id="visingo-help">
   <style>
   :host {
+    /* http://www.materialpalette.com/light-green/blue-grey */
     /* Redefine theme internally */
     --dark-primary-color:       #689F38;
     --default-primary-color:    #8BC34A;
@@ -28,6 +29,7 @@
     --divider-color:            #B6B6B6;
 
     /* Components */
+    --visingo-help-section-width: 85%;
 
     /* paper-menu */
     --menu-link-color: #111111;
@@ -71,9 +73,17 @@
     }
   }
 
-  .content {
+  section {
     padding: 0 2em 1em 2em;
-    height: 900px;
+    width: var(--visingo-help-section-width);
+    margin: 0 auto;
+  }
+  #content /deep/ p,ul {
+    font-size: 16px;
+  }
+  #content /deep/ a {
+    color: var(--paper-light-green-700);
+    text-decoration: none;
   }
   #menuToolbar {
     box-shadow: inset -2px 0px 2px 0px rgba(0, 0, 0, 0.3);
@@ -120,7 +130,11 @@
     line-height: 1em;
     color: var(--paper-grey-600);
   }
-
+  /* TODO: define h1-h3 */
+  :host /deep/ h1 {
+    font-size: 26pt;
+    color: var(--paper-grey-700);
+  }
 
   </style>
   <template>
@@ -136,17 +150,17 @@
           <span class="paper-font-title" style="margin-left: 1em;">Help</span>
         </paper-toolbar>
         <paper-menu class="list" attr-for-selected="data-route" selected="{{helpRoute}}">
-          <a data-route="index" on-tap="tapMenu">
-            <iron-icon icon="home"></iron-icon>
-            <span>Help main page</span>
+          <a data-route="about" on-tap="tapMenu">
+            <iron-icon icon="info"></iron-icon>
+            <span>About Visingo</span>
           </a>
 
           <a data-route="visualizers" on-tap="tapMenu">
             <iron-icon icon="notification:live-tv"></iron-icon>
-            <span>Visualizers</span>
+            <span>Visualizer modules</span>
           </a>
 
-          <template is="dom-repeat" items="[[_visualizersArray]]">
+          <template is="dom-repeat" items="[[_visualizers]]">
             <a data-route$="[[_makeVisRoute(item.tag)]]" on-tap="tapMenu" class="sub">
               <iron-icon icon="gesture"></iron-icon>
               <div class="visualizerItemInMenu">
@@ -161,29 +175,216 @@
             <span>Implementing a visualizer</span>
           </a>
 
-          <a data-route="about" on-tap="tapMenu">
-            <iron-icon icon="info"></iron-icon>
-            <span>About Visingo</span>
+          <a data-route="devstatus" on-tap="tapMenu">
+            <iron-icon icon="code"></iron-icon>
+            <span>Development status</span>
           </a>
         </paper-menu>
       </paper-scroll-header-panel>
 
       <!-- Main content -->
       <paper-scroll-header-panel main>
-        <div class="content">
-          <div id="title"><h1>Route: <span class="paper-font-title">{{helpRoute}}</span></h1></div>
+        <paper-button paper-drawer-toggle>
+          <iron-icon icon="menu"></iron-icon>
+          Show menu
+        </paper-button>
+        <div id="content">
           <iron-pages attr-for-selected="data-route" selected="{{helpRoute}}">
-            <section data-route="index">
-              <p>Index content</p>
+            <section data-route="about">
+              <h1>Visingo help</h1>
+              <h2>About Visingo</h2>
+              <p>
+                Visingo is a visualization platform for Answer Set Programming.
+                It aims to support two modes:
+                <ul>
+                  <li>Playback mode</li>
+                  <li>Interactive mode &mdash; <em style="color: indianred;">development currently halted</em></li>
+                </ul>
+              </p>
+              <p>
+                In <em>playback mode</em> Visingo takes in output logs of an ASP
+                solver and visualizes the contained answer sets.
+                If there is only one answer set, it is shown. If there are multiple
+                answer sets, they are shown one-by-one.<br>
+                The <em>playback mode</em> is always available in the Web-UI.
+              </p>
+              <p>
+                In <em>interactive mode</em> Visingo visualizer modules can interact
+                with the solver. This allows the visualizer module to provide the
+                user a way to control the solver. What this interaction is, and
+                what the user interface is, is up to the visualizer module implementer.
+                Different visualizer modules should have different strategies and
+                concepts for interactive manipulation &mdash; depending on what
+                makes sense.<br>
+                The <em>interactive mode</em> is available only when running the
+                Visingo Desktop App or when the Web-UI is connected to a solver
+                in some other manner.
+              </p>
+              <p>
+                Visingo depends on the browser support for WebComponents.
+                Current browser support can be checked from
+                <a href="http://webcomponents.org/">WebComponents website</a>.
+                Currently the recommended browsers are Chrome/Chromium and Opera,
+                which support WebComponents natively. Firefox might work, but
+                will be a lot slower due to JavaScript-based backporting of
+                WebComponent support.
+              </p>
+              <p>The aim of the visualizer
+                modules should be to make the changes between answer sets as
+                &ldquo;smooth&rdquo; as possible, so the visualization is easy to follow.
+              </p>
+              <p>
+                Visingo ships with the &ldquo;Network visualizer&rdquo; visualizer
+                module, meant for visualizing network/graph problems.
+              </p>
+              <p>
+                Currently Visingo targets Clingo ASP solver from
+                <a href="http://potassco.sourceforge.net/">Potassco tools</a>.<br>
+                Supported formats in <em>playback mode</em> are Clasp3 and Clingo4
+                textual output logs and JSON output (CLI flag <code>--outf=2</code>).
+              </p>
+              <h2>Resources</h2>
+              <p>
+                In the menu on the left you should see help sections for Visingo,
+                and also the available help for different visualizer modules.
+              </p>
+              <p>
+                For help and tutorials on Answer Set Programming see
+                the <a href="http://sourceforge.net/projects/potassco/files/guide/2.0/">Potassco Guide</a>
+                and <em>&ldquo;Answer Set Solving in Practice&rdquo;</em> by Gebser, Kaminski, Kaufmann, Schaub (ISBN: 9781608459728).
+              </p>
+              <p>
+                The Git repositories should be available at
+                <a href="http://github.com/vukk/visingo">github.com/vukk/visingo</a>
+                and
+                <a href="http://github.com/vukk/visingo-web">github.com/vukk/visingo-web</a>.
+              </p>
+              <h2>Understand</h2>
+              <p>
+                Visingo consists of different modular sections:
+                <ul>
+                  <li>Visingo C++ application (henceforth VisingoApp)</li>
+                  <li>Visingo Web-UI</li>
+                  <li>Visualizer modules</li>
+                </ul>
+              </p>
+              <h4>VisingoApp (desktop C++ application)</h4>
+              <p>
+                Essentially VisingoApp is a web browser that shows the Web-UI
+                and connects it to Clingo ASP solver.<br>
+                Internally the desktop application uses
+                <a href="https://wiki.qt.io/QtWebEngine">Qt5 WebEngine</a>
+                as a browser, serves the Visingo Web-UI via
+                <a href="https://github.com/cybercatalyst/qtwebserver">qtwebserver pod</a>,
+                then wraps the
+                <a href="http://potassco.sourceforge.net/">Clingo ASP solver</a>
+                and exposes it to the Web-UI JavaScript modules via Chrome IPC.
+              </p>
+              <p>
+                Additionally the plan is to be able to run VisingoApp in headless
+                mode, and connect to it from the Web-UI on some browser via WebSockets.<br>
+                This would allow running the solver part on a powerful server
+                while displaying visualization on a separate workstation.
+              </p>
+              <h4>Visingo Web-UI and visualizer modules</h4>
+              <p>
+                The Web-UI uses
+                <a href="https://www.polymer-project.org/">Google's Polymer</a>
+                and
+                <a href="http://webcomponents.org/">WebComponents</a>
+                to provide a modular structure which allows implementing
+                each visualizer module separately.<br>
+                The Web-UI supports browsers that support WebComponents.
+                The browser support can be checked from
+                <a href="http://webcomponents.org/">their website</a>.
+              </p>
+              <p>
+                The visualizer modules are simply directories with files that
+                are imported via HTML imports. This means that the visualizer is
+                is quite free to implement almost any kind of behaviour.<br>
+                For example the visualizer module can import
+                <a href="http://selection.datavisualization.ch/">any ready-made
+                JavaScript visualization library</a> and use it.<br>
+                The Web-UI ultimately tries to have very few opinions about what
+                the visualizer module should and shouldn't do.
+                As a disadvantage, this freedom means that the Web-UI does not
+                provide much support for the visualizer module.
+              </p>
+              <p>
+                See &ldquo;Implementing a visualizer&rdquo; and
+                help sections of each visualizer module for more information.
+              </p>
             </section>
-            <section data-route="index">
-              <p>Index content</p>
+
+            <section data-route="visualizers">
+              <h1>About visualizeration modules</h1>
+              <h2>Loaded visualization modules</h2>
+              <p>Visingo has is currently in <em style="color: indianred;">[[_modeText]]</em>.</p>
+              <p>
+                The following modules have been defined
+                <ul>
+                  <template is="dom-repeat" items="[[visualizers]]">
+                    <li><span>[[item.name]]</span> (<span>[[item.tag]]</span>)</li>
+                  </template>
+                </ul>
+                and of those, the following provide help pages
+                <ul>
+                  <template is="dom-repeat" items="[[_visualizers]]">
+                    <li>
+                      <a on-tap="_changeHelpRouteToVisualizer">
+                        <span>[[item.name]]</span>
+                      </a>
+                      (<span>[[item.tag]]</span>)
+                    </li>
+                  </template>
+                </ul>
+              </p>
             </section>
-            <template is="dom-repeat" items="[[_visualizersArray]]">
-              <section data-route$="[[_makeVisRoute(item.tag)]]">
+
+            <section data-route="extend">
+              <h1>Implementing a visualizer</h1>
+              <h2>TODO</h2>
+              <p>TODO</p>
+              <h2>settings.html</h2>
+              <h2>element.html</h2>
+              <h2>help.html</h2>
+              <h2>Attaching to the Web-UI toolbar</h2>
+            </section>
+
+            <section data-route="devstatus">
+              <h1>Development status of Visingo</h1>
+              <h2>Interactive mode</h2>
+              <p>
+                The development of the interactive mode is currently
+                <strong style="color: indianred;">on hold</strong>.
+              </p>
+              <p>
+                Each component of Visingo has varying level of support built for
+                the interactive mode.<br>
+                &ndash; The main API of the visualizer modules,
+                i.e. just passing a sequence of answer sets, should support both
+                the playback and interactive mode.<br>
+                &ndash; The plumbing from visualization
+                launch and creation to interactive visualization however does not
+                exist currently. Slight modifications or more major overhauls
+                of code might be needed.
+              </p>
+              <h2>Playback mode</h2>
+              <p>
+                The playback mode is fairly ready. Adding the interactive mode
+                might later cause need for slight modifications on implemented
+                visualizer modules that only provide playback, but this shouldn't
+                be anything major
+              </p>
+            </section>
+
+            <!-- Stamp help sections for each visualizer to the page -->
+            <template is="dom-repeat" items="[[_visualizers]]">
+              <section data-route$="[[_makeVisRoute(item.tag)]]" class="visualizer-help">
                 <div id$="[[_makeVisRoute(item.tag)]]"></div>
               </section>
             </template>
+
           </iron-pages>
         </div>
       </paper-scroll-header-panel>
@@ -203,9 +404,13 @@
           type: Boolean,
           value: false
         },
+        qtConnected: {
+          type: Boolean,
+          value: false
+        },
         visualizers: {
-          type: Object,
-          value: function() { return {}; },
+          type: Array,
+          value: function() { return []; },
           observer: '_visualizersChanged'
         },
         helpRoute: {
@@ -217,18 +422,25 @@
           type: Object,
           value: function() { return {}; }
         },
-        _visualizersArray: {
+        _visualizers: { // in array if defined & help element loaded
           type: Array,
           value: function() { return []; }
+        },
+        _modeText: {
+          type: String,
+          computed: '_computeModeText(qtConnected)'
         }
       },
 
+      _computeModeText: function(qtConnected) {
+        return qtConnected ? 'interactive mode' : 'web-mode (playback only)'
+      },
+
       _visualizersChanged: function(value, old) {
-        var keys = Object.keys(value);
-        for(idx in keys) {
+        for(idx in value) {
           // if already loaded, skip
-          if(this._visualizerHelpElements[keys[idx]] !== undefined) continue;
-          this._importHelp(value[keys[idx]]); // load and create help element
+          if(this._visualizerHelpElements[value[idx].tag] !== undefined) continue;
+          this._importHelp(value[idx]); // load and create help element
         }
       },
 
@@ -240,14 +452,17 @@
         // Append loaded help element if not already appended.
         var tag = match[1];
         var container = this.$$('#'+value); // get by id
-        console.log(container, container.firstChild);
         if(container.firstChild === null) {
           container.appendChild(this._visualizerHelpElements[tag]);
+          this.updateStyles(); // Make /deep/ pierce to these elements also.
         }
       },
 
+      _changeHelpRouteToVisualizer: function(evt) {
+        this.helpRoute = this._makeVisRoute(evt.model.__data__.item.tag);
+      },
+
       _makeVisRoute: function(tag) {
-        console.log('visualizer-' + tag);
         return 'visualizer-' + tag;
       },
 
@@ -256,15 +471,13 @@
         if (this.$.layout.narrow) {
           this.$.layout.closeDrawer();
         }
-        console.log('tapped menu item', evt.target, evt);
       },
 
       ready: function() {
-        this.helpRoute = 'index';
+        this.helpRoute = 'about';
       },
 
       _importHelp: function(visualizer) {
-        console.log('_importHelp', visualizer);
         var path = '../../visualizers/' + visualizer.directory + '/help.html';
         this.importHref(
           path,
@@ -272,7 +485,7 @@
             var elemName = 'visualizer-' + visualizer.tag + '-help';
             var elem = document.createElement(elemName);
             this._visualizerHelpElements[visualizer.tag] = elem;
-            this.push('_visualizersArray', visualizer);
+            this.push('_visualizers', visualizer);
           }.bind(this),
           function(evt) {
             // loading error

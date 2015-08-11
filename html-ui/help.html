@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Help - Visingo</title>
+
+  <!-- webcomponents -->
+  <script src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+  <!-- Polymer elements, own elements -->
+  <link rel="import" href="elements/elements.html">
+
+</head>
+
+<body unresolved class="fullbleed layout vertical">
+<template is="dom-bind" id="app">
+<visingo-web-mode-ajax id="webModeAjax" visualizers="{{webModeVisualizers}}" chosen-visualizer="{{chosenVisualizer}}">
+</visingo-web-mode-ajax>
+
+<!-- Main Content -->
+<!--div style="width:100%;height:100%;"-->
+  <visingo-help id="visingoHelp" visualizers="[[visualizers]]" qt-connected="[[qtConnected]]"></visingo-help>
+<!--/div-->
+
+</template> <!-- end template dom-bind -->
+
+<script src="scripts/app.js"></script>
+
+</body>
+</html>

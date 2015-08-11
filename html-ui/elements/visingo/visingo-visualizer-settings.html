@@ -14,8 +14,8 @@
   (function() {
     Polymer({
       is: 'visingo-visualizer-settings',
-      
-      properties: {      
+
+      properties: {
         visualizer: {
           type: Object,
           observer: '_visualizerChange'
@@ -79,15 +79,15 @@
         this.importHref(
           '../../visualizers/' + visualizer.directory + '/settings.html',
           function(evt) {
-            var elemName = 'visualizer-' + visualizer.name + '-settings';
+            var elemName = 'visualizer-' + visualizer.tag + '-settings';
             var elem = document.createElement(elemName);
             elem.id = 'visualizerSettingsElement';
             elem.input = {};
 
             // map most properties forward to the element
             Object.keys(this.properties).forEach(function(item, idx, arr) {
-              // ignore properties starting with underscore, also visualizer
-              if(item[0] !== '_' && item !== 'visualizer')
+              // ignore properties starting with underscore
+              if(item[0] !== '_')
                 elem.input[item] = this[item];
             }, this);
 
@@ -105,4 +105,3 @@
   })();
 
 </script>
-
