@@ -4,9 +4,6 @@
 
 <dom-module id="visualizer-test-vis-graph-help">
 <style>
-  :host {
-    box-sizing: border-box;
-  }
   /* BEGIN BOOSTRAP COPYPASTA FOR TABLES, TODO: REPLACE WITH POLYMER TABLES ONCE POSSIBLE */
   code {
     padding: 2px 4px;
@@ -282,7 +279,7 @@
   }
   td.nowrap {
     /*white-space: nowrap;*/
-    min-width: 180px;
+    /*min-width: 180px;*/
   }
   span.id:before {
     content: "\2018";
@@ -404,10 +401,10 @@
                   <td>&ndash; node identifier</td>
                 </tr>
               </table>
-              The identifier of the edge will be set to<br>
-              <code>Id = string_concat(From, "%", To);</code><br>
-              If the network is undirected, <span class="id">From</span> and<br>
-              <span class="id">To</span> have no special meaning for direction,<br>
+              The identifier of the edge will be set to
+              <code>Id = concat(From, "%", To);</code>
+              If the network is undirected, <span class="id">From</span> and
+              <span class="id">To</span> have no special meaning for direction,
               they are just nodes.
             </td>
             <td>edge(1,2).</td>
@@ -419,7 +416,7 @@
           <tr>
             <td class="nowrap">edge(Id, From, To)</td>
             <td>
-              <span class="id">Id</span> &ndash; edge identifier<br>
+              <span class="id">Id</span> &ndash; edge identifier
               Otherwise like above, in edge/2.
             </td>
             <td>edge(1,1,2).</td>
@@ -438,10 +435,10 @@
             <td>group(2).</td>
             <td>&mdash;</td>
             <td>
-              Defines a group with identifier <span class="id">Id</span>.<br>
-              Supports all <a href="#nodeAttr">node attributes</a> that<br>
-              make sense for groups using<br>
-              groupAttr(Id, AttributePath, Value),<br>
+              Defines a group with identifier <span class="id">Id</span>.
+              Supports all <a href="#nodeAttr">node attributes</a> that
+              make sense for groups using
+              groupAttr(Id, AttributePath, Value),
               e.g. <code>groupAttr(1, color, "#ffff00")</code>.
             </td>
           </tr>
@@ -1747,11 +1744,17 @@ var options: {
 
       _onIronResize: function() {
         // fix absolute positioning on help tables
+        console.log('resizing');
         var elems = this.querySelectorAll('.help-table');
         Array.prototype.forEach.call(elems, function(elem, idx, arr) {
           Polymer.dom(elem).parentNode.style.height = (elem.clientHeight+10) + 'px';
         }, this);
-      }
+      },
+
+      onResponsiveChange: function() {
+        // 800 is a magical number that fixes clientHeight in most cases...
+        this.async(this.notifyResize, 800);
+      },
 
     });
   })();

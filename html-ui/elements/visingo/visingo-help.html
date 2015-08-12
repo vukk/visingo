@@ -138,7 +138,7 @@
 
   </style>
   <template>
-    <paper-drawer-panel id="layout">
+    <paper-drawer-panel id="layout" responsive-width="960px">
 
       <!-- Left menu -->
       <paper-scroll-header-panel drawer fixed>
@@ -440,6 +440,10 @@
         }
       },
 
+      listeners: {
+        'paper-responsive-change': '_onResponsiveChange',
+      },
+
       _computeModeText: function(qtConnected) {
         return qtConnected ? 'interactive mode' : 'web-mode (playback only)'
       },
@@ -503,7 +507,21 @@
             );
           }
         );
-      }
+      },
+
+      _onResponsiveChange: function() {
+        // Call onResponsiveChange function on the visualizer help elements,
+        // if one exists.
+        var keys = Object.keys(this._visualizerHelpElements);
+        for(idx in keys) {
+          var elem = this._visualizerHelpElements[keys[idx]];
+          var fun = elem.onResponsiveChange;
+          if(typeof fun !== 'undefined' && fun instanceof Function) {
+            // bind the element itself for thisArg
+            fun.bind(elem)();
+          }
+        }
+      },
 
     });
   })();
