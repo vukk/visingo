@@ -279,39 +279,49 @@ TODO: additional settings dialog, follow node network.focus(NodeID, {scale: 0.5,
         this.set('_playbackState.current', 0);
         //console.log(this._playbackState.data);
 
-        // if no anwer sets are present
-        if(typeof this._playbackState.data[this._playbackState.current] === 'undefined')
-          return;
-
         // load first answer set immediately
-        this.playbackTick.bind(this)(); // TODO: is bind needed?
+        // if no anwer sets are present, playbackTick should handle it nicely
+        this.playbackTick();
       },
 
       playbackTick: function() {
+        // put first answerset to screen
         if(this.playbackNext()) {
+          // then start a clock if there are more answersets
           this._timer.reset();
           this._timer.start(this._timerInterval);
         }
       },
 
-      // returns boolean, whether caller can continue timer or not
+      // displays the next answerset
+      // returns boolean, whether there are more answersets to display after this one
       playbackNext: function() {
+        // make sure there is a next answerset to display
+        if(this._playbackState.current >= this._playbackState.data.length)
+          return false;
+
         this._visScript.addAnswerSet(
             this._playbackState.data[this._playbackState.current].Value
         );
 
-        // flash time display
+        // increment answerset number
+        this.set('_playbackState.current', this._playbackState.current + 1);
+
+        // flash time display focus to visually indicate change
         this._toolbarControlsElement.$.timeToNextInputContainer._setFocused(true);
         this.async(function() {
           this._toolbarControlsElement.$.timeToNextInputContainer._setFocused(false);
         }, 250); // 250ms seems to be enough for the underline to flash fully
 
         // if in the end TODO: make based on length?
-        if(typeof this._playbackState.data[this._playbackState.current + 1] === 'undefined')
+        // if there are no more answersets to display, return false
+        //if(typeof this._playbackState.data[this._playbackState.current + 1] === 'undefined')
+        //  return false;
+        // if there are no more answersets to display after this one, return false
+        if(this._playbackState.current >= this._playbackState.data.length)
           return false;
 
-        this.set('_playbackState.current', this._playbackState.current + 1);
-
+        // there are still answersets to display, so return true
         return true;
       },
 
