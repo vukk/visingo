@@ -205,11 +205,13 @@ pathAndValue
 // predicate must be first
 // booleanAtom must be before atom
 // number must be before string (to support floats "1.2")
+// NOTE / TODO: path should contain only non-boolean atoms!
 singlePathOrValue
   = atom:booleanAtom
   / atom:predicateIdent
   / num:number
   / string:aspstring
+  / tuple:anontuple
 
 
 
@@ -316,4 +318,3 @@ E "tab or space"
 
 S "whitespace"
   = [ \t\r\n\f]
-
