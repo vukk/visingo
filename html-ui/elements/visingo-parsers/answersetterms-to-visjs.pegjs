@@ -208,6 +208,7 @@ pathAndValue
 // NOTE / TODO: path should contain only non-boolean atoms!
 singlePathOrValue
   = atom:booleanAtom
+  / atom:nullAtom
   / atom:predicateIdent
   / num:number
   / string:aspstring
@@ -258,6 +259,10 @@ anontuple
 booleanAtom
   = "true" { return true; }
   / "false" { return false; }
+
+/* Null, for resetting stuff */
+nullAtom
+  = "null" { return null; }
 
 /* ASP strings */
 
