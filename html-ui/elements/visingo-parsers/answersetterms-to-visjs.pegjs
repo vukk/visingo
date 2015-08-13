@@ -209,6 +209,7 @@ pathAndValue
 singlePathOrValue
   = atom:booleanAtom
   / atom:nullAtom
+  / fun:insideFunction
   / atom:predicateIdent
   / num:number
   / string:aspstring
@@ -220,14 +221,12 @@ singlePathOrValue
 
 predicate
   = predicateName:predicateIdent "(" inside:arguments ")"
-    {
-      /*global.lastUnmatched = {
-        Type: "predicate",
-        Name: predicateName,
-        Arity: inside.length,
-        Contains: inside
-      };*/
-    }
+  { }
+
+// inside a predicate, f() is a called a function
+// parse any functions into strings for display purposes
+insideFunction
+  = $(predicateName:predicateIdent "(" inside:arguments ")")
 
 arguments
   = first:argument rest:("," E* argument)*
