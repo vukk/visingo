@@ -17,9 +17,9 @@
     var result = [], i;
 
     for (i = 0; i < list.length; i++) {
-      if (list[i][index] !== null) {
+      //if (list[i][index] !== null) {
         result.push(list[i][index]);
-      }
+      //}
     }
 
     return result;
