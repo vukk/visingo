@@ -351,12 +351,27 @@
 
             <section data-route="extend">
               <h1>Implementing a visualizer</h1>
-              <h2>TODO</h2>
-              <p>TODO</p>
+              <h2>Components</h2>
+              <p>
+                A visualizer module consists of three WebComponents that are included
+                by the Visingo Web-UI on-the-fly. The Web-UI provides necessary data
+                pipelining from one section to another, like from settings to
+                visualizer element.
+                The elements are
+                <ul>
+                  <li>Settings &ndash; settings.html</li>
+                  <li>Visualizer element &ndash; element.html</li>
+                  <li>Help &ndash; help.html</li>
+                </ul>
+              </p>
               <h2>settings.html</h2>
+              TODO
               <h2>element.html</h2>
+              TODO
               <h2>help.html</h2>
+              TODO
               <h2>Attaching to the Web-UI toolbar</h2>
+              TODO
             </section>
 
             <section data-route="devstatus">
@@ -490,7 +505,7 @@
       },
 
       _importHelp: function(visualizer) {
-        var path = '../../visualizers/' + visualizer.directory + '/help.html';
+        var path = this.resolveUrl('../../visualizers/' + visualizer.directory + '/help.html');
         this.importHref(
           path,
           function(evt) {
@@ -503,7 +518,7 @@
             // loading error
             console.log(
               'ERROR: Help element for ' + visualizer.name + '(' + visualizer.tag + ')'
-              + ' couldn\'t be loaded from ' + this.resolveUrl(path)
+              + ' couldn\'t be loaded from ' + path
             );
           }
         );

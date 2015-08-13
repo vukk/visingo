@@ -11,7 +11,6 @@
   <link rel="import" href="elements/scripts.html">
   <!-- Polymer elements, own elements -->
   <link rel="import" href="elements/elements.html">
-  <link rel="import" href="elements/routing.html">
 
   <style is="custom-style">
     paper-button {
@@ -41,6 +40,7 @@
 
 <!-- Main Content -->
 <div class="content">
+  <!-- TODO could remove iron-pages(?) do we want to? -->
   <iron-pages attr-for-selected="data-route" selected="{{route}}" class="padded">
 
   <section data-route="new">
@@ -112,14 +112,6 @@
       <visingo-visualizer-settings visualizer="[[chosenVisualizer]]" parse-status="[[parseStatus]]" visualization-type="[[visualizationType]]" input-files="[[inputFiles]]"></visingo-visualizer-settings>
     </paper-material>
 
-  </section>
-
-  <section data-route="help">
-    <paper-material elevation="1">
-    <h2 class="paper-font-display2">Help</h2>
-    <!-- TODO: make into paper-dialog, modal -->
-    <p>This is the help section</p>
-    </paper-material>
   </section>
 
   </iron-pages>

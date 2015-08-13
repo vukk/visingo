@@ -77,7 +77,7 @@
 
       _import: function(visualizer) {
         this.importHref(
-          '../../visualizers/' + visualizer.directory + '/settings.html',
+          this.resolveUrl('../../visualizers/' + visualizer.directory + '/settings.html'),
           function(evt) {
             var elemName = 'visualizer-' + visualizer.tag + '-settings';
             var elem = document.createElement(elemName);

@@ -5,6 +5,7 @@
     var app = document.querySelector('#app');
 
     /* Defaults for bindings */
+    app.route = 'new';
     app.visualizationType = 'playback';
     app.solverLogFile = [];
     app.visualizers = [];

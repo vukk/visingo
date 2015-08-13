@@ -12,7 +12,8 @@
     "system.js": "~0.18.4",
     "traceur": "~0.0.90",
     "tock": "~1.0.8",
-    "lodash": "~3.10.0"
+    "lodash": "~3.10.0",
+    "qurl": "~0.1.2"
   },
   "devDependencies": {
     "web-component-tester": "*",
