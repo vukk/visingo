@@ -173,6 +173,7 @@ TODO: additional settings dialog, follow node network.focus(NodeID, {scale: 0.5,
         this._timer.stop();
         this._timer.reset();
 
+        /* // skipping implementation
         var len = this._playbackState.data.length;
         var cur = this._playbackState.current;
         // queue the rest of the sets
@@ -181,8 +182,10 @@ TODO: additional settings dialog, follow node network.focus(NodeID, {scale: 0.5,
               this._playbackState.data[i].Value
           );
         }
-        this.set('_playbackState.current', len-1);
+        this.set('_playbackState.current', len); // set to "next" state, even if there is none
         this._visScript.flushChanges();
+        */
+        while(this.playbackNext(true)) {};
       },
 
       created: function() {
@@ -286,7 +289,7 @@ TODO: additional settings dialog, follow node network.focus(NodeID, {scale: 0.5,
 
       playbackTick: function() {
         // put first answerset to screen
-        if(this.playbackNext()) {
+        if(this.playbackNext(false)) {
           // then start a clock if there are more answersets
           this._timer.reset();
           this._timer.start(this._timerInterval);
@@ -295,7 +298,7 @@ TODO: additional settings dialog, follow node network.focus(NodeID, {scale: 0.5,
 
       // displays the next answerset
       // returns boolean, whether there are more answersets to display after this one
-      playbackNext: function() {
+      playbackNext: function(noFlash) {
         // make sure there is a next answerset to display
         if(this._playbackState.current >= this._playbackState.data.length)
           return false;
@@ -306,12 +309,15 @@ TODO: additional settings dialog, follow node network.focus(NodeID, {scale: 0.5,
 
         // increment answerset number
         this.set('_playbackState.current', this._playbackState.current + 1);
+        console.log('new playbackState.current', this._playbackState.current);
 
         // flash time display focus to visually indicate change
-        this._toolbarControlsElement.$.timeToNextInputContainer._setFocused(true);
-        this.async(function() {
-          this._toolbarControlsElement.$.timeToNextInputContainer._setFocused(false);
-        }, 250); // 250ms seems to be enough for the underline to flash fully
+        if(!noFlash) {
+          this._toolbarControlsElement.$.timeToNextInputContainer._setFocused(true);
+          this.async(function() {
+            this._toolbarControlsElement.$.timeToNextInputContainer._setFocused(false);
+          }, 250); // 250ms seems to be enough for the underline to flash fully
+        }
 
         // if in the end TODO: make based on length?
         // if there are no more answersets to display, return false

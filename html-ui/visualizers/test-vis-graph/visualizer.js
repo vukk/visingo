@@ -150,6 +150,7 @@ var testVisGraphVisualizer = (function (vis, _, parser) {
         entities.edges.remove(edgesToRem);
         entities.nodes.remove(nodesToRem);
 
+				// add
         _.map(nodesToAdd, function(key) {
             // by default show id as label, but don't override if label set
             if(typeof parsed.nodes[key].label === 'undefined')
@@ -161,10 +162,26 @@ var testVisGraphVisualizer = (function (vis, _, parser) {
             entities.edges.add(parsed.edges[key]);
         });
 
+				// entities that stay, (nodes & edges to update)
+				var nodesToUpd = _.difference(currentEntityKeys.nodes, nodesToRem);
+				var edgesToUpd = _.difference(currentEntityKeys.edges, edgesToRem);
+
+				/*
         currentEntityKeys.nodes =
             _.union(nodesToAdd, _.difference(currentEntityKeys.nodes, nodesToRem));
         currentEntityKeys.edges =
             _.union(edgesToAdd, _.difference(currentEntityKeys.edges, edgesToRem));
+				*/
+				currentEntityKeys.nodes = _.union(nodesToAdd, nodesToUpd);
+        currentEntityKeys.edges = _.union(edgesToAdd, edgesToUpd);
+
+
+				_.map(nodesToUpd, function(key) {
+            entities.nodes.update(parsed.nodes[key]);
+        });
+        _.map(edgesToUpd, function(key) {
+            entities.edges.update(parsed.edges[key]);
+        });
 
         // attributes
 
