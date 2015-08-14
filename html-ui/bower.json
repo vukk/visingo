@@ -6,7 +6,6 @@
     "iron-input": "PolymerElements/iron-input#47-kschaaf-disabled-notify",
     "paper-elements": "PolymerElements/paper-elements#1.0.2",
     "neon-elements": "PolymerElements/neon-elements#1.0.0",
-    "page": "visionmedia/page.js#~1.6.3",
     "pegjs": "~0.8.0",
     "vis": "~4.7.0",
     "system.js": "~0.18.4",
