@@ -1,0 +1,157 @@
+<link rel="import" href="../../bower_components/iron-selector/iron-selector.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/iron-icons/av-icons.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/paper-toolbar/paper-toolbar.html">
+<link rel="import" href="../../bower_components/paper-styles/color.html">
+<link rel="import" href="../../bower_components/paper-checkbox/paper-checkbox.html">
+<!-- TODO: Remove MDL once polymer has the tooltip component again. -->
+<!--link rel="import" href="../mdl-import.html"-->
+
+<dom-module id="visingo-toolbar">
+  <style>
+    paper-icon-button.green {
+      color: var(--paper-light-green-400);
+    }
+    paper-icon-button.red {
+      color: var(--paper-red-400);
+    }
+    paper-checkbox {
+      --paper-checkbox-checked-color: var(--paper-light-green-500);
+      --paper-checkbox-checked-ink-color: var(--paper-light-green-500);
+      --paper-checkbox-unchecked-color: var(--paper-light-green-900);
+      --paper-checkbox-unchecked-ink-color: var(--paper-light-green-900);
+      --paper-checkbox-label-color: var(--paper-grey-50);
+      font-size: 8pt;
+      line-height: 1em;
+    }
+
+    #autoZoom {
+      margin-right: 0.5em;
+    }
+
+
+
+  </style>
+
+  <template>
+    <!-- Main Toolbar -->
+    <paper-toolbar>
+
+    <!-- Toolbar menu -->
+    <iron-selector attr-for-selected="data-route" selected="{{route}}">
+      <paper-icon-button data-route="new" icon="av:queue"></paper-icon-button>
+    </iron-selector>
+
+    <div id="helpButtonDiv" title="Show help">
+      <paper-icon-button icon="help" on-tap="tapHelp"></paper-icon-button>
+    </div>
+    <!--div for="helpButtonDiv">
+      Show help
+    </div-->
+
+    <!-- Indicate availability of Qt -->
+    <div id="qtAvailability" title="Qt availability">
+      <paper-icon-button id="qtAvailabilityIcon" icon="settings-input-antenna" class="red" disabled></paper-icon-button>
+    </div>
+    <!--div class="mdl-tooltip mdl-tooltip--large" for="qtAvailability">
+      Qt availability:<br>
+      <span>{{qtConnectedText}}</span>
+    </div-->
+
+    <span class="flex"></span>
+
+    <!-- Element insertion point -->
+    <div id="container"></div>
+    <!-- End insertion point -->
+
+    <span class="flex"></span>
+
+    <!-- Auto zoom setting -->
+    <template is="dom-if" if="[[showAutoZoom]]">
+      <div id="autoZoom">
+        <paper-checkbox checked="{{autoZoom}}" disabled="[[disableAutoZoom]]">Auto<br>Zoom</paper-checkbox>
+      </div>
+    </template>
+
+    <!-- Application name -->
+    <div class="paper-font-display2 app-name">Visingo</div>
+
+    </paper-toolbar>
+  </template>
+</dom-module>
+<script>
+  (function() {
+    Polymer({
+      is: 'visingo-toolbar',
+
+      properties: {
+        route: {
+          type: String,
+          notify: true
+        },
+        qtConnected: {
+          type: Boolean,
+          value: false,
+          observer: '_qtConnectedChanged'
+        },
+        qtConnectedText: {
+          type: String,
+          value: 'not connected'
+        },
+        showAutoZoom: {
+          type: Boolean,
+          value: false
+        },
+        disableAutoZoom: {
+          type: Boolean,
+          value: false
+        },
+        autoZoom: {
+          type: Boolean,
+          value: false,
+          notify: true
+        },
+        showHelp: {
+          type: Boolean,
+          value: false,
+          notify: true
+        },
+        _components: {
+          type: Array,
+          value: function() { return []; }
+        }
+      },
+
+      created: function() {
+        // set visingo-toolbar to have paper-header class, otherwise layout bugs
+        this.toggleClass('paper-header', true);
+      },
+
+      _qtConnectedChanged: function(newValue, oldValue) {
+        var qtA = this.$.qtAvailabilityIcon;
+        qtA.toggleClass('green', newValue);
+        qtA.toggleClass('red',  !newValue);
+        this.qtConnectedText = newValue ? 'connected' : 'not connected';
+      },
+
+      tapHelp: function(evt) {
+        // toggle
+        this.showHelp = !this.showHelp;
+      },
+
+      attachComponent: function(component) {
+        // instanceof HTMLElement return obj instanceof HTMLElement;
+        if(typeof component === 'undefined' || !(component instanceof HTMLElement)) {
+          return false;
+        }
+
+        this._components.push(component);
+        Polymer.dom(this.$.container).appendChild(component);
+
+        return true;
+      },
+
+    });
+  })();
+</script>

@@ -1,0 +1,217 @@
+
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../../bower_components/paper-styles/color.html">
+
+<dom-module id="ettet-filedrop">
+  <style type="text/css">
+    .hidden {
+      display: none;
+    }
+
+    #dropArea {
+      text-align: center;
+      padding: 1em;
+      background-color: var(--paper-light-green-50);
+      @apply(--ettet-filedrop-droparea);
+    }
+
+    #errorMultiple {
+      color: var(--paper-red-700);
+      margin-top: 1em;
+      @apply(--ettet-filedrop-error);
+    }
+
+    #fileList {
+      padding-bottom: 0.5em;
+      @apply(--ettet-filedrop-file-list);
+    }
+
+    #fileListText {
+      text-align: center;
+      margin-top: 0.5em;
+      @apply(--ettet-filedrop-file-list-text);
+    }
+
+    paper-icon-item {
+      margin: 1em;
+    }
+  </style>
+
+  <template>
+    <paper-material id="dropArea" elevation="1">
+      <span>[[_dropText]]</span>
+      <label for="inputHiddenFiles">
+        <!-- Because this is a label for the hidden file input,
+             clicking this will trigger file chooser -->
+        <paper-button id="btnSelectFiles" raised>
+          <iron-icon icon="file-upload"></iron-icon>
+          <span>[[_buttonText]]</span>
+        </paper-button>
+      </label>
+      <div id="errorMultiple" class="hidden">Multiple files not allowed.</div>
+      <input hidden type="file" id="inputHiddenFiles" on-change="handleFiles" multiple$="[[multiple]]">
+    </paper-material>
+    <template is="dom-if" if="[[showFileList]]">
+      <paper-material id="fileList" elevation="1">
+        <div id="fileListText">[[_fileListText]]</div>
+        <template is="dom-repeat" items="[[files]]">
+          <paper-icon-item class="layout horizontal">
+            <div class="flex">[[item.name]]</div>
+            <iron-icon icon="cancel" title="Remove" on-click="_remove"></iron-icon>
+            <!--paper-item-body>
+              <div>[[item.name]]</div>
+            </paper-item-body>
+            <iron-icon icon="cancel" title="Remove" on-click="_remove"></iron-icon-->
+          </paper-icon-item>
+        </template>
+      </paper-material>
+    </template>
+  </template>
+</dom-module>
+
+<script>
+  (function() {
+    Polymer({
+      is: 'ettet-filedrop',
+
+      properties: {
+        multiple: {
+          type: Boolean,
+          value: false
+        },
+
+        dropText: {
+          type: String,
+          value: null
+        },
+
+        _dropText: {
+          type: String,
+          computed: '_computeDropText(dropText, multiple, showButton)'
+        },
+
+        showFileList: {
+          type: Boolean,
+          value: true
+        },
+
+        showButton: {
+          type: Boolean,
+          value: true
+        },
+
+        buttonText: {
+          type: String,
+          value: null
+        },
+
+        _buttonText: {
+          type: String,
+          computed: '_computeButtonText(buttonText, multiple)'
+        },
+
+        fileListText: {
+          type: String,
+          value: null
+        },
+
+        _fileListText: {
+          type: String,
+          computed: '_computeFileListText(fileListText, multiple)'
+        },
+
+        files: {
+          type: Array,
+          value: function() { return []; }
+        }
+      },
+
+      _computeDropText: function(text, multiple, showButton) {
+        if(text !== null)
+          return text;
+        var txt = multiple ? 'Drop files here' : 'Drop file here';
+        return showButton ? txt + ' or ' : txt;
+      },
+
+      _computeButtonText: function(text, multiple) {
+        if(text !== null)
+          return text;
+        return multiple ? 'Select files' : 'Select file';
+      },
+
+      _computeFileListText: function(text, multiple) {
+        if(text !== null)
+          return text;
+        return multiple ? 'Selected files' : 'Selected file';
+      },
+
+      _remove: function(evt) {
+        this.removeByFile(evt.model.__data__.item);
+      },
+
+      removeByIndex: function(idx) {
+        this.splice('files', idx, 1);
+
+        if(this.files.length < 1)
+          this.toggleClass('hidden', true, this.$.errorMultiple);
+      },
+
+      removeByFile: function(file) {
+        this.removeByIndex(this.files.indexOf(file));
+      },
+
+      removeAll: function() {
+        this.set('files', []); // TODO: Or this.splice. Does set() fire correct events?
+        this.toggleClass('hidden', true, this.$.errorMultiple); // hide error
+      },
+
+      handleFiles: function(evt) {
+        // Files are in evt.target.files when using dialog,
+        //              evt.dataTransfer.files when using drag'n'drop.
+        var files = evt.target.files || evt.dataTransfer.files;
+        this._pushFiles(files);
+      },
+
+      _pushFiles: function(files) {
+        // Loop through the FileList 'files', add to current files
+        // (why the looping construct works? see http://stackoverflow.com/questions/5313575/html5-filelist-and-jquerys-each#comment31961145_5313722)
+        for (var i = 0, f; f = files[i]; i++) {
+          if(this.multiple || this.files.length < 1) {
+            this.push('files', f);
+          }
+          else {
+            // show error
+            this.toggleClass('hidden', false, this.$.errorMultiple);
+          }
+        }
+      },
+
+      ready: function() {
+        // Set dropArea event handlers
+
+        this.ondragover = function(evt) {
+          evt.stopPropagation();
+          evt.preventDefault();
+          evt.dataTransfer.dropEffect = 'copy';
+          this.toggleClass('hover', true, this.$.dropArea);
+          return false;
+        }
+
+        this.ondragleave = function(evt) {
+          this.toggleClass('hover', false, this.$.dropArea);
+          return false;
+        }
+
+        this.ondrop = function(evt) {
+          evt.stopPropagation();
+          evt.preventDefault();
+          this.toggleClass('hover', false, this.$.dropArea);
+          this.handleFiles(evt);
+        }
+      }
+    });
+  })();
+
+</script>

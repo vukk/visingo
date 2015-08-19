@@ -1,0 +1,29 @@
+class="right-caret"
+class="nowrap"
+
+class="indent"
+class="nowrap"
+
+class="indent2"
+class="nowrap"
+
+<code>'([\w\d\.\\ \(\),#\n"']+)'</code>
+<code>"$1"</code>
+
+<td><code>([\w\d\.\\ \(\),#\n"']+)</code></td>
+<td>$1</td>
+
+<td class="nowrap">(\w+)\.(\w+)</td>
+<td class="nowrap">$1, $2</td>
+
+<td class="nowrap">(\w+)\.(\w+)\.(\w+)</td>
+<td class="nowrap">$1, $2, $3</td>
+
+ class='toggle collapsible' onclick="[\w',; \(\)]+"
+<nothing>
+
+<td>undefined</td>
+<td><em>undefined</em></td>
+
+ parent="[\w\d\\ \(\),#\n]+" class="hidden"
+<nothing>

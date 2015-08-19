@@ -1,0 +1,14 @@
+{
+  "visualizers": [
+    {
+      "name": "Network visualizer",
+      "tag": "test-vis-graph",
+      "directory": "test-vis-graph"
+    },
+    {
+      "name": "test-vis-graph2",
+      "tag": "test-vis-graph2",
+      "directory": "test-vis-graph2"
+     }
+  ]
+}
