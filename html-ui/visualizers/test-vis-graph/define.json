@@ -1,8 +1,0 @@
-{
-  "name": "test-vis-graph",
-  "predicates": [
-      {"name": "edge", "display": "edge(From,To)"},
-      {"name": "cost", "display": "cost(From,To,Cost)"}
-    ],
-  "options": ["directed"]
-}
