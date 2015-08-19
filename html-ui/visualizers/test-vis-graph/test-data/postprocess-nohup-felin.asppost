@@ -1,0 +1,7 @@
+node(N) :- edge(N, _).
+node(N) :- edge(_, N).
+nodeAttr(N, label, Label) :- node(N), asgn(N, Label), _info(Limit,_), N <= Limit.
+
+#show node/1.
+#show edge/2.
+#show nodeAttr/3.

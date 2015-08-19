@@ -1,0 +1,48 @@
+
+<link rel="import" href="../../bower_components/paper-radio-group/paper-radio-group.html">
+<link rel="import" href="../../bower_components/paper-radio-button/paper-radio-button.html">
+
+<dom-module id="visualizer-test-vis-graph-settings-options">
+  <template>
+    <div>
+      <h4>Consider edges directed/undirected</h4>
+      <paper-radio-group selected="{{_directed}}">
+        <paper-radio-button name="true">Directed</paper-radio-button>
+        <paper-radio-button name="false">Undirected</paper-radio-button>
+      </paper-radio-group>
+      <!-- TODO: layout, zoom etc. -->
+    </div>
+  </template>
+</dom-module>
+
+<script>
+  (function () {
+    Polymer({
+      is: 'visualizer-test-vis-graph-settings-options',
+      properties: {
+        input: { // has the attributes passed to visingo-visualizer-settings
+          type: Object
+        },
+        settings: {
+          type: Object,
+          notify: true
+        },
+        _directed: {
+          type: String,
+          observer: '_directedChanged'
+        }
+      },
+
+      _directedChanged: function(newVal, oldVal) {
+        this.set('settings.directed', (newVal === 'true'));
+      },
+
+      ready: function() {
+        /* defaults for binding */
+        this._directed = 'false';
+      }
+
+    });
+  })();
+</script>
+

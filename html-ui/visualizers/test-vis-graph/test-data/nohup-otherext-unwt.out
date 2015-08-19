@@ -1,0 +1,74 @@
+clasp version 3.1.2
+Reading from stdin
+Solving...
+Answer: 1
+edge(8,2) edge(8,6) edge(9,1) edge(9,3) edge(9,4) edge(9,5) edge(9,7) edge(9,8) asgn(1,felinae) asgn(9,t(felinae,styriofelis)) asgn(9,t(styriofelis,felinae)) asgn(9,t(machairodontinae,pseudaelurus)) asgn(9,t(hyperailurictis,felinae)) asgn(9,t(machairodontinae,t(hyperailurictis,pseudaelurus),felinae)) asgn(8,t(hyperailurictis,pseudaelurus)) asgn(2,hyperailurictis) asgn(3,machairodontinae) asgn(4,outgroup) asgn(5,proailurus) asgn(6,pseudaelurus) asgn(7,styriofelis) _info(7,16)
+Optimization: 44
+Answer: 2
+edge(8,2) edge(8,3) edge(8,6) edge(9,1) edge(9,4) edge(9,5) edge(9,7) edge(9,8) asgn(1,felinae) asgn(9,t(felinae,styriofelis)) asgn(9,t(styriofelis,felinae)) asgn(9,t(hyperailurictis,felinae)) asgn(9,t(proailurus,t(machairodontinae,pseudaelurus))) asgn(8,t(machairodontinae,pseudaelurus)) asgn(8,t(hyperailurictis,pseudaelurus)) asgn(2,hyperailurictis) asgn(3,machairodontinae) asgn(4,outgroup) asgn(5,proailurus) asgn(6,pseudaelurus) asgn(7,styriofelis) _info(7,16)
+Optimization: 43
+Answer: 3
+edge(8,3) edge(8,6) edge(9,5) edge(9,7) edge(9,8) edge(10,1) edge(10,2) edge(10,4) edge(10,9) asgn(1,felinae) asgn(10,t(felinae,styriofelis)) asgn(10,t(styriofelis,felinae)) asgn(10,t(hyperailurictis,felinae)) asgn(10,t(hyperailurictis,pseudaelurus)) asgn(10,t(outgroup,t(proailurus,t(machairodontinae,pseudaelurus)))) asgn(9,t(proailurus,t(machairodontinae,pseudaelurus))) asgn(8,t(machairodontinae,pseudaelurus)) asgn(2,hyperailurictis) asgn(3,machairodontinae) asgn(4,outgroup) asgn(5,proailurus) asgn(6,pseudaelurus) asgn(7,styriofelis) _info(7,16)
+Optimization: 41
+Answer: 4
+edge(8,3) edge(8,6) edge(9,5) edge(9,8) edge(10,1) edge(10,2) edge(10,4) edge(10,7) edge(10,9) asgn(1,felinae) asgn(10,t(felinae,styriofelis)) asgn(10,t(styriofelis,felinae)) asgn(10,t(hyperailurictis,felinae)) asgn(10,t(hyperailurictis,pseudaelurus)) asgn(10,t(outgroup,t(proailurus,t(machairodontinae,pseudaelurus)))) asgn(9,t(proailurus,t(machairodontinae,pseudaelurus))) asgn(8,t(machairodontinae,pseudaelurus)) asgn(2,hyperailurictis) asgn(3,machairodontinae) asgn(4,outgroup) asgn(5,proailurus) asgn(6,pseudaelurus) asgn(7,styriofelis) _info(7,16)
+Optimization: 39
+Answer: 5
+edge(8,3) edge(8,6) edge(9,1) edge(9,2) edge(9,7) edge(9,8) edge(10,4) edge(10,5) edge(10,9) asgn(1,felinae) asgn(10,t(proailurus,t(hyperailurictis,felinae))) asgn(10,t(proailurus,t(machairodontinae,pseudaelurus))) asgn(10,t(proailurus,t(styriofelis,felinae))) asgn(9,t(felinae,styriofelis)) asgn(9,t(styriofelis,felinae)) asgn(9,t(hyperailurictis,felinae)) asgn(9,t(hyperailurictis,pseudaelurus)) asgn(8,t(machairodontinae,pseudaelurus)) asgn(2,hyperailurictis) asgn(3,machairodontinae) asgn(4,outgroup) asgn(5,proailurus) asgn(6,pseudaelurus) asgn(7,styriofelis) _info(7,16)
+Optimization: 38
+Answer: 6
+edge(8,2) edge(8,6) edge(9,1) edge(9,3) edge(9,7) edge(9,8) edge(10,4) edge(10,5) edge(10,9) asgn(1,felinae) asgn(10,t(proailurus,t(hyperailurictis,felinae))) asgn(10,t(proailurus,t(machairodontinae,pseudaelurus))) asgn(10,t(proailurus,t(styriofelis,felinae))) asgn(10,t(outgroup,t(machairodontinae,t(hyperailurictis,pseudaelurus),felinae))) asgn(9,t(felinae,styriofelis)) asgn(9,t(styriofelis,felinae)) asgn(9,t(machairodontinae,pseudaelurus)) asgn(9,t(hyperailurictis,felinae)) asgn(9,t(machairodontinae,t(hyperailurictis,pseudaelurus),felinae)) asgn(8,t(hyperailurictis,pseudaelurus)) asgn(2,hyperailurictis) asgn(3,machairodontinae) asgn(4,outgroup) asgn(5,proailurus) asgn(6,pseudaelurus) asgn(7,styriofelis) _info(7,16)
+Optimization: 30
+Answer: 7
+edge(8,1) edge(8,2) edge(8,3) edge(8,6) edge(8,7) edge(9,5) edge(9,8) edge(10,4) edge(10,9) asgn(1,felinae) asgn(10,t(outgroup,t(proailurus,t(styriofelis,felinae)))) asgn(10,t(outgroup,t(proailurus,t(machairodontinae,pseudaelurus)))) asgn(10,t(outgroup,t(proailurus,t(hyperailurictis,felinae)))) asgn(9,t(proailurus,t(hyperailurictis,felinae))) asgn(9,t(proailurus,t(machairodontinae,pseudaelurus))) asgn(9,t(proailurus,t(styriofelis,felinae))) asgn(8,t(felinae,styriofelis)) asgn(8,t(styriofelis,felinae)) asgn(8,t(machairodontinae,pseudaelurus)) asgn(8,t(hyperailurictis,felinae)) asgn(8,t(hyperailurictis,pseudaelurus)) asgn(2,hyperailurictis) asgn(3,machairodontinae) asgn(4,outgroup) asgn(5,proailurus) asgn(6,pseudaelurus) asgn(7,styriofelis) _info(7,16)
+Optimization: 24
+Answer: 8
+edge(8,1) edge(8,2) edge(8,7) edge(9,3) edge(9,6) edge(10,5) edge(10,8) edge(10,9) edge(11,4) edge(11,10) asgn(1,felinae) asgn(11,t(outgroup,t(proailurus,t(styriofelis,felinae)))) asgn(11,t(outgroup,t(proailurus,t(machairodontinae,pseudaelurus)))) asgn(11,t(outgroup,t(proailurus,t(hyperailurictis,felinae)))) asgn(10,t(t(felinae,styriofelis),t(machairodontinae,pseudaelurus))) asgn(10,t(hyperailurictis,pseudaelurus)) asgn(10,t(proailurus,t(hyperailurictis,felinae))) asgn(10,t(proailurus,t(machairodontinae,pseudaelurus))) asgn(10,t(proailurus,t(styriofelis,felinae))) asgn(9,t(machairodontinae,pseudaelurus)) asgn(8,t(felinae,styriofelis)) asgn(8,t(styriofelis,felinae)) asgn(8,t(hyperailurictis,felinae)) asgn(2,hyperailurictis) asgn(3,machairodontinae) asgn(4,outgroup) asgn(5,proailurus) asgn(6,pseudaelurus) asgn(7,styriofelis) _info(7,16)
+Optimization: 21
+Answer: 9
+edge(8,2) edge(8,6) edge(9,1) edge(9,3) edge(9,7) edge(9,8) edge(10,5) edge(10,9) edge(11,4) edge(11,10) asgn(1,felinae) asgn(11,t(outgroup,t(proailurus,t(styriofelis,felinae)))) asgn(11,t(outgroup,t(proailurus,t(machairodontinae,pseudaelurus)))) asgn(11,t(outgroup,t(proailurus,t(hyperailurictis,felinae)))) asgn(11,t(outgroup,t(machairodontinae,t(hyperailurictis,pseudaelurus),felinae))) asgn(10,t(proailurus,t(hyperailurictis,felinae))) asgn(10,t(proailurus,t(machairodontinae,pseudaelurus))) asgn(10,t(proailurus,t(styriofelis,felinae))) asgn(9,t(felinae,styriofelis)) asgn(9,t(styriofelis,felinae)) asgn(9,t(machairodontinae,pseudaelurus)) asgn(9,t(hyperailurictis,felinae)) asgn(9,t(machairodontinae,t(hyperailurictis,pseudaelurus),felinae)) asgn(8,t(hyperailurictis,pseudaelurus)) asgn(2,hyperailurictis) asgn(3,machairodontinae) asgn(4,outgroup) asgn(5,proailurus) asgn(6,pseudaelurus) asgn(7,styriofelis) _info(7,16)
+Optimization: 19
+Answer: 10
+edge(8,1) edge(8,2) edge(9,7) edge(9,8) edge(10,3) edge(10,6) edge(11,9) edge(11,10) edge(12,5) edge(12,11) edge(13,4) edge(13,12) asgn(1,felinae) asgn(13,t(outgroup,t(proailurus,t(t(felinae,styriofelis),t(machairodontinae,pseudaelurus))))) asgn(13,t(outgroup,t(proailurus,t(styriofelis,felinae)))) asgn(13,t(outgroup,t(proailurus,t(machairodontinae,pseudaelurus)))) asgn(13,t(outgroup,t(proailurus,t(hyperailurictis,felinae)))) asgn(12,t(proailurus,t(hyperailurictis,felinae))) asgn(12,t(proailurus,t(machairodontinae,pseudaelurus))) asgn(12,t(proailurus,t(styriofelis,felinae))) asgn(12,t(proailurus,t(t(felinae,styriofelis),t(machairodontinae,pseudaelurus)))) asgn(11,t(t(felinae,styriofelis),t(machairodontinae,pseudaelurus))) asgn(11,t(hyperailurictis,pseudaelurus)) asgn(10,t(machairodontinae,pseudaelurus)) asgn(9,t(felinae,styriofelis)) asgn(9,t(styriofelis,felinae)) asgn(8,t(hyperailurictis,felinae)) asgn(2,hyperailurictis) asgn(3,machairodontinae) asgn(4,outgroup) asgn(5,proailurus) asgn(6,pseudaelurus) asgn(7,styriofelis) _info(7,16)
+Optimization: 15
+Answer: 11
+edge(8,1) edge(8,7) edge(9,3) edge(9,6) edge(10,2) edge(10,9) edge(11,8) edge(11,10) edge(12,5) edge(12,11) edge(13,4) edge(13,12) asgn(1,felinae) asgn(13,t(outgroup,t(proailurus,t(t(felinae,styriofelis),t(machairodontinae,pseudaelurus))))) asgn(13,t(outgroup,t(proailurus,t(styriofelis,felinae)))) asgn(13,t(outgroup,t(proailurus,t(machairodontinae,pseudaelurus)))) asgn(13,t(outgroup,t(proailurus,t(hyperailurictis,felinae)))) asgn(12,t(proailurus,t(hyperailurictis,felinae))) asgn(12,t(proailurus,t(machairodontinae,pseudaelurus))) asgn(12,t(proailurus,t(styriofelis,felinae))) asgn(12,t(proailurus,t(t(felinae,styriofelis),t(machairodontinae,pseudaelurus)))) asgn(11,t(t(felinae,styriofelis),t(machairodontinae,pseudaelurus))) asgn(11,t(hyperailurictis,felinae)) asgn(10,t(hyperailurictis,pseudaelurus)) asgn(9,t(machairodontinae,pseudaelurus)) asgn(8,t(felinae,styriofelis)) asgn(8,t(styriofelis,felinae)) asgn(2,hyperailurictis) asgn(3,machairodontinae) asgn(4,outgroup) asgn(5,proailurus) asgn(6,pseudaelurus) asgn(7,styriofelis) _info(7,16)
+Optimization: 14
+Answer: 12
+edge(8,1) edge(8,7) edge(9,3) edge(9,6) edge(10,2) edge(10,8) edge(10,9) edge(11,5) edge(11,10) edge(12,4) edge(12,11) asgn(1,felinae) asgn(12,t(outgroup,t(proailurus,t(t(felinae,styriofelis),t(machairodontinae,pseudaelurus))))) asgn(12,t(outgroup,t(proailurus,t(styriofelis,felinae)))) asgn(12,t(outgroup,t(proailurus,t(machairodontinae,pseudaelurus)))) asgn(12,t(outgroup,t(proailurus,t(hyperailurictis,felinae)))) asgn(11,t(proailurus,t(hyperailurictis,felinae))) asgn(11,t(proailurus,t(machairodontinae,pseudaelurus))) asgn(11,t(proailurus,t(styriofelis,felinae))) asgn(11,t(proailurus,t(t(felinae,styriofelis),t(machairodontinae,pseudaelurus)))) asgn(10,t(t(felinae,styriofelis),t(machairodontinae,pseudaelurus))) asgn(10,t(hyperailurictis,felinae)) asgn(10,t(hyperailurictis,pseudaelurus)) asgn(9,t(machairodontinae,pseudaelurus)) asgn(8,t(felinae,styriofelis)) asgn(8,t(styriofelis,felinae)) asgn(2,hyperailurictis) asgn(3,machairodontinae) asgn(4,outgroup) asgn(5,proailurus) asgn(6,pseudaelurus) asgn(7,styriofelis) _info(7,16)
+Optimization: 13
+Answer: 13
+edge(8,1) edge(8,7) edge(9,2) edge(9,3) edge(9,6) edge(10,8) edge(10,9) edge(11,5) edge(11,10) edge(12,4) edge(12,11) asgn(1,felinae) asgn(12,t(outgroup,t(proailurus,t(t(felinae,styriofelis),t(machairodontinae,pseudaelurus))))) asgn(12,t(outgroup,t(proailurus,t(styriofelis,felinae)))) asgn(12,t(outgroup,t(proailurus,t(machairodontinae,pseudaelurus)))) asgn(12,t(outgroup,t(proailurus,t(hyperailurictis,felinae)))) asgn(11,t(proailurus,t(hyperailurictis,felinae))) asgn(11,t(proailurus,t(machairodontinae,pseudaelurus))) asgn(11,t(proailurus,t(styriofelis,felinae))) asgn(11,t(proailurus,t(t(felinae,styriofelis),t(machairodontinae,pseudaelurus)))) asgn(10,t(t(felinae,styriofelis),t(machairodontinae,pseudaelurus))) asgn(10,t(hyperailurictis,felinae)) asgn(9,t(machairodontinae,pseudaelurus)) asgn(9,t(hyperailurictis,pseudaelurus)) asgn(8,t(felinae,styriofelis)) asgn(8,t(styriofelis,felinae)) asgn(2,hyperailurictis) asgn(3,machairodontinae) asgn(4,outgroup) asgn(5,proailurus) asgn(6,pseudaelurus) asgn(7,styriofelis) _info(7,16)
+Optimization: 12
+Answer: 1
+edge(8,1) edge(8,7) edge(9,2) edge(9,3) edge(9,6) edge(10,8) edge(10,9) edge(11,5) edge(11,10) edge(12,4) edge(12,11) asgn(1,felinae) asgn(12,t(outgroup,t(proailurus,t(t(felinae,styriofelis),t(machairodontinae,pseudaelurus))))) asgn(12,t(outgroup,t(proailurus,t(styriofelis,felinae)))) asgn(12,t(outgroup,t(proailurus,t(machairodontinae,pseudaelurus)))) asgn(12,t(outgroup,t(proailurus,t(hyperailurictis,felinae)))) asgn(11,t(proailurus,t(hyperailurictis,felinae))) asgn(11,t(proailurus,t(machairodontinae,pseudaelurus))) asgn(11,t(proailurus,t(styriofelis,felinae))) asgn(11,t(proailurus,t(t(felinae,styriofelis),t(machairodontinae,pseudaelurus)))) asgn(10,t(t(felinae,styriofelis),t(machairodontinae,pseudaelurus))) asgn(10,t(hyperailurictis,felinae)) asgn(9,t(machairodontinae,pseudaelurus)) asgn(9,t(hyperailurictis,pseudaelurus)) asgn(8,t(felinae,styriofelis)) asgn(8,t(styriofelis,felinae)) asgn(2,hyperailurictis) asgn(3,machairodontinae) asgn(4,outgroup) asgn(5,proailurus) asgn(6,pseudaelurus) asgn(7,styriofelis) _info(7,16)
+Optimization: 12
+OPTIMUM FOUND
+
+Models       : 14    
+  Optimum    : yes
+Optimization : 12
+Calls        : 1
+Time         : 0.041s (Solving: 0.01s 1st Model: 0.00s Unsat: 0.00s)
+CPU Time     : 0.030s
+
+Choices      : 311     
+Conflicts    : 209      (Analyzed: 206)
+Restarts     : 0       
+Model-Level  : 6.9     
+Problems     : 2        (Average Length: 0.00 Splits: 0)
+Lemmas       : 206      (Deleted: 0)
+  Binary     : 16       (Ratio:   7.77%)
+  Ternary    : 20       (Ratio:   9.71%)
+  Conflict   : 206      (Average Length:    9.8 Ratio: 100.00%) 
+  Loop       : 0        (Average Length:    0.0 Ratio:   0.00%) 
+  Other      : 0        (Average Length:    0.0 Ratio:   0.00%) 
+
+Atoms        : 2282     (Original: 1711 Auxiliary: 571)
+Rules        : 4247     (1: 3101/4245 2: 1/0 3: 1/1 6: 1/1)
+Bodies       : 2404    
+Equivalences : 2195     (Atom=Atom: 135 Body=Body: 139 Other: 1921)
+Tight        : Yes
+Variables    : 3572     (Eliminated: 1831 Frozen:   32)
+Constraints  : 7352     (Binary: 51.8% Ternary: 30.3% Other: 17.9%)
+

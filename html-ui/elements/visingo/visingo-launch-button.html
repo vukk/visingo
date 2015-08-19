@@ -1,0 +1,46 @@
+
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+
+<dom-module id="visingo-launch-button">
+  <template>
+    <paper-button on-tap="launch" raised>
+      <iron-icon icon="launch"></iron-icon>
+      Launch
+    </paper-button>
+  </template>
+</dom-module>
+
+<script>
+  (function() {
+    Polymer({
+      is: 'visingo-launch-button',
+
+      properties: {
+        input: {
+          type: Object
+        },
+        settings: {
+          type: Object
+        }
+      },
+
+      _saveData: function() {
+        window.localStorage[this.input.visualizer.tag] = JSON.stringify({
+          visualizer: this.input.visualizer,
+          visualizationType: this.input.visualizationType,
+          inputFiles: this.input.inputFiles,
+          settings: this.settings
+        });
+        console.log(window.localStorage[this.input.visualizer.tag]);
+      },
+
+      launch: function(evt) {
+        this._saveData();
+        window.open('visualize.html?visualizer=' + this.input.visualizer.tag); // TODO: escape?
+      }
+
+    });
+  })();
+
+</script>

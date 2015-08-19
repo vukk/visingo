@@ -1,0 +1,1761 @@
+
+<link rel="import" href="../../bower_components/font-roboto/roboto.html">
+<link rel="import" href="../../bower_components/iron-resizable-behavior/iron-resizable-behavior.html">
+
+<dom-module id="visualizer-test-vis-graph-help">
+<style>
+  /* BEGIN BOOSTRAP COPYPASTA FOR TABLES, TODO: REPLACE WITH POLYMER TABLES ONCE POSSIBLE */
+  code {
+    padding: 2px 4px;
+    font-size: 90%;
+    color: #c7254e;
+    background-color: #f9f2f4;
+    border-radius: 4px;
+  }
+  table {
+    border-spacing: 0;
+    border-collapse: collapse;
+  }
+  td,
+  th {
+    padding: 0;
+  }
+  table {
+    background-color: transparent;
+  }
+  caption {
+    padding-top: 8px;
+    padding-bottom: 8px;
+    color: #777;
+    text-align: left;
+  }
+  th {
+    text-align: left;
+  }
+  .table {
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 20px;
+  }
+  .table > thead > tr > th,
+  .table > tbody > tr > th,
+  .table > tfoot > tr > th,
+  .table > thead > tr > td,
+  .table > tbody > tr > td,
+  .table > tfoot > tr > td {
+    padding: 8px;
+    line-height: 1.42857143;
+    vertical-align: top;
+    border-top: 1px solid #ddd;
+  }
+  .table > thead > tr > th {
+    vertical-align: bottom;
+    border-bottom: 2px solid #ddd;
+  }
+  .table > caption + thead > tr:first-child > th,
+  .table > colgroup + thead > tr:first-child > th,
+  .table > thead:first-child > tr:first-child > th,
+  .table > caption + thead > tr:first-child > td,
+  .table > colgroup + thead > tr:first-child > td,
+  .table > thead:first-child > tr:first-child > td {
+    border-top: 0;
+  }
+  .table > tbody + tbody {
+    border-top: 2px solid #ddd;
+  }
+  .table .table {
+    background-color: #fff;
+  }
+  .table-condensed > thead > tr > th,
+  .table-condensed > tbody > tr > th,
+  .table-condensed > tfoot > tr > th,
+  .table-condensed > thead > tr > td,
+  .table-condensed > tbody > tr > td,
+  .table-condensed > tfoot > tr > td {
+    padding: 5px;
+  }
+  .table-bordered {
+    border: 1px solid #ddd;
+  }
+  .table-bordered > thead > tr > th,
+  .table-bordered > tbody > tr > th,
+  .table-bordered > tfoot > tr > th,
+  .table-bordered > thead > tr > td,
+  .table-bordered > tbody > tr > td,
+  .table-bordered > tfoot > tr > td {
+    border: 1px solid #ddd;
+  }
+  .table-bordered > thead > tr > th,
+  .table-bordered > thead > tr > td {
+    border-bottom-width: 2px;
+  }
+  .table-striped > tbody > tr:nth-of-type(odd) {
+    background-color: #f9f9f9;
+  }
+  .table-hover > tbody > tr:hover {
+    background-color: #f5f5f5;
+  }
+  table col[class*="col-"] {
+    position: static;
+    display: table-column;
+    float: none;
+  }
+  table td[class*="col-"],
+  table th[class*="col-"] {
+    position: static;
+    display: table-cell;
+    float: none;
+  }
+  .table > thead > tr > td.active,
+  .table > tbody > tr > td.active,
+  .table > tfoot > tr > td.active,
+  .table > thead > tr > th.active,
+  .table > tbody > tr > th.active,
+  .table > tfoot > tr > th.active,
+  .table > thead > tr.active > td,
+  .table > tbody > tr.active > td,
+  .table > tfoot > tr.active > td,
+  .table > thead > tr.active > th,
+  .table > tbody > tr.active > th,
+  .table > tfoot > tr.active > th {
+    background-color: #f5f5f5;
+  }
+  .table-hover > tbody > tr > td.active:hover,
+  .table-hover > tbody > tr > th.active:hover,
+  .table-hover > tbody > tr.active:hover > td,
+  .table-hover > tbody > tr:hover > .active,
+  .table-hover > tbody > tr.active:hover > th {
+    background-color: #e8e8e8;
+  }
+  .table > thead > tr > td.success,
+  .table > tbody > tr > td.success,
+  .table > tfoot > tr > td.success,
+  .table > thead > tr > th.success,
+  .table > tbody > tr > th.success,
+  .table > tfoot > tr > th.success,
+  .table > thead > tr.success > td,
+  .table > tbody > tr.success > td,
+  .table > tfoot > tr.success > td,
+  .table > thead > tr.success > th,
+  .table > tbody > tr.success > th,
+  .table > tfoot > tr.success > th {
+    background-color: #dff0d8;
+  }
+  .table-hover > tbody > tr > td.success:hover,
+  .table-hover > tbody > tr > th.success:hover,
+  .table-hover > tbody > tr.success:hover > td,
+  .table-hover > tbody > tr:hover > .success,
+  .table-hover > tbody > tr.success:hover > th {
+    background-color: #d0e9c6;
+  }
+  .table > thead > tr > td.info,
+  .table > tbody > tr > td.info,
+  .table > tfoot > tr > td.info,
+  .table > thead > tr > th.info,
+  .table > tbody > tr > th.info,
+  .table > tfoot > tr > th.info,
+  .table > thead > tr.info > td,
+  .table > tbody > tr.info > td,
+  .table > tfoot > tr.info > td,
+  .table > thead > tr.info > th,
+  .table > tbody > tr.info > th,
+  .table > tfoot > tr.info > th {
+    background-color: #d9edf7;
+  }
+  .table-hover > tbody > tr > td.info:hover,
+  .table-hover > tbody > tr > th.info:hover,
+  .table-hover > tbody > tr.info:hover > td,
+  .table-hover > tbody > tr:hover > .info,
+  .table-hover > tbody > tr.info:hover > th {
+    background-color: #c4e3f3;
+  }
+  .table > thead > tr > td.warning,
+  .table > tbody > tr > td.warning,
+  .table > tfoot > tr > td.warning,
+  .table > thead > tr > th.warning,
+  .table > tbody > tr > th.warning,
+  .table > tfoot > tr > th.warning,
+  .table > thead > tr.warning > td,
+  .table > tbody > tr.warning > td,
+  .table > tfoot > tr.warning > td,
+  .table > thead > tr.warning > th,
+  .table > tbody > tr.warning > th,
+  .table > tfoot > tr.warning > th {
+    background-color: #fcf8e3;
+  }
+  .table-hover > tbody > tr > td.warning:hover,
+  .table-hover > tbody > tr > th.warning:hover,
+  .table-hover > tbody > tr.warning:hover > td,
+  .table-hover > tbody > tr:hover > .warning,
+  .table-hover > tbody > tr.warning:hover > th {
+    background-color: #faf2cc;
+  }
+  .table > thead > tr > td.danger,
+  .table > tbody > tr > td.danger,
+  .table > tfoot > tr > td.danger,
+  .table > thead > tr > th.danger,
+  .table > tbody > tr > th.danger,
+  .table > tfoot > tr > th.danger,
+  .table > thead > tr.danger > td,
+  .table > tbody > tr.danger > td,
+  .table > tfoot > tr.danger > td,
+  .table > thead > tr.danger > th,
+  .table > tbody > tr.danger > th,
+  .table > tfoot > tr.danger > th {
+    background-color: #f2dede;
+  }
+  .table-hover > tbody > tr > td.danger:hover,
+  .table-hover > tbody > tr > th.danger:hover,
+  .table-hover > tbody > tr.danger:hover > td,
+  .table-hover > tbody > tr:hover > .danger,
+  .table-hover > tbody > tr.danger:hover > th {
+    background-color: #ebcccc;
+  }
+  .table-responsive {
+    min-height: .01%;
+    overflow-x: auto;
+  }
+  @media screen and (max-width: 767px) {
+    .table-responsive {
+      width: 100%;
+      margin-bottom: 15px;
+      overflow-y: hidden;
+      -ms-overflow-style: -ms-autohiding-scrollbar;
+      border: 1px solid #ddd;
+    }
+    .table-responsive > .table {
+      margin-bottom: 0;
+    }
+    .table-responsive > .table > thead > tr > th,
+    .table-responsive > .table > tbody > tr > th,
+    .table-responsive > .table > tfoot > tr > th,
+    .table-responsive > .table > thead > tr > td,
+    .table-responsive > .table > tbody > tr > td,
+    .table-responsive > .table > tfoot > tr > td {
+      white-space: nowrap;
+    }
+    .table-responsive > .table-bordered {
+      border: 0;
+    }
+    .table-responsive > .table-bordered > thead > tr > th:first-child,
+    .table-responsive > .table-bordered > tbody > tr > th:first-child,
+    .table-responsive > .table-bordered > tfoot > tr > th:first-child,
+    .table-responsive > .table-bordered > thead > tr > td:first-child,
+    .table-responsive > .table-bordered > tbody > tr > td:first-child,
+    .table-responsive > .table-bordered > tfoot > tr > td:first-child {
+      border-left: 0;
+    }
+    .table-responsive > .table-bordered > thead > tr > th:last-child,
+    .table-responsive > .table-bordered > tbody > tr > th:last-child,
+    .table-responsive > .table-bordered > tfoot > tr > th:last-child,
+    .table-responsive > .table-bordered > thead > tr > td:last-child,
+    .table-responsive > .table-bordered > tbody > tr > td:last-child,
+    .table-responsive > .table-bordered > tfoot > tr > td:last-child {
+      border-right: 0;
+    }
+    .table-responsive > .table-bordered > tbody > tr:last-child > th,
+    .table-responsive > .table-bordered > tfoot > tr:last-child > th,
+    .table-responsive > .table-bordered > tbody > tr:last-child > td,
+    .table-responsive > .table-bordered > tfoot > tr:last-child > td {
+      border-bottom: 0;
+    }
+  }
+  /* END BOOTSTRAP COPYPASTA */
+
+  /* Tables */
+  table.help-table {
+    background-color: var(--paper-light-green-50);
+  }
+  table.help-table thead {
+    background-color: var(--paper-light-green-100);
+  }
+  tbody td {
+    font-family: "Roboto Mono";
+    font-size: 14px;
+  }
+  tr td ul {
+    font-size: 12px;
+    line-height: 1.1em;
+  }
+  td.nowrap {
+    /*white-space: nowrap;*/
+    /*min-width: 180px;*/
+  }
+  span.id:before {
+    content: "\2018";
+  }
+  span.id:after {
+    content: "\2019";
+  }
+  span.id {
+    font-weight: 700;
+  }
+  /* A table that overflows the container div
+   * JS is used to fix the position: absolute problems
+   */
+  table.help-table {
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    width: calc(100% - 3em);
+    max-width: 1920px;
+  }
+  @media screen and (min-width: 1921px) {
+    /* don't stretch forever */
+    table.help-table {
+      position: static;
+      margin: 0 0;
+    }
+  }
+
+  </style>
+  <template>
+    <h1>Network visualizer help</h1>
+    <h2>About</h2>
+    <p>
+      The <em>Network visualizer</em> module provides a fairly general network/graph
+      visualizer, that uses internally the network module of the
+      <a href="http://visjs.org/">VisJS</a> JavaScript library.
+      Nearly all settings that are available in VisJS nework module are also
+      available in this visualizer via ASP predicates.
+    </p>
+    <p>
+      The visualizer module uses the concepts of <em><strong>entities</strong></em>
+      and <em><strong>attributes</strong></em>:
+      <ul>
+        <li>
+          <em><strong>Entities</strong></em>
+          are things to show on the screen: nodes and edges.
+        </li>
+        <li>
+          <em><strong>Entity attributes</strong></em>
+          define things like color and size for entities
+        </li>
+        <li>
+          <em><strong>General attributes</strong></em>
+          define network settings like layout and physics,
+          but also default attributes for the entity attributes.
+        </li>
+      </ul>
+    </p>
+    <h2>Mapping ASP predicates to visualization</h2>
+    <p>
+      The following tables present the predicates supported by the visualization.<br>
+      Options in <i>italics</i> are the default values.<br>
+      An <strong>identifier</strong> has to be either an atom, a string, or an integer.
+      The indentifier has to be unique and non-changing (identifier can't change between answer sets).
+    </p>
+    <p>
+      The visualizer module does some type conversions from ASP atoms to JavaScript.
+      The visualizer uses the following mapping:
+      <ul>
+        <li>Atoms <code>true</code> and <code>false</code> are mapped to <em>Boolean</em></li>
+        <li>Atom <code>null</code> is mapped to <em>null</em>, used for resetting values</li>
+        <li>Rest of the atoms are mapped to <em>String</em>, e.g. <code>fooBar</code></li>
+        <li>
+          ASP strings that look like decimals <code>"-0.66"</code> are mapped to <em>Number</em><br>
+          > The regular expression used to match decimals is <code>-?[0-9]+\.[0-9]+</code>
+        </li>
+        <li>Rest of the strings are mapped to <em>String</em>, e.g. <code>"asp string"</code></li>
+        <li>An integer from ASP is mapped to <em>Number</em>, e.g. <code>1</code></li>
+        <li>Predicates &mdash; other than the ones in tables below &mdash; are ignored</li>
+      </ul>
+      <!--The attribute documentation (in the following tables on this page) is also
+      available on the <a href="http://visjs.org/docs/network/">VisJS Network Module</a>
+      website. Please note that the VisJS version used on that page might be different
+      to the one Visingo uses.-->
+    </p>
+    <h2>Entities</h2>
+    <div class="tableWrap">
+      <table class="table table-bordered table-hover help-table">
+        <thead>
+          <tr>
+            <th>Predicate</th>
+            <th>Arguments</th>
+            <th>Example</th>
+            <th>Alternative</th>
+            <th>Attributes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="nowrap">node(Id)</td>
+            <td><span class="id">Id</span> &ndash; node identifier</td>
+            <td>node(1).</td>
+            <td>&mdash;</td>
+            <td>
+              <a href="#nodeAttr">nodeAttr/3</a>
+            </td>
+          </tr>
+          <tr>
+            <td class="nowrap">edge(From, To)</td>
+            <td>
+              <table>
+                <tr>
+                  <td class="nowrap"><span class="id">From</span></td>
+                  <td>&ndash; node identifier</td>
+                </tr>
+                <tr>
+                  <td class="nowrap"><span class="id">To</span></td>
+                  <td>&ndash; node identifier</td>
+                </tr>
+              </table>
+              The identifier of the edge will be set to
+              <code>Id = concat(From, "%", To);</code>
+              If the network is undirected, <span class="id">From</span> and
+              <span class="id">To</span> have no special meaning for direction,
+              they are just nodes.
+            </td>
+            <td>edge(1,2).</td>
+            <td>edge/3</td>
+            <td>
+              <a href="#edgeAttr">edgeAttr/4</a>
+            </td>
+          </tr>
+          <tr>
+            <td class="nowrap">edge(Id, From, To)</td>
+            <td>
+              <span class="id">Id</span> &ndash; edge identifier
+              Otherwise like above, in edge/2.
+            </td>
+            <td>edge(1,1,2).</td>
+            <td>edge/2</td>
+            <td>
+              <a href="#edgeAttr">edgeAttr/3</a>
+            </td>
+          </tr>
+          <tr>
+            <td class="nowrap">group(Id)</td>
+            <!-- TODO: actually just ignored, groups are created for any Id in
+                       groupAttr(Id, AttrPath, Value), so lying here a bit... -->
+            <td>
+              <span class="id">Id</span> &ndash; group identifier
+            </td>
+            <td>group(2).</td>
+            <td>&mdash;</td>
+            <td>
+              Defines a group with identifier <span class="id">Id</span>.
+              Supports all <a href="#nodeAttr">node attributes</a> that
+              make sense for groups using
+              groupAttr(Id, AttributePath, Value),
+              e.g. <code>groupAttr(1, color, "#ffff00")</code>.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <a name="nodeAttr"></a>
+    <h2>Entity attributes: nodes</h2>
+    <p>
+      Node attributes can be set with <code>nodeAttr(Id, AttributePath, Value)</code>.
+    </p>
+    <p>
+      Global node attributes can be set with <code>nodeDefault(AttributePath, Value)</code>.
+    </p>
+    <p>
+      Examples:
+      <ul>
+        <li><code>nodeAttr(1, color, "#ff00ff")</code></li>
+        <li><code>nodeAttr(2, color, highlight, border "rgba(120,32,14,1)")</code></li>
+        <li><code>nodeAttr(1, x, "-1.8")</code></li>
+      </ul>
+    </p>
+    <div class="tableWrap">
+      <table class="table table-bordered table-hover help-table">
+        <thead>
+          <tr>
+            <th>Attribute path</th>
+            <th>Type</th>
+            <th>Default</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="nowrap">borderWidth</td>
+            <td>Number</td>
+            <td>1</td>
+            <td>The width of the border of the node.</td>
+          </tr>
+          <tr>
+            <td class="nowrap">borderWidthSelected</td>
+            <td>Number</td>
+            <td><em>undefined</em></td>
+            <td>The width of the border of the node when it is selected. When undefined, the borderWidth is used</td>
+          </tr>
+          <tr>
+            <td class="nowrap">brokenImage</td>
+            <td>String</td>
+            <td><em>undefined</em></td>
+            <td>When the shape is set to <code>image</code> or <code>circularImage</code>, this option can be an URL to
+              a backup image in case the URL supplied in the image option cannot be resolved.
+            </td>
+          </tr>
+          <tr>
+            <td class="nowrap">color</td>
+            <td>String</td>
+            <td>&ndash;</td>
+            <td>The color attributes contain the color information of the node in every situation. When the node only needs
+              a single color, a color value like <code>"rgba(120,32,14,1)"</code>, <code>"#ffffff"</code> or <code>"red"</code>
+              can be supplied. Set either this option OR use its suboptions.
+            </td>
+          </tr>
+          <tr>
+            <td class="nowrap">color, border</td>
+            <td>String</td>
+            <td>"#2B7CE9"</td>
+            <td>The color of the border of the node when it is not selected.<!-- or hovered over <i>(assuming hover is
+              enabled in the interaction module)</i>.-->
+            </td>
+          </tr>
+          <tr>
+            <td class="nowrap">color, background</td>
+            <td>String</td>
+            <td>"#D2E5FF"</td>
+            <td>The color of the background of the node when it is not selected.<!-- or hovered over <i>(assuming hover is
+              enabled in the interaction module)</i>.-->
+            </td>
+          </tr>
+          <tr>
+            <td class="nowrap">color, highlight</td>
+            <td>String</td>
+            <td>&ndash;</td>
+            <td>The color the node when it is selected.
+                Set either this option OR use its suboptions.
+            </td>
+          </tr>
+          <tr>
+            <td class="nowrap">color, highlight, border</td>
+            <td>String</td>
+            <td>"#2B7CE9"</td>
+            <td>The color of the border of the node when it is selected.</td>
+          </tr>
+          <tr>
+            <td class="nowrap">color, highlight, background</td>
+            <td>String</td>
+            <td>"#D2E5FF"</td>
+            <td>The color of the background of the node when it is selected.</td>
+          </tr>
+          <!--<tr>
+            <td class="nowrap">color, hover</td>
+            <td>Object or String</td>
+            <td>Object</td>
+            <td>The color the node when the mouse hovers over it <i>(assuming hover is enabled in the interaction
+              module)</i>. Shorthand like above is also supported.
+            </td>
+          </tr>
+          <tr>
+            <td class="nowrap">color, hover, border</td>
+            <td>String</td>
+            <td>"#2B7CE9"</td>
+            <td>The color of the border of the node when the mouse hovers over it <i>(assuming hover is enabled in the
+              interaction module)</i>.
+            </td>
+          </tr>
+          <tr>
+            <td class="nowrap">color, hover, background</td>
+            <td>String</td>
+            <td>"#D2E5FF"</td>
+            <td>The color of the background of the node when the mouse hovers over it <i>(assuming hover is enabled in
+              the interaction module)</i>.
+            </td>
+          </tr>-->
+          <tr>
+            <td class="nowrap">fixed</td>
+            <td>Boolean</td>
+            <td>&ndash;</td>
+            <td>When true, the node will not move but IS part of the physics simulation. When defined using suboptions,
+              movement in either X or Y direction can be disabled. Set either this option OR use its suboptions.
+            </td>
+          </tr>
+          <tr>
+            <td class="nowrap">fixed, x</td>
+            <td>Boolean</td>
+            <td>false</td>
+            <td>When true, the node will not move in the X direction.</td>
+          </tr>
+          <tr>
+            <td class="nowrap">fixed, y</td>
+            <td>Boolean</td>
+            <td>false</td>
+            <td>When true, the node will not move in the Y direction.</td>
+          </tr>
+          <tr>
+            <td class="nowrap">font</td>
+            <td>String</td>
+            <td>&ndash;</td>
+            <td>This attribute defines the details of the label. A shorthand is also supported in the form <code>"size face
+              color"</code> for example: <code>"14px arial red"</code>. Set either this option OR use its suboptions.
+            </td>
+          </tr>
+          <tr>
+            <td class="nowrap">font, color</td>
+            <td>String</td>
+            <td>"#343434"</td>
+            <td>Color of the label text.</td>
+          </tr>
+          <tr>
+            <td class="nowrap">font, size</td>
+            <td>Number</td>
+            <td>14</td>
+            <td>Size of the label text.</td>
+          </tr>
+          <tr>
+            <td class="nowrap">font, face</td>
+            <td>String</td>
+            <td>"arial"</td>
+            <td>Font face (or font family) of the label text.</td>
+          </tr>
+          <tr>
+            <td class="nowrap">font, background</td>
+            <td>String</td>
+            <td><em>undefined</em></td>
+            <td>When not <code>undefined</code> but a <b>color string</b>, a background rectangle will be drawn behind
+              the label in the supplied color.
+            </td>
+          </tr>
+          <tr>
+            <td class="nowrap">font, strokeWidth</td>
+            <td>Number</td>
+            <td>0</td>
+            <td>As an alternative to the background rectangle, a stroke can be drawn around the text. When a value
+              higher than 0 is supplied, the stroke will be drawn.
+            </td>
+          </tr>
+          <tr>
+            <td class="nowrap">font, strokeColor</td>
+            <td>String</td>
+            <td>"#ffffff"</td>
+            <td>This is the color of the stroke <i>assuming the value for stroke is higher than 0</i>.</td>
+          </tr>
+          <tr>
+            <td class="nowrap">group</td>
+            <td>String</td>
+            <td><em>undefined</em></td>
+            <td>When not <code>undefined</code>, the node will belong to the defined group. Styling information of
+                that group will apply to this node. Node specific styling overrides group styling.</td>
+          </tr>
+          <tr>
+            <td class="nowrap">hidden</td>
+            <td>Boolean</td>
+            <td>false</td>
+            <td>When true, the node will not be shown. It will still be part of the physics simulation though!</td>
+          </tr>
+          <tr>
+            <td class="nowrap">icon</td>
+            <td>&ndash;</td>
+            <td>&ndash;</td>
+            <td>These options are only used when the shape is set to <code>icon</code>.</td>
+          </tr>
+          <tr>
+            <td class="nowrap">icon, face</td>
+            <td>String</td>
+            <td>"FontAwesome"</td>
+            <td>These options are only used when the shape is set to <code>icon</code>. The possible options for the
+              face are: <code>"FontAwesome"</code> and <code>"Ionicons"</code>.
+            </td>
+          </tr>
+          <tr>
+            <td class="nowrap">icon, code</td>
+            <td>String</td>
+            <td><em>undefined</em></td>
+            <td>This is the code of the icon, for example <code>"\uf007"</code>.</td>
+          </tr>
+          <tr>
+            <td class="nowrap">icon, size</td>
+            <td>Number</td>
+            <td>50</td>
+            <td>The size of the icon.</td>
+          </tr>
+          <tr>
+            <td class="nowrap">icon, color</td>
+            <td>String</td>
+            <td>"#2B7CE9"</td>
+            <td>The color of the icon.</td>
+          </tr>
+          <tr>
+            <td class="nowrap">image</td>
+            <td>String</td>
+            <td><em>undefined</em></td>
+            <td>When the shape is set to <code>image</code> or <code>circularImage</code>, this option should be the URL
+              to an image. If the image cannot be found, the brokenImage option can be used.
+            </td>
+          </tr>
+          <tr>
+            <td class="nowrap">label</td>
+            <td>String</td>
+            <td><em>node identifier</em></td>
+            <td>The label is the piece of text shown in or under the node, depending on the shape.
+                The label defaults to node identifier.
+            </td>
+          </tr>
+          <tr>
+            <td class="nowrap">labelHighlightBold</td>
+            <td>Boolean</td>
+            <td>true</td>
+            <td>Determines whether or not the label becomes bold when the node is selected.</td>
+          </tr>
+          <tr>
+            <td class="nowrap">level</td>
+            <td>Number</td>
+            <td><em>undefined</em></td>
+            <td>When using the hierarchical layout, the level determines where the node is going to be positioned.</td>
+          </tr>
+          <tr>
+            <td class="nowrap">mass</td>
+            <td>Number</td>
+            <td>1</td>
+            <td>The barnesHut physics model (which is enabled by default) is based on an inverted gravity model. By
+              increasing the mass of a node, you increase it's repulsion. Values lower than 1 are not recommended.
+            </td>
+          </tr>
+          <tr>
+            <td class="nowrap">physics</td>
+            <td>Boolean</td>
+            <td>true</td>
+            <td>When false, the node is not part of the physics simulation. It will not move except for from manual
+              dragging.
+            </td>
+          </tr>
+          <tr>
+            <td class="nowrap">scaling</td>
+            <td>&ndash;</td>
+            <td>&ndash;</td>
+            <td>If the scaling suboptions are specified, the width of the edges will be scaled accordingly.
+              All node shapes can be scaled, but some only when label scaling is enabled as
+              their size is based on the size of the label.
+              Only scalable when label scaling is enabled are:
+              <code>ellipse</code>, <code>circle</code>, <code>database</code>, <code>box</code>, <code>text</code>.
+              Always scalable are:
+              <code>image</code>, <code>circularImage</code>, <code>diamond</code>, <code>dot</code>,
+              <code>star</code>, <code>triangle</code>, <code>triangleDown</code>, <code>square</code> and
+              <code>icon</code>. Keep in mind that when using scaling, the <code>size</code> option is neglected.
+            </td>
+          </tr>
+          <tr>
+            <td class="nowrap">scaling, min</td>
+            <td>Number</td>
+            <td>10</td>
+            <td>If nodes have a value, their sizes are determined by the value, the scaling function and the min max
+              values. The min value is the minimum allowed value.
+            </td>
+          </tr>
+          <tr>
+            <td class="nowrap">scaling, max</td>
+            <td>Number</td>
+            <td>30</td>
+            <td>This is the maximum allowed size when the nodes are scaled using the value option.</td>
+          </tr>
+          <tr>
+            <td class="nowrap">scaling, label</td>
+            <td>Boolean</td>
+            <td>&ndash;</td>
+            <td>This can be false if the label is not allowed to scale with the node. If true it will scale using
+              default settigns. For further customization, use the suboptions instead.
+            </td>
+          </tr>
+          <tr>
+            <td class="nowrap">scaling, label, enabled</td>
+            <td>Boolean</td>
+            <td>false</td>
+            <td>Toggle the scaling of the label on or off.
+                This option is set to true if any of the
+                other suboptions are modified.
+            </td>
+          </tr>
+          <tr>
+            <td class="nowrap">scaling, label, min</td>
+            <td>Number</td>
+            <td>14</td>
+            <td>The minimum font-size used for labels when scaling.</td>
+          </tr>
+          <tr>
+            <td class="nowrap">scaling, label, max</td>
+            <td>Number</td>
+            <td>30</td>
+            <td>The maximum font-size used for labels when scaling.</td>
+          </tr>
+          <tr>
+            <td class="nowrap">scaling, label, maxVisible</td>
+            <td>Number</td>
+            <td>30</td>
+            <td>When zooming in, the font is drawn larger as well. You can limit the perceived font size using this
+              option. If set to 30, the font will never look larger than size 30 zoomed at 100%.
+            </td>
+          </tr>
+          <tr>
+            <td class="nowrap">scaling, label, drawThreshold</td>
+            <td>Number</td>
+            <td>5</td>
+            <td>When zooming out, the font will be drawn smaller. This defines a lower limit for when the font is drawn.
+              When using font scaling, you can use this together with the maxVisible to first show labels of important
+              nodes when zoomed out and only show the rest when zooming in.
+            </td>
+          </tr>
+          <tr>
+            <td class="nowrap">shadow</td>
+            <td>Boolean</td>
+            <td>&ndash;</td>
+            <td>When true, the node casts a shadow using the default settings.
+              Set either this option OR use its suboptions.
+            </td>
+          </tr>
+          <tr>
+            <td class="nowrap">shadow, enabled</td>
+            <td>Boolean</td>
+            <td>false</td>
+            <td>Toggle the casting of shadows.
+                This option is set to true if any of the
+                other suboptions are modified.
+            </td>
+          </tr>
+          <tr>
+            <td class="nowrap">shadow, size</td>
+            <td>Number</td>
+            <td>10</td>
+            <td>The blur size of the shadow.</td>
+          </tr>
+          <tr>
+            <td class="nowrap">shadow, x</td>
+            <td>Number</td>
+            <td>5</td>
+            <td>The x offset.</td>
+          </tr>
+          <tr>
+            <td class="nowrap">shadow, y</td>
+            <td>Number</td>
+            <td>5</td>
+            <td>The y offset.</td>
+          </tr>
+          <tr>
+            <td class="nowrap">shape</td>
+            <td>String</td>
+            <td>"ellipse"</td>
+            <td>The shape defines what the node looks like. There are two types of nodes. One type has the label inside
+              of it and the other type has the label underneath it. The types with the label inside of it are:
+              <code>ellipse</code>, <code>circle</code>, <code>database</code>, <code>box</code>, <code>text</code>.
+              The ones with the label outside of it are: <code>image</code>, <code>circularImage</code>,
+              <code>diamond</code>, <code>dot</code>, <code>star</code>, <code>triangle</code>,
+              <code>triangleDown</code>, <code>square</code> and <code>icon</code>.
+            </td>
+          </tr>
+          <tr>
+            <td class="nowrap">shapeProperties</td>
+            <td>&ndash;</td>
+            <td>&ndash;</td>
+            <td>These options apply configuration for specific shapes
+            </td>
+          </tr>
+          <tr>
+            <td class="nowrap">shapeProperties, borderDashes</td>
+            <td>Tuple or Boolean</td>
+            <td>false</td>
+            <td>This property applies to all shapes that have borders.
+              You set the dashes by supplying an Array. Tuple format: (dash length, gap length).
+              You can also use a Boolean, false is disable and true is default (5,15).
+            </td>
+          </tr>
+          <tr>
+            <td class="nowrap">shapeProperties, borderRadius</td>
+            <td>Number</td>
+            <td>6</td>
+            <td>This property is used only for the <code>box</code> shape. It allows you to determine the roundness of the corners of the shape.
+            </td>
+          </tr>
+          <tr>
+            <td class="nowrap">shapeProperties, useImageSize</td>
+            <td>Boolean</td>
+            <td>false</td>
+            <td>This property only applies to the <code>image</code> and <code>circularImage</code> shapes. When false, the size option is used, when true, the size of the image is used. <br><i><b>Important</b>:
+              if this is set to true, the image cannot be scaled with the value option!</i>
+            </td>
+          </tr>
+          <tr>
+            <td class="nowrap">size</td>
+            <td>Number</td>
+            <td>25</td>
+            <td>The size is used to determine the size of node shapes that do not have the label inside of them. These
+              shapes are: <code>image</code>, <code>circularImage</code>, <code>diamond</code>, <code>dot</code>,
+              <code>star</code>, <code>triangle</code>, <code>triangleDown</code>, <code>square</code> and
+              <code>icon</code>.
+              NOTE: Remember to reset label by setting it null.
+            </td>
+          </tr>
+          <tr>
+            <td class="nowrap">title</td>
+            <td>String</td>
+            <td><em>undefined</em></td>
+            <td>Title to be displayed when the user hovers over the node. The title can be a string
+              containing plain text or HTML.
+            </td>
+          </tr>
+          <tr>
+            <td class="nowrap">value</td>
+            <td>Number</td>
+            <td><em>undefined</em></td>
+            <td>When a value is set, the nodes will be scaled using the options in the scaling attributes defined above.
+            </td>
+          </tr>
+          <tr>
+            <td class="nowrap">x</td>
+            <td>Number</td>
+            <td><em>undefined</em></td>
+            <td>This gives a node an initial x position. When using the hierarchical layout, either the x or y position
+              is set by the layout engine depending on the type of view. The other value remains untouched. When using
+              stabilization, the stabilized position may be different from the initial one. To lock the node to that
+              position use the physics or fixed options.
+            </td>
+          </tr>
+          <tr>
+            <td class="nowrap">y</td>
+            <td>Number</td>
+            <td><em>undefined</em></td>
+            <td>This gives a node an initial y position. When using the hierarchical layout, either the x or y position
+              is set by the layout engine depending on the type of view. The other value remains untouched. When using
+              stabilization, the stabilized position may be different from the initial one. To lock the node to that
+              position use the physics or fixed options.
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+
+    <a name="edgeAttr"></a>
+    <h2>Entity attributes: edges</h2>
+    <p>
+      Edge attributes can be set with <code>edgeAttr(Id, AttributePath, Value)</code>
+      or with <code>edgeAttr((From, To), AttributePath, Value)</code>.
+    </p>
+    <p>
+      Global edge attributes can be set with <code>edgeDefault(AttributePath, Value)</code>.
+    </p>
+    <p>
+      Examples:
+      <ul>
+        <li><code>edgeAttr(1, color, "#0000ff")</code></li>
+        <li><code>edgeAttr((1,2), dashes, true)</code></li>
+        <li><code>edgeAttr(3, label, "Constraint")</code></li>
+      </ul>
+    </p>
+    <div class="tableWrap">
+      <table class="table table-bordered table-hover help-table">
+        <thead>
+          <tr>
+            <th>Attribute path</th>
+            <th>Type</th>
+            <th>Default</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+              <td class="nowrap">arrows</td>
+              <td>String</td>
+              <td><em>undefined</em></td>
+              <td>To draw an arrow with default settings a string can be supplied. For example: <code>'to, from,
+                  middle'</code> or <code>'to;from'</code>, any combination with any seperating symbol is fine. If you
+                  want to control the size of the arrowheads, use the suboptions instead.
+                  Set either this option OR use its suboptions.
+              </td>
+          </tr>
+          <tr>
+              <td class="nowrap">arrows, to</td>
+              <td>Boolean</td>
+              <td>&ndash;</td>
+              <td>When true, an arrowhead on the 'to' side of the edge is drawn, pointing to the 'to' node with default
+                  settings. To customize the size of the arrow, use the suboptions instead.
+                  Set either this option OR use its suboptions.
+              </td>
+          </tr>
+          <tr>
+              <td class="nowrap">arrows, to, enabled</td>
+              <td>Boolean</td>
+              <td>false</td>
+              <td>Toggle the arrow on or off. This option is optional, if undefined and the scaleFactor property is set,
+                  enabled will be set to true.
+              </td>
+          </tr>
+          <tr>
+              <td class="nowrap">arrows, to, scaleFactor</td>
+              <td>Number</td>
+              <td>1</td>
+              <td>The scale factor allows you to change the size of the arrowhead.</td>
+          </tr>
+          <tr>
+              <td class="nowrap">arrows, middle</td>
+              <td>Boolean</td>
+              <td>&ndash;</td>
+              <td>Exactly the same as the to arrow but with an arrowhead in the center of the edge.</td>
+          </tr>
+          <tr>
+              <td class="nowrap">arrows, from</td>
+              <td>Boolean</td>
+              <td>&ndash;</td>
+              <td>Exactly the same as the to arrow but with an arrowhead at the from node of the edge.</td>
+          </tr>
+          <tr>
+              <td class="nowrap">color</td>
+              <td>String</td>
+              <td>&ndash;</td>
+              <td>The color attributes contain the color information of the edge in every situation. When the edge only needs
+                  a single color, a color value like <code>"rgb(120,32,14)"</code>, <code>"#ffffff"</code> or
+                  <code>"red"</code> can be supplied.
+                  Set either this option OR use its suboptions.
+              </td>
+          </tr>
+          <tr>
+              <td class="nowrap">color, color</td>
+              <td>String</td>
+              <td>"#848484"</td>
+              <td>The color of the border of the node when it is not selected.<!-- or hovered over <i>(assuming hover is
+                  enabled in the interaction module)</i>.-->
+              </td>
+          </tr>
+          <tr>
+              <td class="nowrap">color, highlight</td>
+              <td>String</td>
+              <td>"#848484"</td>
+              <td>The color the edge when it is selected.</td>
+          </tr>
+          <!--<tr>
+              <td class="nowrap">color, hover</td>
+              <td>String</td>
+              <td>"#848484"</td>
+              <td>The color the edge when the mouse hovers over it <i>(assuming hover is enabled in the interaction
+                  module)</i>.
+              </td>
+          </tr>-->
+          <tr>
+              <td class="nowrap">color, inherit</td>
+              <td>String or Boolean</td>
+              <td>"from"</td>
+              <td><i>When color, highlight or hover are defined, inherit is set to false!</i>
+                  <br><br>Supported options are: <code>true, false, 'from','to','both'</code>.
+                  <br><br>The default value is 'from' which does the same as true: the edge will inherit the color from
+                  the border of the node on the 'from' side.
+                  <br><br>When set to 'to', the border color from the 'to' node will be used.
+                  <br><br>When set to 'both', the color will fade from the from color to the to color. <b>'both' is
+                      computationally intensive</b> because the gradient is recomputed every redraw. This is required
+                  because the angles change when the nodes move.
+              </td>
+          </tr>
+          <tr>
+              <td class="nowrap">color, opacity</td>
+              <td>Number</td>
+              <td>1.0</td>
+              <td>It can be useful to set the opacity of an edge without manually changing all the colors. The opacity
+                  option will convert all colors (also when using inherit) to adhere to the supplied opacity. The allowed
+                  range of the opacity option is between <code>0 and 1</code>. This is only done once so the performance
+                  impact is not too big.
+              </td>
+          </tr>
+          <tr>
+              <td class="nowrap">dashes</td>
+              <td>Tuple or Boolean</td>
+              <td>false</td>
+              <td>When true, the edge will be drawn as a dashed line. You can customize the dashes by supplying a Tuple.
+                  Tuple format: Tuple of numbers, gap length, dash length, gap length, dash length, ... etc. The tuple is
+                  repeated until the distance is filled.
+              </td>
+          </tr>
+          <tr>
+              <td class="nowrap">font</td>
+              <td>String</td>
+              <td>&ndash;</td>
+              <td>This attribute defines the details of the label. A shorthand is also supported in the form <code>"size face
+                  color"</code> for example: <code>"14px arial red"</code>. Set either this option OR use its suboptions.
+              </td>
+          </tr>
+          <tr>
+              <td class="nowrap">font, color</td>
+              <td>String</td>
+              <td>"#343434"</td>
+              <td>Color of the label text.</td>
+          </tr>
+          <tr>
+              <td class="nowrap">font, size</td>
+              <td>Number</td>
+              <td>14</td>
+              <td>Size of the label text.</td>
+          </tr>
+          <tr>
+              <td class="nowrap">font, face</td>
+              <td>String</td>
+              <td>"arial"</td>
+              <td>Font face (or font family) of the label text.</td>
+          </tr>
+          <tr>
+              <td class="nowrap">font, background</td>
+              <td>String</td>
+              <td><em>undefined</em></td>
+              <td>When not <code>undefined</code> but a <b>color string</b>, a background rectangle will be drawn behind
+                  the label in the supplied color.
+              </td>
+          </tr>
+          <tr>
+              <td class="nowrap">font, strokeWidth</td>
+              <td>Number</td>
+              <td>2</td>
+              <td>As an alternative to the background rectangle, a stroke can be drawn around the text. When a value
+                  higher than 0 is supplied, the stroke will be drawn.
+              </td>
+          </tr>
+          <tr>
+              <td class="nowrap">font, strokeColor</td>
+              <td>String</td>
+              <td>"#ffffff"</td>
+              <td>This is the color of the stroke <i>assuming the value for stroke is higher than 0</i>.</td>
+          </tr>
+          <tr>
+              <td class="nowrap">font, align</td>
+              <td>String</td>
+              <td>"horizontal"</td>
+              <td>Possible options: <code>horizontal, top, middle, bottom</code>. The alignment determines how the
+                  label is aligned over the edge. The default value <code>horizontal</code> aligns the label horizontally,
+                  regardless of the orientation of the edge. When an option other than <code>horizontal</code> is chosen,
+                  the label will align itself according to the edge.
+              </td>
+          </tr>
+          <tr>
+              <td class="nowrap">hidden</td>
+              <td>Boolean</td>
+              <td>false</td>
+              <td>When true, the edge is not drawn. It is part still part of the physics simulation however!</td>
+          </tr>
+          <!--<tr>
+              <td class="nowrap">hoverWidth</td>
+              <td>Number or Function</td>
+              <td>0.5</td>
+              <td>Assuming the hover behaviour is enabled in the <a href="./interaction.html">interaction module</a>, the
+                  hoverWidth determines the width of the edge when the user hovers over it with the mouse. If a number is
+                  supplied, this number will be <b>added</b> to the width.
+                  Because the width can be altered by the value and the scaling functions, a constant multiplier or added
+                  value may not give the best results. To solve this, you can supply a function. Example:
+
+<pre>
+var options: {
+  edges: {
+    hoverWidth: function (width) {return width+1;}
+  }
+}
+</pre>
+                  It receives the <code>Number width</code> of the edge. In this simple example we add 1 to the width. You
+                  can taylor the logic in the function as long as it returns a <code>Number</code>.
+              </td>
+          </tr>-->
+
+          <tr>
+              <td class="nowrap">label</td>
+              <td>String</td>
+              <td><em>undefined</em></td>
+              <td>The label of the edge. Plain text only, HTML does not work in here because the network uses HTML5 Canvas to draw the label.</td>
+          </tr>
+          <tr>
+              <td class="nowrap">labelHighlightBold</td>
+              <td>Boolean</td>
+              <td>true</td>
+              <td>Determines whether or not the label becomes bold when the edge is selected.</td>
+          </tr>
+          <tr>
+              <td class="nowrap">length</td>
+              <td>Number</td>
+              <td><em>undefined</em></td>
+              <td>The physics simulation gives edges a spring length. This value can override the length of the spring in
+                  rest.
+              </td>
+          </tr>
+          <tr>
+              <td class="nowrap">physics</td>
+              <td>Boolean</td>
+              <td>true</td>
+              <td>When true, the edge is part of the physics simulation. When false, it will not act as a spring.</td>
+          </tr>
+          <tr>
+              <td class="nowrap">scaling</td>
+              <td>&ndash;</td>
+              <td>&ndash;</td>
+              <td>If the scaling suboptions are specified, the width of the edges will be scaled accordingly.
+                Keep in mind that when using scaling, the <code>width</code> option is ignored.
+              </td>
+          </tr>
+          <tr>
+              <td class="nowrap">scaling, min</td>
+              <td>Number</td>
+              <td>1</td>
+              <td>If edges have a value, their widths are determined by the value, the scaling function and the min max
+                  values. The min value is the minimum allowed value.
+              </td>
+          </tr>
+          <tr>
+              <td class="nowrap">scaling, max</td>
+              <td>Number</td>
+              <td>15</td>
+              <td>This is the maximum allowed width when the edges are scaled using the value option.</td>
+          </tr>
+          <tr>
+              <td class="nowrap">scaling, label</td>
+              <td>Boolean</td>
+              <td>&ndash;</td>
+              <td>When false, the label is not allowed to scale with the edge. If true it will scale using default
+                  settigns. For further customization, use the suboptions instead.
+              </td>
+          </tr>
+          <tr>
+              <td class="nowrap">scaling, label, enabled</td>
+              <td>Boolean</td>
+              <td>false</td>
+              <td>Toggle the scaling of the label on or off.
+                  This option is set to true if any of the
+                  other suboptions are modified.
+              </td>
+          </tr>
+          <tr>
+              <td class="nowrap">scaling, label, min</td>
+              <td>Number</td>
+              <td>14</td>
+              <td>The minimum font-size used for labels when scaling.</td>
+          </tr>
+          <tr>
+              <td class="nowrap">scaling, label, max</td>
+              <td>Number</td>
+              <td>30</td>
+              <td>The maximum font-size used for labels when scaling.</td>
+          </tr>
+          <tr>
+              <td class="nowrap">scaling, label, maxVisible</td>
+              <td>Number</td>
+              <td>30</td>
+              <td>When zooming in, the font is drawn larger as well. You can limit the perceived font size using this
+                  option. If set to 30, the font will never look larger than size 30 zoomed at 100%.
+              </td>
+          </tr>
+          <tr>
+              <td class="nowrap">scaling, label, drawThreshold</td>
+              <td>Number</td>
+              <td>5</td>
+              <td>When zooming out, the font will be drawn smaller. This defines a lower limit for when the font is drawn.
+                  When using font scaling, you can use this together with the maxVisible to first show labels of important
+                  edges when zoomed out and only show the rest when zooming in.
+              </td>
+          </tr>
+          <tr>
+              <td class="nowrap">selectionWidth</td>
+              <td>Number</td>
+              <td>1</td>
+              <td>The selectionWidth determines the width of the edge when the edge is selected. If a number is supplied,
+                  this number will be <b>added</b> to the width.
+                  Note that the width can be altered by the value and the scaling functions.
+              </td>
+          </tr>
+          <tr>
+              <td class="nowrap">selfReferenceSize</td>
+              <td>Number</td>
+              <td>20</td>
+              <td>When the to and from nodes are the same, a circle is drawn. This is the radius of that circle.</td>
+          </tr>
+          <tr>
+              <td class="nowrap">shadow</td>
+              <td>Boolean</td>
+              <td>&ndash;</td>
+              <td>When true, the edge casts a shadow using the default settings.
+                Set either this option OR use its suboptions.
+              </td>
+          </tr>
+          <tr>
+              <td class="nowrap">shadow, enabled</td>
+              <td>Boolean</td>
+              <td>false</td>
+              <td>Toggle the casting of shadows.
+                  This option is set to true if any of the
+                  other suboptions are modified.
+              </td>
+          </tr>
+          <tr>
+              <td class="nowrap">shadow, size</td>
+              <td>Number</td>
+              <td>10</td>
+              <td>The blur size of the shadow.</td>
+          </tr>
+          <tr>
+              <td class="nowrap">shadow, x</td>
+              <td>Number</td>
+              <td>5</td>
+              <td>The x offset.</td>
+          </tr>
+          <tr>
+              <td class="nowrap">shadow, y</td>
+              <td>Number</td>
+              <td>5</td>
+              <td>The y offset.</td>
+          </tr>
+          <tr>
+              <td class="nowrap">smooth</td>
+              <td>Boolean</td>
+              <td>&ndash;</td>
+              <td>When true, the edge is drawn as a dynamic quadratic bezier curve. The drawing of these curves takes longer than
+                  that of straight curves but it looks better.
+                  There is a difference between dynamic smooth curves and static smooth curves. The dynamic smooth curves
+                  have an invisible support node that takes part in the physics simulation. If you have a lot of edges,
+                  you may want to consider picking a different type of smooth curves then dynamic for better performance.
+              </td>
+          </tr>
+          <tr>
+              <td class="nowrap">smooth, enabled</td>
+              <td>Boolean</td>
+              <td>true</td>
+              <td>Toggle smooth curves on and off.
+                  This option is set to true if any of the
+                  other suboptions are modified.
+              </td>
+          </tr>
+          <tr>
+              <td class="nowrap">smooth, type</td>
+              <td>String</td>
+              <td>"dynamic"</td>
+              <td>Possible options: <code>'dynamic', 'continuous', 'discrete', 'diagonalCross', 'straightCross', 'horizontal',
+                  'vertical', 'curvedCW', 'curvedCCW', 'cubicBezier'</code>. Take a look at our example 26 to see what these look like
+                  and pick the one that you like best!
+                  <br><br>
+                  When using dynamic, the edges will have an invisible support node guiding the shape. This node is part of the
+                  physics simulation.
+              </td>
+          </tr>
+          <tr>
+              <td class="nowrap">smooth, forceDirection</td>
+              <td>String or Boolean</td>
+              <td>false</td>
+              <td>Accepted options: <code>horizontal, vertical, none</code>. This options is only used with the cubicBezier curves. When true, horizontal is chosen, when false,
+                  the direction that is larger (x distance between nodes vs y distance between nodes) is used. If the x distance is larger, horizontal. This is ment to be used with hierarchical layouts.
+              </td>
+          </tr>
+          <tr>
+              <td class="nowrap">smooth, roundness</td>
+              <td>Number</td>
+              <td>0.5</td>
+              <td>Accepted range: <code>0 .. 1.0</code>. This parameter tweaks the roundness of the smooth curves for all types EXCEPT dynamic.
+              </td>
+          </tr>
+          <tr>
+              <td class="nowrap">title</td>
+              <td>String</td>
+              <td><em>undefined</em></td>
+              <td>The title is shown in a pop-up when the mouse moves over the edge.</td>
+          </tr>
+          <tr>
+              <td class="nowrap">value</td>
+              <td>Number</td>
+              <td><em>undefined</em></td>
+              <td>When a value is set, the edges' width will be scaled using the options in the scaling attributes defined
+                  above.
+              </td>
+          </tr>
+          <tr>
+              <td class="nowrap">width</td>
+              <td>Number</td>
+              <td>1</td>
+              <td>The width of the edge. If value attribute is set, this is not used.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>General attributes: Layout</h2>
+    <p>Control the layout of the network.</p>
+    <p>
+      Layout attributes can be set with <code>layout(AttributePath, Value)</code>.
+    </p>
+    <p>
+      Examples:
+      <ul>
+        <li><code>layout(hierarchical, enabled, true)</code></li>
+      </ul>
+    </p>
+    <div class="tableWrap">
+      <table class="table table-bordered table-hover help-table">
+        <thead>
+          <tr>
+            <th>AttributePath</th>
+            <th>Type</th>
+            <th>Default</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="nowrap">randomSeed</td>
+            <td>Number</td>
+            <td><i>random</i></td>
+            <td>
+              When using force layout, control the node positioning random seed.
+            </td>
+          </tr>
+          <tr>
+            <td class="nowrap">hierarchical, enabled</td>
+            <td>Boolean</td>
+            <td>false</td>
+            <td>
+              Enable hierarchical (tree) layout.
+              This option is set to true if any of the
+              other suboptions are modified.
+            </td>
+          </tr>
+          <tr>
+            <td class="nowrap">hierarchical, levelSeparation</td>
+            <td>Number</td>
+            <td>150</td>
+            <td>
+              The distance between the different levels.
+            </td>
+          </tr>
+          <tr>
+            <td class="nowrap">hierarchical, direction</td>
+            <td>String</td>
+            <td>"UD"</td>
+            <td>
+              The direction of the hierarchical layout. The available options are: UD (up-down), DU (down-up), LR (left-right), RL (right-left).
+            </td>
+          </tr>
+          <tr>
+            <td class="nowrap">hierarchical, sortMethod</td>
+            <td>Atom</td>
+            <td>hubsize</td>
+            <td>
+              The algorithm used to ascertain the levels of the nodes based on the data. The possible options are: hubsize, directed.
+  Hubsize takes the nodes with the most edges and puts them at the top. From that the rest of the hierarchy is evaluated.
+  Directed adheres to the to and from data of the edges. edge(From,To) so To is a level lower than From.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>General attributes: Physics</h2>
+    <p>Control the physics settings of the network.</p>
+    <p>
+      Physics attributes can be set with <code>physics(AttributePath, Value)</code>.
+    </p>
+    <p>
+      Examples:
+      <ul>
+        <li><code>physics(barnesHut, damping, "0.7")</code></li>
+      </ul>
+    </p>
+    <div class="tableWrap">
+      <table class="table table-bordered table-hover help-table">
+        <thead>
+          <tr>
+            <th>AttributePath</th>
+            <th>Type</th>
+            <th>Default</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="nowrap">enabled</td>
+            <td>Boolean</td>
+            <td>true</td>
+            <td>Toggle the physics system on or off.
+              This option is set to true if any of the
+              other suboptions are modified.
+            </td>
+          </tr>
+          <tr>
+            <td class="nowrap">
+              barnesHut</td>
+            <td>&ndash;</td>
+            <td>&ndash;</td>
+            <td>BarnesHut is a quadtree based gravity model. This is the fastest, default and recommended solver for non-hierarchical layouts.</td>
+          </tr>
+          <tr>
+            <td class="nowrap">barnesHut, gravitationalConstant</td>
+            <td>Number</td>
+            <td>-2000</td>
+            <td>Gravity attracts. We like repulsion. So the value is negative. If you want the repulsion to be stronger, decrease the value (so -10000, -50000).</td>
+          </tr>
+          <tr>
+            <td class="nowrap">barnesHut, centralGravity</td>
+            <td>Number</td>
+            <td>0.3</td>
+            <td>There is a central gravity attractor to pull the entire network back to the center.</td>
+          </tr>
+          <tr>
+            <td class="nowrap">barnesHut, springLength</td>
+            <td>Number</td>
+            <td>95</td>
+            <td>The edges are modelled as springs. This springLength here is the the rest length of the spring.</td>
+          </tr>
+          <tr>
+            <td class="nowrap">barnesHut, springConstant</td>
+            <td>Number</td>
+            <td>0.04</td>
+            <td>This is how 'sturdy' the springs are. Higher values mean stronger springs.</td>
+          </tr>
+          <tr>
+            <td class="nowrap">barnesHut, damping</td>
+            <td>Number</td>
+            <td>0.09</td>
+            <td>Accepted range:
+              <code>[0 .. 1]</code>. The damping factor is how much of the velocity from the previous physics simulation iteration carries over to the next iteration.</td>
+          </tr>
+          <tr>
+            <td class="nowrap">barnesHut, avoidOverlap</td>
+            <td>Number</td>
+            <td>0</td>
+            <td>Accepted range:
+              <code>[0 .. 1]</code>. When larger than 0, the size of the node is taken into account. The distance will be calculated from the radius of the encompassing circle of the node for both the gravity model. Value 1 is maximum overlap avoidance.</td>
+          </tr>
+          <tr>
+            <td class="nowrap">
+              forceAtlas2Based</td>
+            <td>&ndash;</td>
+            <td>&ndash;</td>
+            <td>Force Atlas 2 has been developed by <a href="http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0098679" target="_blank">Jacomi <i>et al</i> (2014)</a> for use with Gephi. The forceAtlas2Based solver makes use of some of the equations
+              provided by them and makes use of the barnesHut implementation in vis. The main differences are the central gravity model, which is here distance independent, and the repulsion being linear instead of quadratic. Finally, all node masses have a multiplier
+              based on the amount of connected edges plus one.</td>
+          </tr>
+          <tr>
+            <td class="nowrap">forceAtlas2Based, gravitationalConstant</td>
+            <td>Number</td>
+            <td>-50</td>
+            <td>This is similar to the barnesHut method except that the falloff is linear instead of quadratic. The connectivity is also taken into account as a factor of the mass. If you want the repulsion to be stronger, decrease the value (so -1000, -2000).</td>
+          </tr>
+          <tr>
+            <td class="nowrap">forceAtlas2Based, centralGravity</td>
+            <td>Number</td>
+            <td>0.01</td>
+            <td>There is a central gravity attractor to pull the entire network back to the center. This is not dependent on distance.</td>
+          </tr>
+          <tr>
+            <td class="nowrap">forceAtlas2Based, springLength</td>
+            <td>Number</td>
+            <td>100</td>
+            <td>The edges are modelled as springs. This springLength here is the the rest length of the spring.</td>
+          </tr>
+          <tr>
+            <td class="nowrap">forceAtlas2Based, springConstant</td>
+            <td>Number</td>
+            <td>0.08</td>
+            <td>This is how 'sturdy' the springs are. Higher values mean stronger springs.</td>
+          </tr>
+          <tr>
+            <td class="nowrap">forceAtlas2Based, damping</td>
+            <td>Number</td>
+            <td>0.4</td>
+            <td>Accepted range:
+              <code>[0 .. 1]</code>. The damping factor is how much of the velocity from the previous physics simulation iteration carries over to the next iteration.</td>
+          </tr>
+          <tr>
+            <td class="nowrap">forceAtlas2Based, avoidOverlap</td>
+            <td>Number</td>
+            <td>0</td>
+            <td>Accepted range:
+              <code>[0 .. 1]</code>. When larger than 0, the size of the node is taken into account. The distance will be calculated from the radius of the encompassing circle of the node for both the gravity model. Value 1 is maximum overlap avoidance.</td>
+          </tr>
+          <tr>
+            <td class="nowrap">repulsion</td>
+            <td>&ndash;</td>
+            <td>&ndash;</td>
+            <td>The repulsion model assumes nodes have a simplified repulsion field around them. It's force linearly decreases from 1 (at 0.5*nodeDistance and smaller) to 0 (at 2*nodeDistance).</td>
+          </tr>
+          <tr>
+            <td class="nowrap">repulsion, nodeDistance</td>
+            <td>Number</td>
+            <td>100</td>
+            <td>This is the range of influence for the repulsion.</td>
+          </tr>
+          <tr>
+            <td class="nowrap">repulsion, centralGravity</td>
+            <td>Number</td>
+            <td>0.2</td>
+            <td>There is a central gravity attractor to pull the entire network back to the center.</td>
+          </tr>
+          <tr>
+            <td class="nowrap">repulsion, springLength</td>
+            <td>Number</td>
+            <td>200</td>
+            <td>The edges are modelled as springs. This springLength here is the the rest length of the spring.</td>
+          </tr>
+          <tr>
+            <td class="nowrap">repulsion, springConstant</td>
+            <td>Number</td>
+            <td>0.05</td>
+            <td>This is how 'sturdy' the springs are. Higher values mean stronger springs.</td>
+          </tr>
+          <tr>
+            <td class="nowrap">repulsion, damping</td>
+            <td>Number</td>
+            <td>0.09</td>
+            <td>Accepted range:
+              <code>[0 .. 1]</code>. The damping factor is how much of the velocity from the previous physics simulation iteration carries over to the next iteration.</td>
+          </tr>
+          <tr>
+            <td class="nowrap">
+              hierarchicalRepulsion</td>
+            <td>&ndash;</td>
+            <td>&ndash;</td>
+            <td>This model is based on the repulsion solver but the levels are taken into account and the forces are normalized.</td>
+          </tr>
+          <tr>
+            <td class="nowrap">hierarchicalRepulsion, nodeDistance</td>
+            <td>Number</td>
+            <td>120</td>
+            <td>This is the range of influence for the repulsion.</td>
+          </tr>
+          <tr>
+            <td class="nowrap">hierarchicalRepulsion, centralGravity</td>
+            <td>Number</td>
+            <td>0.0'</td>
+            <td>There is a central gravity attractor to pull the entire network back to the center.</td>
+          </tr>
+          <tr>
+            <td class="nowrap">hierarchicalRepulsion, springLength</td>
+            <td>Number</td>
+            <td>100</td>
+            <td>The edges are modelled as springs. This springLength here is the the rest length of the spring.</td>
+          </tr>
+          <tr>
+            <td class="nowrap">hierarchicalRepulsion, springConstant</td>
+            <td>Number</td>
+            <td>0.01</td>
+            <td>This is how 'sturdy' the springs are. Higher values mean stronger springs.</td>
+          </tr>
+          <tr>
+            <td class="nowrap">hierarchicalRepulsion, damping</td>
+            <td>Number</td>
+            <td>0.09</td>
+            <td>Accepted range:
+              <code>[0 .. 1]</code>. The damping factor is how much of the velocity from the previous physics simulation iteration carries over to the next iteration.</td>
+          </tr>
+
+          <tr>
+            <td class="nowrap">maxVelocity</td>
+            <td>Number</td>
+            <td>50</td>
+            <td>The physics module limits the maximum velocity of the nodes to increase the time to stabilization. This is the maximium value.</td>
+          </tr>
+          <tr>
+            <td class="nowrap">minVelocity</td>
+            <td>Number</td>
+            <td>0.1</td>
+            <td>Once the minimum velocity is reached for all nodes, we assume the network has been stabilized and the simulation stops.</td>
+          </tr>
+          <tr>
+            <td class="nowrap">solver</td>
+            <td>String</td>
+            <td>"barnesHut"</td>
+            <td>You can select the solver. Possible options:
+              <code>barnesHut, repulsion, hierarchicalRepulsion, forceAtlas2Based</code>. When setting the hierarchical layout, the hierarchical repulsion solver is automaticaly selected, regardless of what you fill in here.</td>
+          </tr>
+          <tr>
+            <td class="nowrap">stabilization</td>
+            <td>Boolean</td>
+            <td>&ndash;</td>
+            <td>When true, the network is stabilized on load using default settings. If false, stabilization is disabled. To further customize this, use the suboptions. Set either this option OR use its suboptions.</td>
+          </tr>
+          <tr>
+            <td class="nowrap">stabilization, enabled</td>
+            <td>Boolean</td>
+            <td>true</td>
+            <td>Toggle the stabilization.
+              This option is set to true if any of the
+              other suboptions are modified.
+            </td>
+          </tr>
+          <tr>
+            <td class="nowrap">stabilization, iterations</td>
+            <td>Number</td>
+            <td>1000</td>
+            <td>The physics module tries to stabilize the network on load up til a maximum number of iterations defined here. If the network stabilized with less, you are finished before the maximum number.</td>
+          </tr>
+          <tr>
+            <td class="nowrap">stabilization, updateInterval</td>
+            <td>Number</td>
+            <td>50</td>
+            <td>When stabilizing, the DOM can freeze. You can chop the stabilization up into pieces to show a loading bar for instance. The interval determines after how many iterations the
+              <code>stabilizationProgress</code> event is triggered.</td>
+          </tr>
+          <tr>
+            <td class="nowrap">stabilization, onlyDynamicEdges</td>
+            <td>Boolean</td>
+            <td>false</td>
+            <td>If you have predefined the position of all nodes and only want to stabilize the dynamic smooth edges, set this to true. It freezes all nodes except the invisible dynamic smooth curve support nodes. If you want the visible nodes to move and stabilize,
+              do not use this.</td>
+          </tr>
+          <tr>
+            <td class="nowrap">stabilization, fit</td>
+            <td>Boolean</td>
+            <td>true</td>
+            <td>Toggle whether or not you want the view to zoom to fit all nodes when the stabilization is finished.</td>
+          </tr>
+          <tr>
+            <td class="nowrap">timestep</td>
+            <td>Number</td>
+            <td>0.5</td>
+            <td>The physics simulation is discrete. This means we take a step in time, calculate the forces, move the nodes and take another step. If you increase this number the steps will be too large and the network can get unstable. If you see a lot of jittery
+              movement in the network, you may want to reduce this value a little.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2></h2>
+    <p>
+      Developed at Aalto School of Science Department of Computer Science
+      as part of
+      <a href="http://www.hiit.fi/summer-jobs-it-research-institutions-deadline-february-20th-2015">HIIT Summer jobs in IT research 2015</a>.
+    </p>
+    <p>
+      For contact, see the <a href="https://github.com/vukk">GitHub repository</a>, or
+      <a href="http://research.ics.aalto.fi/cl/">Computational Logic</a> group of Aalto University
+      <a href="http://cs.aalto.fi/en/">Department of Computer Science</a>.
+    </p>
+
+  </template>
+</dom-module>
+
+<script>
+  (function () {
+    Polymer({
+      is: 'visualizer-test-vis-graph-help',
+
+      behaviors: [
+        Polymer.IronResizableBehavior
+      ],
+
+      listeners: {
+        'iron-resize': '_onIronResize'
+      },
+
+      attached: function() {
+        // 100 is a magical number that fixes clientHeight in most cases...
+        this.async(this.notifyResize, 100);
+      },
+
+      get parent() {
+        if (this.parentNode.nodeType === Node.DOCUMENT_FRAGMENT_NODE) {
+          return this.parentNode.host;
+        }
+        return this.parentNode;
+      },
+
+      _onIronResize: function() {
+        // fix absolute positioning on help tables
+        console.log('resizing');
+        var elems = this.querySelectorAll('.help-table');
+        Array.prototype.forEach.call(elems, function(elem, idx, arr) {
+          Polymer.dom(elem).parentNode.style.height = (elem.clientHeight+10) + 'px';
+        }, this);
+      },
+
+      onResponsiveChange: function() {
+        // 800 is a magical number that fixes clientHeight in most cases...
+        this.async(this.notifyResize, 800);
+      },
+
+    });
+  })();
+</script>

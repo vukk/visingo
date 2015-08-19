@@ -1,0 +1,42 @@
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+
+<dom-module id="visingo-web-mode-ajax">
+  <template>
+    <iron-ajax id="ajax"
+      url="../../visualizers/web-mode-enabled.json"
+      handle-as="json"
+      on-response="setWebModeVisualizers"
+      ><!-- TODO: on-error; also use on-response handler to set webMode = webMode || {}; webMode.visualizers = ... -->
+    </iron-ajax>
+  </template>
+</dom-module>
+
+<script>
+  (function() {
+    Polymer({
+      is: 'visingo-web-mode-ajax',
+
+      properties: {
+        visualizers: {
+          type: Array,
+          notify: true
+        },
+        chosenVisualizer: {
+          type: Object,
+          notify: true
+        }
+      },
+
+      setWebModeVisualizers: function(event) {
+        this.set('visualizers', event.target.lastResponse.visualizers);
+        this.set('chosenVisualizer', this.visualizers[0]);
+      },
+
+      generateRequest: function() {
+        this.$.ajax.generateRequest();
+      }
+
+    });
+  })();
+
+</script>
