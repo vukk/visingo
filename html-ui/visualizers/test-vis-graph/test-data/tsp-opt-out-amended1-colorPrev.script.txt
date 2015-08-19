@@ -1,0 +1,12 @@
+oneStep(From,To) :- _as(edge(From,To), asCurrent-1), not _as(edge(From,To), asCurrent).
+twoStep(From,To) :- _as(edge(From,To), asCurrent-2), not _as(edge(From,To), asCurrent-1), not _as(edge(From,To), asCurrent).
+% add and color the edges
+edge(From,To) :- oneStep(From,To).
+edge(From,To) :- twoStep(From,To).
+edgeAttr((From, To), color, red) :- oneStep(From, To).
+edgeAttr((From, To), color, yellow) :- twoStep(From, To).
+edgeAttr((From, To), color, "#ee0000") :- oneStep(From, To).
+edgeAttr((From, To), color, "#eeee00") :- twoStep(From, To).
+#show node/1.
+#show edge/2.
+#show edgeAttr/3.
