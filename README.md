@@ -10,7 +10,10 @@ See <https://github.com/vukk/visingo-web> and <http://users.ics.aalto.fi/kuurann
 ## Subprojects
 
 Qt pods are used as git submodules.
-visingo-web is a git subtree <https://github.com/vukk/visingo-web>.
+visingo-web is a git submodule also <https://github.com/vukk/visingo-web>.
+
+Remember to run `git submodule init` and `git submodule update` to initialize
+the submodules when cloning this repository.
 
 ## Ideas for continuing the project
 
