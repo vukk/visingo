@@ -1,8 +1,0 @@
-{
-  "name": "test-vis-graph2",
-  "predicates": [
-      {"name": "cycle", "display": "cycle(From,To)"},
-      {"name": "cost", "display": "cost(From,To,Cost)"}
-    ],
-  "options": []
-}
