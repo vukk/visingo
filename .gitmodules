@@ -1,3 +1,6 @@
 [submodule "qtwebserver"]
 	path = qtwebserver
 	url = https://github.com/cybercatalyst/qtwebserver.git
+[submodule "visingo-web"]
+	path = visingo-web
+	url = https://github.com/vukk/visingo-web.git
